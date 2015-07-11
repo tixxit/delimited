@@ -31,8 +31,8 @@ trait GuessCsvFormat extends CsvFormatStrategy {
    * returned reader will contain all the original reader's data.
    */
   def apply(reader: Reader): (CsvFormat, Reader) = {
-    val reader0 = new PushbackReader(reader, Csv.BufferSize)
-    val buffer = new Array[Char](Csv.BufferSize)
+    val reader0 = new PushbackReader(reader, CsvParser.BufferSize)
+    val buffer = new Array[Char](CsvParser.BufferSize)
     val len = reader0.read(buffer)
     reader0.unread(buffer, 0, len)
 

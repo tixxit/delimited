@@ -53,18 +53,21 @@ case class LabeledCsv(format: CsvFormat, header: Vector[String], rows: Vector[Ei
 case class UnlabeledCsv(format: CsvFormat, rows: Vector[Either[CsvError, CsvRow]]) extends Csv
 
 object Csv {
-  val BufferSize = 32 * 1024
-
   def empty(format: CsvFormat): Csv =
     if (format.header) LabeledCsv(format, Vector.empty, Vector.empty)
     else UnlabeledCsv(format, Vector.empty)
+
+  private def wrap(format: CsvFormat, rows: Vector[Either[CsvError, CsvRow]]): Csv = {
+    val csv = UnlabeledCsv(format, rows)
+    if (format.header) csv.labeled else csv
+  }
 
   def parseReader(reader: Reader, format: CsvFormatStrategy = CsvFormat.Guess): Csv = {
     val (format0, reader0) = format match {
       case (guess: GuessCsvFormat) => guess(reader)
       case (fmt: CsvFormat) => (fmt, reader)
     }
-    CsvParser(format0).parseReader(reader0)
+    wrap(format0, CsvParser(format0).parseReader(reader0))
   }
 
   def parseString(input: String, format: CsvFormatStrategy = CsvFormat.Guess): Csv =
@@ -73,8 +76,14 @@ object Csv {
   def parseInputStream(is: InputStream, format: CsvFormatStrategy = CsvFormat.Guess, charset: Charset = StandardCharsets.UTF_8): Csv =
     parseReader(new InputStreamReader(is, charset), format)
 
-  def parseFile(file: File, format: CsvFormatStrategy = CsvFormat.Guess, charset: Charset = StandardCharsets.UTF_8): Csv =
-    parseInputStream(new FileInputStream(file), format, charset)
+  def parseFile(file: File, format: CsvFormatStrategy = CsvFormat.Guess, charset: Charset = StandardCharsets.UTF_8): Csv = {
+    val is = new FileInputStream(file)
+    try {
+      parseInputStream(is, format, charset)
+    } finally {
+      is.close()
+    }
+  }
 
   def parsePath(filename: String, format: CsvFormatStrategy = CsvFormat.Guess, charset: Charset = StandardCharsets.UTF_8): Csv =
     parseFile(new File(filename), format, charset)

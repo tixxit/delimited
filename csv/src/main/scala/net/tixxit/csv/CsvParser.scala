@@ -1,27 +1,42 @@
 package net.tixxit.csv
 
+import scala.annotation.tailrec
+
 import java.nio.charset.{ Charset, StandardCharsets }
 import java.io.File
 import java.io.{ InputStream, FileInputStream }
 import java.io.{ Reader, InputStreamReader }
 
-case class CsvParser(format: CsvFormat) {
-  import ParserState._
-  import Instr._
+import ParserState._
+import Instr._
 
-  private def removeRowDelim(context: String): String = {
-    def dropTail(tail: String): Option[String] =
-      if (context.endsWith(tail)) Some(context.dropRight(tail.length))
-      else None
+case class CsvParser(
+  strategy: CsvFormatStrategy,
+  parserState: ParserState,
+  fail: Option[Fail],
+  row: Long
+) {
+  def parseChunk(chunk: Option[String]): (CsvParser, Vector[Either[CsvError, CsvRow]]) = {
+    val initState = chunk match {
+      case Some(str) => parserState.mapInput(_.append(str))
+      case None => parserState.mapInput(_.finished)
+    }
+    val format = strategy match {
+      case (guess: GuessCsvFormat) =>
+        if (initState.input.isLast || initState.input.data.length > CsvParser.BufferSize / 2) {
+          // We want <hand-waving>enough</hand-waving> data here, so say 1/2 the buffer size?
+          guess(initState.input.data)
+        } else {
+          // TODO: We could get rid of this return.
+          return (CsvParser(strategy, initState, fail, row), Vector.empty)
+        }
+      case (fmt: CsvFormat) =>
+        fmt
+    }
 
-    dropTail(format.rowDelim.value).
-      orElse(format.rowDelim.alternate.flatMap(dropTail)).
-      getOrElse(context)
-  }
-
-  def parseResource[A](a: A, close: A => Unit)(read: A => Option[String]): Csv = {
-    def loop(s0: ParserState, fail: Option[Fail], row: Long, acc: Vector[Either[CsvError, CsvRow]]): Csv = {
-      val (s1, instr) = parse(s0)
+    @tailrec
+    def loop(s0: ParserState, fail: Option[Fail], row: Long, acc: Vector[Either[CsvError, CsvRow]]): (CsvParser, Vector[Either[CsvError, CsvRow]]) = {
+      val (s1, instr) = CsvParser.parse(format)(s0)
 
       instr match {
         case Emit(cells) =>
@@ -33,7 +48,7 @@ case class CsvParser(format: CsvFormat) {
         case Resume =>
           fail match {
             case Some(Fail(msg, pos)) =>
-              val context = removeRowDelim(s1.input.substring(s0.rowStart, s1.rowStart))
+              val context = CsvParser.removeRowDelim(format, s1.input.substring(s0.rowStart, s1.rowStart))
               val error = CsvError(msg, s0.rowStart, pos, context, row, pos - s0.rowStart + 1)
               loop(s1, None, row + 1, acc :+ Left(error))
 
@@ -42,60 +57,62 @@ case class CsvParser(format: CsvFormat) {
           }
 
         case NeedInput =>
-          read(a) match {
-            case Some(chunk) =>
-              loop(s1.mapInput(_.append(chunk)), fail, row, acc)
-            case None =>
-              loop(s1.mapInput(_.finished), fail, row, acc)
-          }
+          CsvParser(format, s1, fail, row) -> acc
 
         case Done =>
-          val csv = UnlabeledCsv(format, acc)
-          if (format.header) csv.labeled else csv
+          CsvParser(format, s1, None, row) -> acc
       }
     }
 
-    try {
-      read(a).map { input0 =>
-        loop(ParseRow(0L, 0L, Input.init(input0)), None, 1L, Vector.empty)
-      }.getOrElse {
-        Csv.empty(format)
-      }
-    } finally {
-      try {
-        close(a)
-      } catch { case (_: Exception) =>
-        // Do nothing - hopefully letting original exception through.
-      }
-    }
+    loop(initState, fail, row, Vector.empty)
   }
 
-  def parseReader(reader: Reader): Csv = {
-    val buffer = new Array[Char](Csv.BufferSize)
-    parseResource[Reader](reader, _.close()) { reader =>
+  def parseAll(chunks: Iterator[String]): Vector[Either[CsvError, CsvRow]] = {
+    val input = chunks.map(Option(_)).takeWhile(_.isDefined) ++ Iterator(None)
+    input.foldLeft((this, Vector.empty[Either[CsvError, CsvRow]])) {
+      case ((parser, prefix), chunk) =>
+      val (nextParser, rows) = parser.parseChunk(chunk)
+      (nextParser, prefix ++ rows)
+    }._2
+  }
+
+  def parseReader(reader: Reader): Vector[Either[CsvError, CsvRow]] = {
+    val buffer = new Array[Char](CsvParser.BufferSize)
+    val chunks = Iterator.continually {
       val len = reader.read(buffer)
       if (len >= 0) {
-        Some(new String(buffer, 0, len))
+        new String(buffer, 0, len)
       } else {
-        None
+        null
       }
-    }
+    }.takeWhile(_ != null)
+
+    parseAll(chunks)
   }
 
-  def parseInputStream(is: InputStream, charset: Charset = StandardCharsets.UTF_8): Csv =
+  def parseInputStream(is: InputStream, charset: Charset = StandardCharsets.UTF_8): Vector[Either[CsvError, CsvRow]] =
     parseReader(new InputStreamReader(is, charset))
 
-  def parseFile(file: File, charset: Charset = StandardCharsets.UTF_8): Csv =
-    parseInputStream(new FileInputStream(file), charset)
-
-  def parseString(input: String): Csv = {
-    var next: Option[String] = Some(input)
-    parseResource[Unit]((), _ => ()) { _ =>
-      val chunk = next; next = None; chunk
+  def parseFile(file: File, charset: Charset = StandardCharsets.UTF_8): Vector[Either[CsvError, CsvRow]] = {
+    val is = new FileInputStream(file)
+    try {
+      parseInputStream(is, charset)
+    } finally {
+      is.close()
     }
   }
 
-  private def parse(state: ParserState): (ParserState, Instr[CsvRow]) = {
+  def parseString(input: String): Vector[Either[CsvError, CsvRow]] =
+    parseAll(Iterator(input))
+}
+
+object CsvParser {
+  val BufferSize = 32 * 1024
+
+  def apply(format: CsvFormat): CsvParser =
+    CsvParser(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L)
+
+  def parse(format: CsvFormat)(state: ParserState): (ParserState, Instr[CsvRow]) = {
     import format._
 
     val input: Input = state.input
@@ -289,5 +306,15 @@ case class CsvParser(format: CsvFormat) {
           (SkipRow(rowStart, pos, input), NeedInput)
         }
     }
+  }
+
+  private def removeRowDelim(format: CsvFormat, context: String): String = {
+    def dropTail(tail: String): Option[String] =
+      if (context.endsWith(tail)) Some(context.dropRight(tail.length))
+      else None
+
+    dropTail(format.rowDelim.value).
+      orElse(format.rowDelim.alternate.flatMap(dropTail)).
+      getOrElse(context)
   }
 }
