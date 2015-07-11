@@ -210,15 +210,32 @@ object CsvFormat {
       CsvFormat(separator0, quote0, quoteEscape0, empty0, invalid0, header0, rowDelim0, allowRowDelimInQuotes)
     }
 
+    private def dot[K](u: Map[K, Double], v: Map[K, Double]): Double = {
+      if (u.size < v.size) {
+        dot(v, u)
+      } else {
+        var sum = 0D
+        v.foreach { case (k, y) =>
+          u.get(k).foreach { x =>
+            sum += x * y
+          }
+        }
+        sum
+      }
+    }
+
+    private def norm[K](v: Map[K, Double]): Double =
+      math.sqrt(dot(v, v))
+
+    private def similarity[K](u: Map[K, Double], v: Map[K, Double]): Double =
+      dot(u, v) / (norm(u) * norm(v))
+
     def hasHeader(chunk: String, rowDelim: String, separator: String, quote: String): Boolean = {
-      import spire.std.map._
-      import spire.std.double._
-      import spire.syntax.all._
-
-      def mkVec(s: String): Map[Char, Double] =
-        s.groupBy(c => c).map { case (k, v) => k -> v.length.toDouble }.normalize
-
-      def similarity[K](x: Map[K, Double], y: Map[K, Double]): Double = (x dot y) / (x.norm * y.norm)
+      def mkVec(s: String): Map[Char, Double] = {
+        val scaled = s.groupBy(c => c).map { case (k, v) => k -> v.length.toDouble }
+        val length = norm(scaled)
+        scaled.map { case (k, v) => (k, v / length) }
+      }
 
       val headerEnd = chunk.indexOf(rowDelim)
       if (headerEnd > 0) {

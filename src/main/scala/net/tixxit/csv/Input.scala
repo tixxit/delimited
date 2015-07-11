@@ -23,7 +23,7 @@ case class Input(offset: Long, data: String, isLast: Boolean, mark: Long) {
     Input(offset, data, isLast, pos)
 
   private def trim: Input = if (mark > offset) {
-    val next = spire.math.min(mark - offset, data.length.toLong).toInt
+    val next = math.min(mark - offset, data.length.toLong).toInt
     val tail = data.substring(next)
     val offset0 = offset + next
     Input(offset0, tail, isLast, offset0)

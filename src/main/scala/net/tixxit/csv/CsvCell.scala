@@ -1,7 +1,5 @@
 package net.tixxit.csv
 
-import spire.syntax.monoid._
-
 sealed abstract class CsvCell {
   def render(format: CsvFormat): String
 }
@@ -18,19 +16,5 @@ object CsvCell {
   case object Invalid extends CsvCell {
     def render(format: CsvFormat): String = format.invalid
     override def toString: String = "<error>"
-  }
-
-  def fromNonValue(nonValue: NonValue): CsvCell = nonValue match {
-    case NA => Empty
-    case NM => Invalid
-  }
-
-  implicit val CsvCellColumnTyper: ColumnTyper[CsvCell] = new ColumnTyper[CsvCell] {
-    def cast(col: TypedColumn[_]): Column[CsvCell] = {
-      val num = col.cast[BigDecimal] map (n => Data(n.toString): CsvCell)
-      val text = col.cast[String] map (Data(_): CsvCell)
-      val any = col.cast[Any] map (any => Data(any.toString): CsvCell)
-      num |+| text |+| any
-    }
   }
 }
