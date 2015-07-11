@@ -15,4 +15,8 @@ final class CsvRow(val cells: Vector[CsvCell]) extends AnyVal {
 
 object CsvRow extends (Vector[CsvCell] => CsvRow) {
   def apply(cells: Vector[CsvCell]): CsvRow = new CsvRow(cells)
+  def apply(cells: CsvCell*): CsvRow = new CsvRow(Vector(cells: _*))
+
+  def data(cells: String*): CsvRow =
+    new CsvRow(cells.map(CsvCell.Data(_))(collection.breakOut))
 }
