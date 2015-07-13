@@ -12,11 +12,11 @@ maxErrors in ThisBuild := 5
 
 lazy val root = project.
   in(file(".")).
-  aggregate(csv).
+  aggregate(delimited).
   settings(
     publish := (),
     publishLocal := ()
   )
 
-lazy val csv = project.
-  in(file("csv"))
+lazy val delimited = project.
+  in(file("delimited"))

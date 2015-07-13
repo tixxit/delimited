@@ -1,4 +1,5 @@
-package net.tixxit.csv
+package net.tixxit.delimited
+package parser
 
 sealed trait Instr[+A]
 

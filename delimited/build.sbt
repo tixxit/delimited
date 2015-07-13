@@ -1,4 +1,4 @@
-name := "csv"
+name := "delimited"
 
 libraryDependencies ++= Seq(
   Deps.specs2,

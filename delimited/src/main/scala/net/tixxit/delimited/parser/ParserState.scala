@@ -1,4 +1,5 @@
-package net.tixxit.csv
+package net.tixxit.delimited
+package parser
 
 sealed trait ParserState {
   import ParserState._
@@ -17,7 +18,7 @@ sealed trait ParserState {
 }
 
 object ParserState {
-  case class ContinueRow(rowStart: Long, readFrom: Long, partial: Vector[CsvCell], input: Input) extends ParserState
+  case class ContinueRow(rowStart: Long, readFrom: Long, partial: Vector[Cell], input: Input) extends ParserState
   case class SkipRow(rowStart: Long, readFrom: Long, input: Input) extends ParserState
   case class ParseRow(rowStart: Long, readFrom: Long, input: Input) extends ParserState
 }

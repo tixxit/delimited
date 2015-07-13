@@ -1,4 +1,5 @@
-package net.tixxit.csv
+package net.tixxit.delimited
+package parser
 
 case class Input(offset: Long, data: String, isLast: Boolean, mark: Long) {
   private def check(i: Long): Int = if ((i < offset) || (i > (offset + data.length))) {

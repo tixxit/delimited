@@ -1,28 +1,28 @@
-package net.tixxit.csv
+package net.tixxit.delimited
 
 import java.io.{ Reader, PushbackReader }
 import java.util.regex.Pattern
 
-sealed abstract class CsvRowDelim(val value: String, val alternate: Option[String] = None)
-object CsvRowDelim {
-  case class Custom(delim: String) extends CsvRowDelim(delim)
-  case object Unix extends CsvRowDelim("\n")
-  case object Windows extends CsvRowDelim("\r\n")
-  case object Both extends CsvRowDelim("\n", Some("\r\n"))
+sealed abstract class RowDelim(val value: String, val alternate: Option[String] = None)
+object RowDelim {
+  case class Custom(delim: String) extends RowDelim(delim)
+  case object Unix extends RowDelim("\n")
+  case object Windows extends RowDelim("\r\n")
+  case object Both extends RowDelim("\n", Some("\r\n"))
 }
 
-sealed trait CsvFormatStrategy {
-  def withSeparator(separator: String): CsvFormatStrategy
-  def withQuote(quote: String): CsvFormatStrategy
-  def withQuoteEscape(quoteEscape: String): CsvFormatStrategy
-  def withEmpty(empty: String): CsvFormatStrategy
-  def withInvalid(invalid: String): CsvFormatStrategy
-  def withHeader(header: Boolean): CsvFormatStrategy
-  def withRowDelim(rowDelim: CsvRowDelim): CsvFormatStrategy
-  def withRowDelim(rowDelim: String): CsvFormatStrategy
+sealed trait DelimitedFormatStrategy {
+  def withSeparator(separator: String): DelimitedFormatStrategy
+  def withQuote(quote: String): DelimitedFormatStrategy
+  def withQuoteEscape(quoteEscape: String): DelimitedFormatStrategy
+  def withEmpty(empty: String): DelimitedFormatStrategy
+  def withInvalid(invalid: String): DelimitedFormatStrategy
+  def withHeader(header: Boolean): DelimitedFormatStrategy
+  def withRowDelim(rowDelim: RowDelim): DelimitedFormatStrategy
+  def withRowDelim(rowDelim: String): DelimitedFormatStrategy
 }
 
-trait GuessCsvFormat extends CsvFormatStrategy {
+trait GuessDelimitedFormat extends DelimitedFormatStrategy {
 
   /**
    * Makes a guess at the format of the CSV accessed by `reader`. This returns
@@ -30,9 +30,9 @@ trait GuessCsvFormat extends CsvFormatStrategy {
    * `reader`. The original reader will have some data read out of it. The
    * returned reader will contain all the original reader's data.
    */
-  def apply(reader: Reader): (CsvFormat, Reader) = {
-    val reader0 = new PushbackReader(reader, CsvParser.BufferSize)
-    val buffer = new Array[Char](CsvParser.BufferSize)
+  def apply(reader: Reader): (DelimitedFormat, Reader) = {
+    val reader0 = new PushbackReader(reader, parser.DelimitedParser.BufferSize)
+    val buffer = new Array[Char](parser.DelimitedParser.BufferSize)
     val len = reader0.read(buffer)
     reader0.unread(buffer, 0, len)
 
@@ -44,10 +44,10 @@ trait GuessCsvFormat extends CsvFormatStrategy {
   /**
    * Given the first part of a CSV file, return a guess at the format.
    */
-  def apply(str: String): CsvFormat
+  def apply(str: String): DelimitedFormat
 }
 
-case class CsvFormat(
+case class DelimitedFormat(
   /** The delimiter that separates fields within the rows. */
   separator: String,
 
@@ -68,16 +68,16 @@ case class CsvFormat(
   header: Boolean = false,
 
   /** The delimiter used to separate row. */
-  rowDelim: CsvRowDelim = CsvRowDelim.Both,
+  rowDelim: RowDelim = RowDelim.Both,
 
   /** If true, allow row delimiters within quotes, otherwise they are treated
    *  as an error. */
   allowRowDelimInQuotes: Boolean = true
-) extends CsvFormatStrategy {
+) extends DelimitedFormatStrategy {
   val escapedQuote = quoteEscape + quote
 
   override def toString: String =
-    s"""CsvFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", empty = "$empty", invalid = "$invalid", header = $header, rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
+    s"""DelimitedFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", empty = "$empty", invalid = "$invalid", header = $header, rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
 
   /**
    * Replaces all instances of \r\n with \n, then escapes all quotes and wraps
@@ -98,19 +98,19 @@ case class CsvFormat(
     else text
   }
 
-  def withSeparator(separator: String): CsvFormat = copy(separator = separator)
-  def withQuote(quote: String): CsvFormat = copy(quote = quote)
-  def withQuoteEscape(quoteEscape: String): CsvFormat = copy(quoteEscape = quoteEscape)
-  def withEmpty(empty: String): CsvFormat = copy(empty = empty)
-  def withInvalid(invalid: String): CsvFormat = copy(invalid = invalid)
-  def withHeader(header: Boolean): CsvFormat = copy(header = header)
-  def withRowDelim(rowDelim: CsvRowDelim): CsvFormat = copy(rowDelim = rowDelim)
-  def withRowDelim(rowDelim: String): CsvFormat = copy(rowDelim = CsvRowDelim.Custom(rowDelim))
+  def withSeparator(separator: String): DelimitedFormat = copy(separator = separator)
+  def withQuote(quote: String): DelimitedFormat = copy(quote = quote)
+  def withQuoteEscape(quoteEscape: String): DelimitedFormat = copy(quoteEscape = quoteEscape)
+  def withEmpty(empty: String): DelimitedFormat = copy(empty = empty)
+  def withInvalid(invalid: String): DelimitedFormat = copy(invalid = invalid)
+  def withHeader(header: Boolean): DelimitedFormat = copy(header = header)
+  def withRowDelim(rowDelim: RowDelim): DelimitedFormat = copy(rowDelim = rowDelim)
+  def withRowDelim(rowDelim: String): DelimitedFormat = copy(rowDelim = RowDelim.Custom(rowDelim))
 }
 
-object CsvFormat {
-  val CSV = CsvFormat(",")
-  val TSV = CsvFormat("\t")
+object DelimitedFormat {
+  val CSV = DelimitedFormat(",")
+  val TSV = DelimitedFormat("\t")
 
   val Guess = Partial(header = Some(false))
 
@@ -121,9 +121,9 @@ object CsvFormat {
       empty: Option[String] = None,
       invalid: Option[String] = None,
       header: Option[Boolean] = None,
-      rowDelim: Option[CsvRowDelim] = None,
+      rowDelim: Option[RowDelim] = None,
       allowRowDelimInQuotes: Boolean = true
-    ) extends GuessCsvFormat {
+    ) extends GuessDelimitedFormat {
 
     def withSeparator(separator: String): Partial = copy(separator = Some(separator))
     def withQuote(quote: String): Partial = copy(quote = Some(quote))
@@ -131,11 +131,11 @@ object CsvFormat {
     def withEmpty(empty: String): Partial = copy(empty = Some(empty))
     def withInvalid(invalid: String): Partial = copy(invalid = Some(invalid))
     def withHeader(header: Boolean): Partial = copy(header = Some(header))
-    def withRowDelim(rowDelim: CsvRowDelim): Partial = copy(rowDelim = Some(rowDelim))
-    def withRowDelim(rowDelim: String): Partial = copy(rowDelim = Some(CsvRowDelim.Custom(rowDelim)))
+    def withRowDelim(rowDelim: RowDelim): Partial = copy(rowDelim = Some(rowDelim))
+    def withRowDelim(rowDelim: String): Partial = copy(rowDelim = Some(RowDelim.Custom(rowDelim)))
 
     /**
-     * Performs a very naive guess of the CsvFormat. This uses weighted
+     * Performs a very naive guess of the DelimitedFormat. This uses weighted
      * frequencies of occurences of common separators, row-delimiters, quotes,
      * quote escapes, etc. and simply selects the max for each. For empty
      * values, it uses the frequency of the the possible empty values within
@@ -155,7 +155,7 @@ object CsvFormat {
      * all subsequent rows. Values below 0.5 will result in a header being
      * inferred.
      */
-    def apply(str: String): CsvFormat = {
+    def apply(str: String): DelimitedFormat = {
       def count(ndl: String): Int = {
         def check(i: Int, j: Int = 0): Boolean =
           if (j >= ndl.length) true
@@ -180,9 +180,9 @@ object CsvFormat {
         val windCnt = count("\r\n")
         val unixCnt = count("\n")
 
-        if ((windCnt < 4 * unixCnt) && (unixCnt < 4 * windCnt)) CsvRowDelim.Both
-        else if (windCnt < 4 * unixCnt) CsvRowDelim.Unix
-        else CsvRowDelim.Windows
+        if ((windCnt < 4 * unixCnt) && (unixCnt < 4 * windCnt)) RowDelim.Both
+        else if (windCnt < 4 * unixCnt) RowDelim.Unix
+        else RowDelim.Windows
       }
       val separator0 = separator.getOrElse {
         choose(","  -> 2.0, "\t" -> 3.0, ";"  -> 2.0, "|"  -> 1.0)(count)
@@ -207,7 +207,7 @@ object CsvFormat {
 
       val header0 = header.getOrElse(hasHeader(str, rowDelim0.value, separator0, quote0))
 
-      CsvFormat(separator0, quote0, quoteEscape0, empty0, invalid0, header0, rowDelim0, allowRowDelimInQuotes)
+      DelimitedFormat(separator0, quote0, quoteEscape0, empty0, invalid0, header0, rowDelim0, allowRowDelimInQuotes)
     }
 
     private def dot[K](u: Map[K, Double], v: Map[K, Double]): Double = {

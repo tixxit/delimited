@@ -1,6 +1,6 @@
-package net.tixxit.csv
+package net.tixxit.delimited
 
-case class CsvError(message: String, rowStart: Long, pos: Long, context: String, row: Long, col: Long) {
+case class DelimitedError(message: String, rowStart: Long, pos: Long, context: String, row: Long, col: Long) {
   def description: String = {
     val msg = s"Error parsing CSV row: $message"
     val prefix = s"Row $row: "
