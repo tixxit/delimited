@@ -168,17 +168,13 @@ object DelimitedParser {
       }
     }
 
-    def unquotedCell(): ParseResult[Cell] = {
+    def unquotedCell(): ParseResult[String] = {
       val start = pos
-      def loop(): ParseResult[Cell] = {
+      def loop(): ParseResult[String] = {
         val flag = isEndOfCell()
         if (flag > 0 || endOfFile) {
           val value = input.substring(start, pos)
-          val csvCell =
-            if (value == empty) Cell.Empty
-            else if (value == invalid) Cell.Invalid
-            else Cell.Data(value)
-          Emit(csvCell)
+          Emit(value)
         } else if (flag == 0) {
           advance()
           loop()
@@ -190,9 +186,9 @@ object DelimitedParser {
       loop()
     }
 
-    def quotedCell(): ParseResult[Cell] = {
+    def quotedCell(): ParseResult[String] = {
       val start = pos
-      def loop(): ParseResult[Cell] = {
+      def loop(): ParseResult[String] = {
         if (endOfInput) {
           if (endOfFile) {
             Fail("Unmatched quoted string at end of file", pos)
@@ -212,9 +208,9 @@ object DelimitedParser {
             advance(e)
             loop()
           } else if (q > 0) {
-            val escaped = input.substring(start, pos).replace(escapedQuote, quote)
+            val unescaped = unescape(input.substring(start, pos))
             advance(q)
-            Emit(Cell.Data(escaped))
+            Emit(unescaped)
           } else {
             advance(1)
             loop()
@@ -225,7 +221,7 @@ object DelimitedParser {
       loop()
     }
 
-    def cell(): ParseResult[Cell] = {
+    def cell(): ParseResult[String] = {
       val q = isQuote()
       if (q == 0) {
         unquotedCell()
@@ -252,7 +248,7 @@ object DelimitedParser {
       }
     }
 
-    def row(rowStart: Long, cells: Vector[Cell]): (ParserState, Instr[Row]) = {
+    def row(rowStart: Long, cells: Vector[String]): (ParserState, Instr[Row]) = {
       val start = pos
       def needInput() = (ContinueRow(rowStart, start, cells, input), NeedInput)
 
