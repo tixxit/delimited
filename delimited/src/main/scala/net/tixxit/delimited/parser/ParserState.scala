@@ -18,7 +18,7 @@ sealed trait ParserState {
 }
 
 object ParserState {
-  case class ContinueRow(rowStart: Long, readFrom: Long, partial: Vector[String], input: Input) extends ParserState
+  case class ContinueRow(rowStart: Long, readFrom: Long, partial: Row, input: Input) extends ParserState
   case class SkipRow(rowStart: Long, readFrom: Long, input: Input) extends ParserState
   case class ParseRow(rowStart: Long, readFrom: Long, input: Input) extends ParserState
 }

@@ -2,6 +2,7 @@ package net.tixxit.delimited
 package parser
 
 import scala.annotation.tailrec
+import scala.collection.mutable.Builder
 
 import java.nio.charset.{ Charset, StandardCharsets }
 import java.io.File
@@ -248,16 +249,16 @@ object DelimitedParser {
       }
     }
 
-    def row(rowStart: Long, cells: Vector[String]): (ParserState, Instr[Row]) = {
+    def row(rowStart: Long, cells: Builder[String, Row]): (ParserState, Instr[Row]) = {
       val start = pos
-      def needInput() = (ContinueRow(rowStart, start, cells, input), NeedInput)
+      def needInput() = (ContinueRow(rowStart, start, cells.result(), input), NeedInput)
 
       val s = isSeparator()
       if (s == 0) {
         val r = isRowDelim()
         if (r > 0 || endOfFile) {
           advance(r)
-          (ParseRow(pos, pos, input.marked(pos)), Emit(new Row(cells)))
+          (ParseRow(pos, pos, input.marked(pos)), Emit(cells.result()))
         } else if (r == 0) {
           (SkipRow(rowStart, pos, input), Fail("Expected separator, row delimiter, or end of file", pos))
         } else {
@@ -267,7 +268,7 @@ object DelimitedParser {
         advance(s)
         cell() match {
           case Emit(c) =>
-            row(rowStart, cells :+ c)
+            row(rowStart, cells += c)
           case f @ Fail(_, _) =>
             (SkipRow(rowStart, pos, input), f)
           case NeedInput =>
@@ -280,7 +281,7 @@ object DelimitedParser {
 
     state match {
       case ContinueRow(rowStart, readFrom, partial, _) =>
-        row(rowStart, partial)
+        row(rowStart, Row.newBuilder ++= partial)
 
       case instr @ ParseRow(rowStart, readFrom, _) =>
         if (endOfFile) {
@@ -288,7 +289,7 @@ object DelimitedParser {
         } else {
           cell() match {
             case Emit(csvCell) =>
-              row(rowStart, Vector(csvCell))
+              row(rowStart, Row.newBuilder += csvCell)
             case f @ Fail(_, _) =>
               (SkipRow(rowStart, pos, input), f)
             case NeedInput =>
