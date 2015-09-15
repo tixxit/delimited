@@ -258,7 +258,8 @@ object DelimitedParser {
         val r = isRowDelim()
         if (r > 0 || endOfFile) {
           advance(r)
-          (ParseRow(pos, pos, input.marked(pos)), Emit(cells.result()))
+          val row = cells.result()
+          (ParseRow(pos, pos, input.marked(pos), row.size), Emit(row))
         } else if (r == 0) {
           (SkipRow(rowStart, pos, input), Fail("Expected separator, row delimiter, or end of file", pos))
         } else {
@@ -280,28 +281,28 @@ object DelimitedParser {
     }
 
     state match {
-      case ContinueRow(rowStart, readFrom, partial, _) =>
-        row(rowStart, Row.newBuilder ++= partial)
+      case ContinueRow(rowStart, readFrom, partial, _, _) =>
+        row(rowStart, state.newRowBuilder ++= partial)
 
-      case instr @ ParseRow(rowStart, readFrom, _) =>
+      case instr @ ParseRow(rowStart, readFrom, _, sizeHint) =>
         if (endOfFile) {
           (instr, Done)
         } else {
           cell() match {
             case Emit(csvCell) =>
-              row(rowStart, Row.newBuilder += csvCell)
+              row(rowStart, state.newRowBuilder += csvCell)
             case f @ Fail(_, _) =>
-              (SkipRow(rowStart, pos, input), f)
+              (SkipRow(rowStart, pos, input, sizeHint), f)
             case NeedInput =>
               (instr, NeedInput)
           }
         }
 
-      case SkipRow(rowStart, readFrom, _) =>
+      case SkipRow(rowStart, readFrom, _, sizeHint) =>
         if (skipToNextRow()) {
-          (ParseRow(pos, pos, input.marked(pos)), Resume)
+          (ParseRow(pos, pos, input.marked(pos), sizeHint), Resume)
         } else {
-          (SkipRow(rowStart, pos, input), NeedInput)
+          (SkipRow(rowStart, pos, input, sizeHint), NeedInput)
         }
     }
   }
