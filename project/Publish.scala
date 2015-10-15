@@ -20,6 +20,8 @@ object Publish {
       else
         Some("Releases" at nexus + "service/local/staging/deploy/maven2")
     },
+    homepage := Some(url("http://github.com/tixxit/delimited")),
+    licenses += ("ISC License", url("https://opensource.org/licenses/ISC")),
     pomExtra := (
       <scm>
         <url>git@github.com:tixxit/delimited.git</url>
