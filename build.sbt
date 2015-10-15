@@ -16,4 +16,6 @@ lazy val root = project.
   settings(Publish.skip: _*)
 
 lazy val delimitedCore = project.
-  in(file("delimited-core"))
+  in(file("delimited-core")).
+  settings(Publish.settings: _*)
+
