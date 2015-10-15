@@ -1,4 +1,4 @@
-name := "delimited"
+name := "delimited-core"
 
 libraryDependencies ++= Seq(
   Deps.specs2,
