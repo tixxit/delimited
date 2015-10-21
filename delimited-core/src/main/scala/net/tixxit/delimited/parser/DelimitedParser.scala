@@ -68,16 +68,17 @@ case class DelimitedParser(
     loop(initState, fail, row, Vector.empty)
   }
 
-  def parseAll(chunks: Iterator[String]): Vector[Either[DelimitedError, Row]] = {
+  def parseAll(chunks: Iterator[String]): Iterator[Either[DelimitedError, Row]] = {
     val input = chunks.map(Option(_)).takeWhile(_.isDefined) ++ Iterator(None)
-    input.foldLeft((this, Vector.empty[Either[DelimitedError, Row]])) {
-      case ((parser, prefix), chunk) =>
-      val (nextParser, rows) = parser.parseChunk(chunk)
-      (nextParser, prefix ++ rows)
-    }._2
+
+    input
+      .scanLeft((this, Vector.empty[Either[DelimitedError, Row]])) {
+        case ((parser, _), chunk) => parser.parseChunk(chunk)
+      }
+      .flatMap(_._2)
   }
 
-  def parseReader(reader: Reader): Vector[Either[DelimitedError, Row]] = {
+  def parseReader(reader: Reader): Iterator[Either[DelimitedError, Row]] = {
     val buffer = new Array[Char](DelimitedParser.BufferSize)
     val chunks = Iterator.continually {
       val len = reader.read(buffer)
@@ -91,26 +92,26 @@ case class DelimitedParser(
     parseAll(chunks)
   }
 
-  def parseInputStream(is: InputStream, charset: Charset = StandardCharsets.UTF_8): Vector[Either[DelimitedError, Row]] =
+  def parseInputStream(is: InputStream, charset: Charset = StandardCharsets.UTF_8): Iterator[Either[DelimitedError, Row]] =
     parseReader(new InputStreamReader(is, charset))
 
   def parseFile(file: File, charset: Charset = StandardCharsets.UTF_8): Vector[Either[DelimitedError, Row]] = {
     val is = new FileInputStream(file)
     try {
-      parseInputStream(is, charset)
+      parseInputStream(is, charset).toVector
     } finally {
       is.close()
     }
   }
 
   def parseString(input: String): Vector[Either[DelimitedError, Row]] =
-    parseAll(Iterator(input))
+    parseAll(Iterator(input)).toVector
 }
 
 object DelimitedParser {
   val BufferSize = 32 * 1024
 
-  def apply(format: DelimitedFormat): DelimitedParser =
+  def apply(format: DelimitedFormatStrategy): DelimitedParser =
     DelimitedParser(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L)
 
   def parse(format: DelimitedFormat)(state: ParserState): (ParserState, Instr[Row]) = {
