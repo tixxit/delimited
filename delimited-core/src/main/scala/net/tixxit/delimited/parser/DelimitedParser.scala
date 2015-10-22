@@ -2,6 +2,7 @@ package net.tixxit.delimited
 package parser
 
 import scala.annotation.tailrec
+import scala.collection.mutable.Builder
 
 import java.nio.charset.{ Charset, StandardCharsets }
 import java.io.File
@@ -169,17 +170,13 @@ object DelimitedParser {
       }
     }
 
-    def unquotedCell(): ParseResult[Cell] = {
+    def unquotedCell(): ParseResult[String] = {
       val start = pos
-      def loop(): ParseResult[Cell] = {
+      def loop(): ParseResult[String] = {
         val flag = isEndOfCell()
         if (flag > 0 || endOfFile) {
           val value = input.substring(start, pos)
-          val csvCell =
-            if (value == empty) Cell.Empty
-            else if (value == invalid) Cell.Invalid
-            else Cell.Data(value)
-          Emit(csvCell)
+          Emit(value)
         } else if (flag == 0) {
           advance()
           loop()
@@ -191,9 +188,9 @@ object DelimitedParser {
       loop()
     }
 
-    def quotedCell(): ParseResult[Cell] = {
+    def quotedCell(): ParseResult[String] = {
       val start = pos
-      def loop(): ParseResult[Cell] = {
+      def loop(): ParseResult[String] = {
         if (endOfInput) {
           if (endOfFile) {
             Fail("Unmatched quoted string at end of file", pos)
@@ -213,9 +210,9 @@ object DelimitedParser {
             advance(e)
             loop()
           } else if (q > 0) {
-            val escaped = input.substring(start, pos).replace(escapedQuote, quote)
+            val unescaped = unescape(input.substring(start, pos))
             advance(q)
-            Emit(Cell.Data(escaped))
+            Emit(unescaped)
           } else {
             advance(1)
             loop()
@@ -226,7 +223,7 @@ object DelimitedParser {
       loop()
     }
 
-    def cell(): ParseResult[Cell] = {
+    def cell(): ParseResult[String] = {
       val q = isQuote()
       if (q == 0) {
         unquotedCell()
@@ -253,16 +250,17 @@ object DelimitedParser {
       }
     }
 
-    def row(rowStart: Long, cells: Vector[Cell]): (ParserState, Instr[Row]) = {
+    def row(rowStart: Long, cells: Builder[String, Row]): (ParserState, Instr[Row]) = {
       val start = pos
-      def needInput() = (ContinueRow(rowStart, start, cells, input), NeedInput)
+      def needInput() = (ContinueRow(rowStart, start, cells.result(), input), NeedInput)
 
       val s = isSeparator()
       if (s == 0) {
         val r = isRowDelim()
         if (r > 0 || endOfFile) {
           advance(r)
-          (ParseRow(pos, pos, input.marked(pos)), Emit(new Row(cells)))
+          val row = cells.result()
+          (ParseRow(pos, pos, input.marked(pos), row.size), Emit(row))
         } else if (r == 0) {
           (SkipRow(rowStart, pos, input), Fail("Expected separator, row delimiter, or end of file", pos))
         } else {
@@ -272,7 +270,7 @@ object DelimitedParser {
         advance(s)
         cell() match {
           case Emit(c) =>
-            row(rowStart, cells :+ c)
+            row(rowStart, cells += c)
           case f @ Fail(_, _) =>
             (SkipRow(rowStart, pos, input), f)
           case NeedInput =>
@@ -284,28 +282,28 @@ object DelimitedParser {
     }
 
     state match {
-      case ContinueRow(rowStart, readFrom, partial, _) =>
-        row(rowStart, partial)
+      case ContinueRow(rowStart, readFrom, partial, _, _) =>
+        row(rowStart, state.newRowBuilder ++= partial)
 
-      case instr @ ParseRow(rowStart, readFrom, _) =>
+      case instr @ ParseRow(rowStart, readFrom, _, sizeHint) =>
         if (endOfFile) {
           (instr, Done)
         } else {
           cell() match {
             case Emit(csvCell) =>
-              row(rowStart, Vector(csvCell))
+              row(rowStart, state.newRowBuilder += csvCell)
             case f @ Fail(_, _) =>
-              (SkipRow(rowStart, pos, input), f)
+              (SkipRow(rowStart, pos, input, sizeHint), f)
             case NeedInput =>
               (instr, NeedInput)
           }
         }
 
-      case SkipRow(rowStart, readFrom, _) =>
+      case SkipRow(rowStart, readFrom, _, sizeHint) =>
         if (skipToNextRow()) {
-          (ParseRow(pos, pos, input.marked(pos)), Resume)
+          (ParseRow(pos, pos, input.marked(pos), sizeHint), Resume)
         } else {
-          (SkipRow(rowStart, pos, input), NeedInput)
+          (SkipRow(rowStart, pos, input, sizeHint), NeedInput)
         }
     }
   }

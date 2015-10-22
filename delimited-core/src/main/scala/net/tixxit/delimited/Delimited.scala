@@ -41,7 +41,7 @@ sealed abstract class Delimited {
   override def toString: String = {
     val full = this match {
       case Labeled(_, header, _) =>
-        Row(header map (Cell.Data(_))) +: data
+        Row(header: _*) +: data
       case Unlabeled(_, _) =>
         data
     }

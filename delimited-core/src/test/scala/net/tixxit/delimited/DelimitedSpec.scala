@@ -8,8 +8,8 @@ class DelimitedSpec extends Specification {
       val data = """a,"b","c,d"|"e,f,g""""
       val csv = Delimited.parseString(data, DelimitedFormat.Guess.withRowDelim("|"))
       csv.unlabeled.rows must_== Vector(
-        Right(Row.data("a", "b", "c,d")),
-        Right(Row.data("e,f,g"))
+        Right(Row("a", "b", "c,d")),
+        Right(Row("e,f,g"))
       )
     }
 
@@ -17,8 +17,6 @@ class DelimitedSpec extends Specification {
       separator = ",",
       quote = "'",
       quoteEscape = "'",
-      empty = "N/A",
-      invalid = "N/M",
       header = false,
       rowDelim = RowDelim.Custom("|"),
       allowRowDelimInQuotes = true
@@ -29,8 +27,8 @@ class DelimitedSpec extends Specification {
         "a,'''','c'''|'''''d''''', ''''",
         TestFormat
       ).rows must_== Vector(
-        Right(Row.data("a", "'", "c'")),
-        Right(Row.data("''d''", " ''''"))
+        Right(Row("a", "'", "c'")),
+        Right(Row("''d''", " ''''"))
       )
     }
 
@@ -49,16 +47,6 @@ class DelimitedSpec extends Specification {
         Delimited.parseString("'a\\'b','\\''|' '", TestFormat.withQuoteEscape("\\")).rows
     }
 
-    "respect DelimitedFormat empty" in {
-      Delimited.parseString("a,N/A,b|N/A,N/A", TestFormat).rows must_==
-        Delimited.parseString("a,,b|,", TestFormat.withEmpty("")).rows
-    }
-
-    "respect DelimitedFormat invalid" in {
-      Delimited.parseString("a,N/M,b|N/M,N/M", TestFormat).rows must_==
-        Delimited.parseString("a,nm,b|nm,nm", TestFormat.withInvalid("nm")).rows
-    }
-
     "respect DelimitedFormat row delimiter" in {
       Delimited.parseString("a,b|c,d|e,f", TestFormat).rows must_==
         Delimited.parseString("a,b\nc,d\ne,f", TestFormat.withRowDelim(RowDelim.Unix)).rows
@@ -66,16 +54,16 @@ class DelimitedSpec extends Specification {
 
     "parse CSV with row delimiter in quote" in {
       Delimited.parseString("a,'b|c'|'d|e',f", TestFormat).rows must_== Vector(
-        Right(Row.data("a", "b|c")),
-        Right(Row.data("d|e", "f")))
+        Right(Row("a", "b|c")),
+        Right(Row("d|e", "f")))
     }
 
     "parser respects whitespace" in {
       val data = " a , , 'a','b'|  b  ,c  ,   "
       val csv = Delimited.parseString(data, DelimitedFormat.Guess.withRowDelim("|"))
       csv.rows must_== Vector(
-        Right(Row.data(" a ", " ", " 'a'", "b")),
-        Right(Row.data("  b  ", "c  ", "   ")))
+        Right(Row(" a ", " ", " 'a'", "b")),
+        Right(Row("  b  ", "c  ", "   ")))
     }
   }
 }

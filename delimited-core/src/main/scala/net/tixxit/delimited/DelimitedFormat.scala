@@ -15,8 +15,6 @@ sealed trait DelimitedFormatStrategy {
   def withSeparator(separator: String): DelimitedFormatStrategy
   def withQuote(quote: String): DelimitedFormatStrategy
   def withQuoteEscape(quoteEscape: String): DelimitedFormatStrategy
-  def withEmpty(empty: String): DelimitedFormatStrategy
-  def withInvalid(invalid: String): DelimitedFormatStrategy
   def withHeader(header: Boolean): DelimitedFormatStrategy
   def withRowDelim(rowDelim: RowDelim): DelimitedFormatStrategy
   def withRowDelim(rowDelim: String): DelimitedFormatStrategy
@@ -57,13 +55,6 @@ case class DelimitedFormat(
   /** The string that is used to escape a quote character, within a quote. */
   quoteEscape: String = "\"",
 
-  /** The value of an empty field (common values are - or ?). */
-  empty: String = "",
-
-  /** The value of an invalid field. Empty values take precedence, so setting
-   *  this to the same value as `empty` essentially disabled invalid values. */
-  invalid: String = "",
-
   /** Indicates whether or not the CSV's first row is actually a header. */
   header: Boolean = false,
 
@@ -76,8 +67,11 @@ case class DelimitedFormat(
 ) extends DelimitedFormatStrategy {
   val escapedQuote = quoteEscape + quote
 
+  def unescape(value: String): String =
+    value.replace(escapedQuote, quote)
+
   override def toString: String =
-    s"""DelimitedFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", empty = "$empty", invalid = "$invalid", header = $header, rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
+    s"""DelimitedFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", header = $header, rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
 
   /**
    * Replaces all instances of \r\n with \n, then escapes all quotes and wraps
@@ -101,8 +95,6 @@ case class DelimitedFormat(
   def withSeparator(separator: String): DelimitedFormat = copy(separator = separator)
   def withQuote(quote: String): DelimitedFormat = copy(quote = quote)
   def withQuoteEscape(quoteEscape: String): DelimitedFormat = copy(quoteEscape = quoteEscape)
-  def withEmpty(empty: String): DelimitedFormat = copy(empty = empty)
-  def withInvalid(invalid: String): DelimitedFormat = copy(invalid = invalid)
   def withHeader(header: Boolean): DelimitedFormat = copy(header = header)
   def withRowDelim(rowDelim: RowDelim): DelimitedFormat = copy(rowDelim = rowDelim)
   def withRowDelim(rowDelim: String): DelimitedFormat = copy(rowDelim = RowDelim.Custom(rowDelim))
@@ -118,8 +110,6 @@ object DelimitedFormat {
       separator: Option[String] = None,
       quote: Option[String] = None,
       quoteEscape: Option[String] = None,
-      empty: Option[String] = None,
-      invalid: Option[String] = None,
       header: Option[Boolean] = None,
       rowDelim: Option[RowDelim] = None,
       allowRowDelimInQuotes: Boolean = true
@@ -128,8 +118,6 @@ object DelimitedFormat {
     def withSeparator(separator: String): Partial = copy(separator = Some(separator))
     def withQuote(quote: String): Partial = copy(quote = Some(quote))
     def withQuoteEscape(quoteEscape: String): Partial = copy(quoteEscape = Some(quoteEscape))
-    def withEmpty(empty: String): Partial = copy(empty = Some(empty))
-    def withInvalid(invalid: String): Partial = copy(invalid = Some(invalid))
     def withHeader(header: Boolean): Partial = copy(header = Some(header))
     def withRowDelim(rowDelim: RowDelim): Partial = copy(rowDelim = Some(rowDelim))
     def withRowDelim(rowDelim: String): Partial = copy(rowDelim = Some(RowDelim.Custom(rowDelim)))
@@ -137,18 +125,14 @@ object DelimitedFormat {
     /**
      * Performs a very naive guess of the DelimitedFormat. This uses weighted
      * frequencies of occurences of common separators, row-delimiters, quotes,
-     * quote escapes, etc. and simply selects the max for each. For empty
-     * values, it uses the frequency of the the possible empty values within
-     * the cells.
+     * quote escapes, etc. and simply selects the max for each.
      *
      * This supports:
      *
      *   * \r\n and \n as row delimiters,
      *   * ',', '\t', ';', and '|' as field delimiters,
      *   * '"', and ''' as quote delimiter,
-     *   * the quote delimiter or \ for quote escapes,
-     *   * '', '?', '-', 'N/A', and 'NA' as empty values, and
-     *   * 'N/M' and 'NM' as invalid values.
+     *   * the quote delimiter or \ for quote escapes.
      *
      * Headers are guessed by using the cosine similarity of the frequency of
      * characters (except quotes/field delimiters) between the first row and
@@ -198,16 +182,10 @@ object DelimitedFormat {
         cell <- row.split(Pattern.quote(separator0))
       } yield cell
       def matches(value: String): Int = cells.filter(_ == value).size
-      val empty0 = empty.getOrElse {
-        choose("" -> 3, "?" -> 2, "-" -> 2, "N/A" -> 1, "NA" -> 1)(matches)
-      }
-      val invalid0 = invalid.getOrElse {
-        if (matches("N/M") > 1) "N/M" else empty0
-      }
 
       val header0 = header.getOrElse(hasHeader(str, rowDelim0.value, separator0, quote0))
 
-      DelimitedFormat(separator0, quote0, quoteEscape0, empty0, invalid0, header0, rowDelim0, allowRowDelimInQuotes)
+      DelimitedFormat(separator0, quote0, quoteEscape0, header0, rowDelim0, allowRowDelimInQuotes)
     }
 
     private def dot[K](u: Map[K, Double], v: Map[K, Double]): Double = {
