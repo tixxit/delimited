@@ -55,7 +55,7 @@ sealed abstract class Delimited {
 object Delimited {
 
   case class Labeled(format: DelimitedFormat, header: Vector[String], rows: Vector[Either[DelimitedError, Row]]) extends Delimited
-  
+
   case class Unlabeled(format: DelimitedFormat, rows: Vector[Either[DelimitedError, Row]]) extends Delimited
 
   def empty(format: DelimitedFormat): Delimited =
@@ -72,7 +72,7 @@ object Delimited {
       case (guess: GuessDelimitedFormat) => guess(reader)
       case (fmt: DelimitedFormat) => (fmt, reader)
     }
-    wrap(format0, DelimitedParser(format0).parseReader(reader0))
+    wrap(format0, DelimitedParser(format0).parseReader(reader0).toVector)
   }
 
   def parseString(input: String, format: DelimitedFormatStrategy = DelimitedFormat.Guess): Delimited =
