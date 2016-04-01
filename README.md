@@ -46,7 +46,7 @@ Delimited is published for both Scala 2.10 and 2.11. To get started with SBT,
 use the following in your SBT build file:
 
 ```scala
-libraryDependencies += "net.tixxit" %% "delimited-core" % "0.5.3"
+libraryDependencies += "net.tixxit" %% "delimited-core" % "0.5.5"
 ```
 
-If you are using Maven, you can [find more information on the Maven Central Repository](http://search.maven.org/#artifactdetails%7Cnet.tixxit%7Cdelimited-core_2.11%7C0.5.3%7Cjar).
+If you are using Maven, you can [find more information on the Maven Central Repository](http://search.maven.org/#artifactdetails%7Cnet.tixxit%7Cdelimited-core_2.11%7C0.5.5%7Cjar).
