@@ -6,7 +6,7 @@ import scala.collection.mutable.{ ArrayBuilder, Builder }
 /**
  * A single row in a CSV file.
  */
-final class Row(private val cells: Array[String]) extends AbstractSeq[String]
+final class Row(private val cells: Array[String]) extends Seq[String]
 with IndexedSeq[String] with IndexedSeqLike[String, Row] {
   def apply(idx: Int): String = cells(idx)
 
