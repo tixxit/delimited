@@ -19,3 +19,7 @@ lazy val delimitedCore = project.
   in(file("delimited-core")).
   settings(Publish.settings: _*)
 
+lazy val delimitedBenchmark = project.
+  in(file("delimited-benchmark")).
+  dependsOn(delimitedCore).
+  settings(Publish.skip: _*)

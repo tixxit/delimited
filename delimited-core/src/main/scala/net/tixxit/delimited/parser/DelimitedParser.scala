@@ -41,7 +41,7 @@ case class DelimitedParser(
       val (s1, instr) = DelimitedParser.parse(format)(s0)
 
       instr match {
-        case Emit(cells) =>
+        case EmitRow(cells) =>
           loop(s1, fail, row + 1, acc :+ Right(cells))
 
         case f @ Fail(_, _) =>
@@ -115,54 +115,78 @@ object DelimitedParser {
   def apply(format: DelimitedFormatStrategy): DelimitedParser =
     DelimitedParser(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L)
 
-  def parse(format: DelimitedFormat)(state: ParserState): (ParserState, Instr[Row]) = {
-    import format._
+  final class InputBuffer(input: Input) {
+    def this(state: ParserState) = {
+      this(state.input)
+      setPos(state.readFrom)
+    }
 
-    val input: Input = state.input
-    var pos: Long = state.readFrom
-    def ch: Char = input.charAt(pos)
-    def endOfInput: Boolean = pos >= input.length
-    def endOfFile: Boolean = endOfInput && input.isLast
-    def advance(i: Long = 1): Unit = pos += i
-    def retreat(i: Long = 1): Unit = pos -= i
+    private[this] var pos: Int = 0
+    private[this] val chunk: String = input.data
 
-    def isFlag(str: String): () => Int = {
+    def getPos(): Long = input.offset + pos.toLong
+    def setPos(p: Long): Unit = pos = (p.toLong - input.offset).toInt
+
+    def getChar(): Char = chunk.charAt(pos)
+    def advance(i: Int): Unit = pos += i
+    def retreat(i: Int): Unit = pos -= i
+    def endOfInput(): Boolean = pos >= input.length
+    def endOfFile(): Boolean = endOfInput() && input.isLast
+
+    def isFlag(str: String): Int = {
       def loop(i: Int): Int =
         if (i >= str.length) {
           retreat(i)
           i
-        } else if (endOfInput) {
+        } else if (endOfInput()) {
           retreat(i)
           if (endOfFile) 0 else -1
-        } else if (str.charAt(i) == ch) {
-          advance()
+        } else if (str.charAt(i) == getChar()) {
+          advance(1)
           loop(i + 1)
         } else {
           retreat(i)
           0
         }
 
-      () => loop(0)
+      loop(0)
     }
+
+    def eitherFlag(f1: String, f2: String): Int = {
+      val i = isFlag(f1)
+      if (i == 0 && f2 != null) isFlag(f2) else i
+    }
+  }
+
+  def parse(format: DelimitedFormat)(state: ParserState): (ParserState, Instr) = {
+    import format._
+
+    val input: Input = state.input
+    val buf: InputBuffer = new InputBuffer(state)
 
     def either(f0: () => Int, f1: () => Int): () => Int = { () =>
       val i = f0()
       if (i == 0) f1() else i
     }
 
-    val isQuote = isFlag(quote)
-    val isQuoteEscape = isFlag(quoteEscape)
-    val isSeparator = isFlag(separator)
-    val isRowDelim = rowDelim.alternate.map { alt =>
-      either(isFlag(rowDelim.value), isFlag(alt))
-    }.getOrElse(isFlag(rowDelim.value))
-    val isEndOfCell = either(isSeparator, isRowDelim)
-    def isEscapedQuote() = {
+    def isQuote(): Int = buf.isFlag(quote)
+    def isQuoteEscape(): Int = buf.isFlag(quoteEscape)
+    def isSeparator(): Int = buf.isFlag(separator)
+
+    val primaryRowDelim: String = rowDelim.value
+    val secondaryRowDelim: String = rowDelim.alternate.orNull
+    def isRowDelim(): Int = buf.eitherFlag(primaryRowDelim, secondaryRowDelim)
+    def isEndOfCell(): Int = {
+      val i = isSeparator()
+      if (i == 0) isRowDelim() else i
+    }
+
+    def isEscapedQuote(): Int = {
       val e = isQuoteEscape()
       if (e > 0) {
-        advance(e)
+        buf.advance(e)
         val q = isQuote()
-        retreat(e)
+        buf.retreat(e)
         if (q > 0) q + e
         else q
       } else {
@@ -170,15 +194,16 @@ object DelimitedParser {
       }
     }
 
-    def unquotedCell(): ParseResult[String] = {
-      val start = pos
-      def loop(): ParseResult[String] = {
+    def unquotedCell(bldr: Builder[String, Row]): ParseResult = {
+      val start = buf.getPos()
+      def loop(): ParseResult = {
         val flag = isEndOfCell()
-        if (flag > 0 || endOfFile) {
-          val value = input.substring(start, pos)
-          Emit(value)
+        if (flag > 0 || buf.endOfFile()) {
+          val value = input.substring(start, buf.getPos())
+          bldr += value
+          Success
         } else if (flag == 0) {
-          advance()
+          buf.advance(1)
           loop()
         } else {
           NeedInput
@@ -188,12 +213,12 @@ object DelimitedParser {
       loop()
     }
 
-    def quotedCell(): ParseResult[String] = {
-      val start = pos
-      def loop(): ParseResult[String] = {
-        if (endOfInput) {
-          if (endOfFile) {
-            Fail("Unmatched quoted string at end of file", pos)
+    def quotedCell(bldr: Builder[String, Row]): ParseResult = {
+      val start = buf.getPos()
+      def loop(): ParseResult = {
+        if (buf.endOfInput()) {
+          if (buf.endOfFile()) {
+            Fail("Unmatched quoted string at end of file", buf.getPos())
           } else {
             NeedInput
           }
@@ -205,16 +230,17 @@ object DelimitedParser {
           if (d < 0 || e < 0 || q < 0) {
             NeedInput
           } else if (d > 0) {
-            Fail("Unmatched quoted string at row delimiter", pos)
+            Fail("Unmatched quoted string at row delimiter", buf.getPos())
           } else if (e > 0) {
-            advance(e)
+            buf.advance(e)
             loop()
           } else if (q > 0) {
-            val unescaped = unescape(input.substring(start, pos))
-            advance(q)
-            Emit(unescaped)
+            val unescaped = unescape(input.substring(start, buf.getPos()))
+            buf.advance(q)
+            bldr += unescaped
+            Success
           } else {
-            advance(1)
+            buf.advance(1)
             loop()
           }
         }
@@ -223,13 +249,13 @@ object DelimitedParser {
       loop()
     }
 
-    def cell(): ParseResult[String] = {
+    def cell(bldr: Builder[String, Row]): ParseResult = {
       val q = isQuote()
       if (q == 0) {
-        unquotedCell()
+        unquotedCell(bldr)
       } else if (q > 0) {
-        advance(q)
-        quotedCell()
+        buf.advance(q)
+        quotedCell(bldr)
       } else {
         NeedInput
       }
@@ -237,42 +263,42 @@ object DelimitedParser {
 
     def skipToNextRow(): Boolean = {
       val d = isRowDelim()
-      if (d > 0 || endOfFile) {
-        advance(d)
+      if (d > 0 || buf.endOfFile()) {
+        buf.advance(d)
         true
       } else if (d == 0) {
-        advance(1)
+        buf.advance(1)
         skipToNextRow()
       } else {
         if (input.isLast)
-          advance(input.length - pos)
+          buf.advance((input.length - buf.getPos()).toInt)
         input.isLast
       }
     }
 
-    def row(rowStart: Long, cells: Builder[String, Row]): (ParserState, Instr[Row]) = {
-      val start = pos
+    def row(rowStart: Long, cells: Builder[String, Row]): (ParserState, Instr) = {
+      val start = buf.getPos()
       def needInput() = (ContinueRow(rowStart, start, cells.result(), input), NeedInput)
 
       val s = isSeparator()
       if (s == 0) {
         val r = isRowDelim()
-        if (r > 0 || endOfFile) {
-          advance(r)
+        if (r > 0 || buf.endOfFile()) {
+          buf.advance(r)
           val row = cells.result()
-          (ParseRow(pos, pos, input.marked(pos), row.size), Emit(row))
+          (ParseRow(buf.getPos(), buf.getPos(), input.marked(buf.getPos()), row.size), EmitRow(row))
         } else if (r == 0) {
-          (SkipRow(rowStart, pos, input), Fail("Expected separator, row delimiter, or end of file", pos))
+          (SkipRow(rowStart, buf.getPos(), input), Fail("Expected separator, row delimiter, or end of file", buf.getPos()))
         } else {
           needInput()
         }
       } else if (s > 0) {
-        advance(s)
-        cell() match {
-          case Emit(c) =>
-            row(rowStart, cells += c)
+        buf.advance(s)
+        cell(cells) match {
+          case Success =>
+            row(rowStart, cells)
           case f @ Fail(_, _) =>
-            (SkipRow(rowStart, pos, input), f)
+            (SkipRow(rowStart, buf.getPos(), input), f)
           case NeedInput =>
             needInput()
         }
@@ -286,14 +312,15 @@ object DelimitedParser {
         row(rowStart, state.newRowBuilder ++= partial)
 
       case instr @ ParseRow(rowStart, readFrom, _, sizeHint) =>
-        if (endOfFile) {
+        if (buf.endOfFile()) {
           (instr, Done)
         } else {
-          cell() match {
-            case Emit(csvCell) =>
-              row(rowStart, state.newRowBuilder += csvCell)
+          val cells = state.newRowBuilder
+          cell(cells) match {
+            case Success =>
+              row(rowStart, cells)
             case f @ Fail(_, _) =>
-              (SkipRow(rowStart, pos, input, sizeHint), f)
+              (SkipRow(rowStart, buf.getPos(), input, sizeHint), f)
             case NeedInput =>
               (instr, NeedInput)
           }
@@ -301,9 +328,9 @@ object DelimitedParser {
 
       case SkipRow(rowStart, readFrom, _, sizeHint) =>
         if (skipToNextRow()) {
-          (ParseRow(pos, pos, input.marked(pos), sizeHint), Resume)
+          (ParseRow(buf.getPos(), buf.getPos(), input.marked(buf.getPos()), sizeHint), Resume)
         } else {
-          (SkipRow(rowStart, pos, input, sizeHint), NeedInput)
+          (SkipRow(rowStart, buf.getPos(), input, sizeHint), NeedInput)
         }
     }
   }
