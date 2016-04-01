@@ -1,15 +1,17 @@
 package net.tixxit.delimited
 package parser
 
-sealed trait Instr[+A]
+sealed trait Instr
+sealed trait ParseResult
 
 object Instr {
-  sealed trait ParseResult[+A] extends Instr[A]
 
-  case class Emit[+A](value: A) extends ParseResult[A]
-  case class Fail(message: String, pos: Long) extends ParseResult[Nothing]
-  case object NeedInput extends ParseResult[Nothing]
+  case object Success extends ParseResult
 
-  case object Resume extends Instr[Nothing]
-  case object Done extends Instr[Nothing]
+  case class Fail(message: String, pos: Long) extends ParseResult with Instr
+  case object NeedInput extends ParseResult with Instr
+
+  case class EmitRow(row: Row) extends Instr
+  case object Resume extends Instr
+  case object Done extends Instr
 }
