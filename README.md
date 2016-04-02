@@ -14,9 +14,7 @@ use the following in your SBT build file:
 libraryDependencies += "net.tixxit" %% "delimited-core" % "0.5.5"
 ```
 
-## API Docs
-
-You can find the latest API docs here: [http://tixxit.github.io/delimited/latest/api/](http://tixxit.github.io/delimited/latest/api/)
+You can find the latest **API docs** here: [http://tixxit.github.io/delimited/latest/api/](http://tixxit.github.io/delimited/latest/api/)
 
 # Overview
 
