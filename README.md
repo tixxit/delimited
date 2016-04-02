@@ -1,5 +1,8 @@
 # Delimited
 
+[![Build status](https://img.shields.io/travis/tixxit/delimited/master.svg)](https://travis-ci.org/tixxit/delimited)
+[![Maven Central](https://img.shields.io/maven-central/v/net.tixxit/delimited-core_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/net.tixxit/delimited-core_2.11)
+
 A fast, easy-to-use CSV parser for Scala.
 
 # Overview
