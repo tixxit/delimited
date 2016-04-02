@@ -5,6 +5,19 @@
 
 A fast, easy-to-use CSV parser for Scala.
 
+# Set Up
+
+Delimited is published for both Scala 2.10 and 2.11. To get started with SBT,
+use the following in your SBT build file:
+
+```scala
+libraryDependencies += "net.tixxit" %% "delimited-core" % "0.5.5"
+```
+
+## API Docs
+
+You can find the latest API docs here: [http://tixxit.github.io/delimited/latest/api/](http://tixxit.github.io/delimited/latest/api/)
+
 # Overview
 
 ## Fully Configurable Formats
@@ -42,14 +55,3 @@ streaming parsing.
    * per-column inference of empty field values
    * validation
    * etc
-
-# Set Up
-
-Delimited is published for both Scala 2.10 and 2.11. To get started with SBT,
-use the following in your SBT build file:
-
-```scala
-libraryDependencies += "net.tixxit" %% "delimited-core" % "0.5.5"
-```
-
-If you are using Maven, you can [find more information on the Maven Central Repository](http://search.maven.org/#artifactdetails%7Cnet.tixxit%7Cdelimited-core_2.11%7C0.5.5%7Cjar).

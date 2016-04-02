@@ -10,6 +10,8 @@ scalacOptions in ThisBuild ++= Seq("-deprecation", "-feature", "-unchecked", "-l
 
 maxErrors in ThisBuild := 5
 
+addCommandAlias("publishDocs", ";delimitedCore/packageDoc;delimitedCore/ghpagesPushSite")
+
 lazy val root = project.
   in(file(".")).
   aggregate(delimitedCore).
