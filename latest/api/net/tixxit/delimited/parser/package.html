@@ -1,0 +1,257 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>parser - net.tixxit.delimited.parser</title>
+          <meta name="description" content="parser - net.tixxit.delimited.parser" />
+          <meta name="keywords" content="parser net.tixxit.delimited.parser" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'net.tixxit.delimited.parser.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="net">net</a>.<a href="../../package.html" class="extype" name="net.tixxit">tixxit</a>.<a href="../package.html" class="extype" name="net.tixxit.delimited">delimited</a></p>
+        <h1>parser</h1><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parser</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="net.tixxit.delimited.parser.DelimitedParserImpl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DelimitedParserImplextendsDelimitedParserwithProductwithSerializable"></a>
+      <a id="DelimitedParserImpl:DelimitedParserImpl"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DelimitedParserImpl.html"><span class="name">DelimitedParserImpl</span></a><span class="params">(<span name="strategy">strategy: <a href="../DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>, <span name="parserState">parserState: <a href="ParserState.html" class="extype" name="net.tixxit.delimited.parser.ParserState">ParserState</a></span>, <span name="fail">fail: <span class="extype" name="scala.Option">Option</span>[<a href="Instr$$Fail.html" class="extype" name="net.tixxit.delimited.parser.Instr.Fail">Fail</a>]</span>, <span name="row">row: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="../DelimitedParser.html" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@DelimitedParserImplextendsDelimitedParserwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.parser.Input" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InputextendsProductwithSerializable"></a>
+      <a id="Input:Input"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Input.html"><span class="name">Input</span></a><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="mark">mark: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@InputextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.parser.Instr" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="InstrextendsAnyRef"></a>
+      <a id="Instr:Instr"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Instr.html"><span class="name">Instr</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@InstrextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.parser.ParseResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ParseResultextendsAnyRef"></a>
+      <a id="ParseResult:ParseResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ParseResult.html"><span class="name">ParseResult</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@ParseResultextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.parser.ParserState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ParserStateextendsAnyRef"></a>
+      <a id="ParserState:ParserState"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ParserState.html"><span class="name">ParserState</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@ParserStateextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="net.tixxit.delimited.parser.DelimitedParserImpl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DelimitedParserImpl"></a>
+      <a id="DelimitedParserImpl:DelimitedParserImpl"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DelimitedParserImpl$.html"><span class="name">DelimitedParserImpl</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@DelimitedParserImpl" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.parser.Input" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Input"></a>
+      <a id="Input:Input"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Input$.html"><span class="name">Input</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@Input" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.parser.Instr" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Instr"></a>
+      <a id="Instr:Instr"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Instr$.html"><span class="name">Instr</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@Instr" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.parser.ParserState" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ParserState"></a>
+      <a id="ParserState:ParserState"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ParserState$.html"><span class="name">ParserState</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@ParserState" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
