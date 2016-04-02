@@ -29,8 +29,8 @@ trait GuessDelimitedFormat extends DelimitedFormatStrategy {
    * returned reader will contain all the original reader's data.
    */
   def apply(reader: Reader): (DelimitedFormat, Reader) = {
-    val reader0 = new PushbackReader(reader, parser.DelimitedParser.BufferSize)
-    val buffer = new Array[Char](parser.DelimitedParser.BufferSize)
+    val reader0 = new PushbackReader(reader, DelimitedParser.BufferSize)
+    val buffer = new Array[Char](DelimitedParser.BufferSize)
     val len = reader0.read(buffer)
     reader0.unread(buffer, 0, len)
 

@@ -6,8 +6,8 @@ class DelimitedSpec extends Specification {
   "DelimitedParser" should {
     "parse CSV with separator in quote" in {
       val data = """a,"b","c,d"|"e,f,g""""
-      val csv = Delimited.parseString(data, DelimitedFormat.Guess.withRowDelim("|"))
-      csv.unlabeled.rows must_== Vector(
+      val csv = DelimitedParser(DelimitedFormat.Guess.withRowDelim("|")).parseString(data)
+      csv must_== Vector(
         Right(Row("a", "b", "c,d")),
         Right(Row("e,f,g"))
       )
@@ -23,45 +23,44 @@ class DelimitedSpec extends Specification {
     )
 
     "parse escaped quotes" in {
-      Delimited.parseString(
-        "a,'''','c'''|'''''d''''', ''''",
-        TestFormat
-      ).rows must_== Vector(
+      DelimitedParser(TestFormat).parseString(
+        "a,'''','c'''|'''''d''''', ''''"
+      ) must_== Vector(
         Right(Row("a", "'", "c'")),
         Right(Row("''d''", " ''''"))
       )
     }
 
     "respect DelimitedFormat separator" in {
-      Delimited.parseString("a,b,c|d,e,f", TestFormat).rows must_==
-        Delimited.parseString("a;b;c|d;e;f", TestFormat.withSeparator(";")).rows
+      DelimitedParser(TestFormat).parseString("a,b,c|d,e,f") must_==
+        DelimitedParser(TestFormat.withSeparator(";")).parseString("a;b;c|d;e;f")
     }
 
     "respect DelimitedFormat quote" in {
-      Delimited.parseString("'a,b','b'|d,e", TestFormat).rows must_==
-        Delimited.parseString("^a,b^,^b^|d,e", TestFormat.withQuote("^")).rows
+      DelimitedParser(TestFormat).parseString("'a,b','b'|d,e") must_==
+        DelimitedParser(TestFormat.withQuote("^")).parseString("^a,b^,^b^|d,e")
     }
 
     "respect DelimitedFormat quote escape" in {
-      Delimited.parseString("'a''b',''''|' '", TestFormat).rows must_==
-        Delimited.parseString("'a\\'b','\\''|' '", TestFormat.withQuoteEscape("\\")).rows
+      DelimitedParser(TestFormat).parseString("'a''b',''''|' '") must_==
+        DelimitedParser(TestFormat.withQuoteEscape("\\")).parseString("'a\\'b','\\''|' '")
     }
 
     "respect DelimitedFormat row delimiter" in {
-      Delimited.parseString("a,b|c,d|e,f", TestFormat).rows must_==
-        Delimited.parseString("a,b\nc,d\ne,f", TestFormat.withRowDelim(RowDelim.Unix)).rows
+      DelimitedParser(TestFormat).parseString("a,b|c,d|e,f") must_==
+        DelimitedParser(TestFormat.withRowDelim(RowDelim.Unix)).parseString("a,b\nc,d\ne,f")
     }
 
     "parse CSV with row delimiter in quote" in {
-      Delimited.parseString("a,'b|c'|'d|e',f", TestFormat).rows must_== Vector(
+      DelimitedParser(TestFormat).parseString("a,'b|c'|'d|e',f") must_== Vector(
         Right(Row("a", "b|c")),
         Right(Row("d|e", "f")))
     }
 
     "parser respects whitespace" in {
       val data = " a , , 'a','b'|  b  ,c  ,   "
-      val csv = Delimited.parseString(data, DelimitedFormat.Guess.withRowDelim("|"))
-      csv.rows must_== Vector(
+      val csv = DelimitedParser(DelimitedFormat.Guess.withRowDelim("|")).parseString(data)
+      csv must_== Vector(
         Right(Row(" a ", " ", " 'a'", "b")),
         Right(Row("  b  ", "c  ", "   ")))
     }

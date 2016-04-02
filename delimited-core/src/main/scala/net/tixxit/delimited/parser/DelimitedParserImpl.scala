@@ -12,33 +12,38 @@ import java.io.{ Reader, InputStreamReader }
 import ParserState._
 import Instr._
 
-case class DelimitedParser(
+final case class DelimitedParserImpl(
   strategy: DelimitedFormatStrategy,
   parserState: ParserState,
   fail: Option[Fail],
   row: Long
-) {
-  def parseChunk(chunk: Option[String]): (DelimitedParser, Vector[Either[DelimitedError, Row]]) = {
+) extends DelimitedParser {
+  def format: Option[DelimitedFormat] = strategy match {
+    case (fmt: DelimitedFormat) => Some(fmt)
+    case _ => None
+  }
+
+  def parseChunk(chunk: Option[String]): (DelimitedParserImpl, Vector[Either[DelimitedError, Row]]) = {
     val initState = chunk match {
       case Some(str) => parserState.mapInput(_.append(str))
       case None => parserState.mapInput(_.finished)
     }
     val format = strategy match {
       case (guess: GuessDelimitedFormat) =>
-        if (initState.input.isLast || initState.input.data.length > DelimitedParser.BufferSize / 2) {
+        if (initState.input.isLast || initState.input.data.length > DelimitedParserImpl.BufferSize / 2) {
           // We want <hand-waving>enough</hand-waving> data here, so say 1/2 the buffer size?
           guess(initState.input.data)
         } else {
           // TODO: We could get rid of this return.
-          return (DelimitedParser(strategy, initState, fail, row), Vector.empty)
+          return (DelimitedParserImpl(strategy, initState, fail, row), Vector.empty)
         }
       case (fmt: DelimitedFormat) =>
         fmt
     }
 
     @tailrec
-    def loop(s0: ParserState, fail: Option[Fail], row: Long, acc: Vector[Either[DelimitedError, Row]]): (DelimitedParser, Vector[Either[DelimitedError, Row]]) = {
-      val (s1, instr) = DelimitedParser.parse(format)(s0)
+    def loop(s0: ParserState, fail: Option[Fail], row: Long, acc: Vector[Either[DelimitedError, Row]]): (DelimitedParserImpl, Vector[Either[DelimitedError, Row]]) = {
+      val (s1, instr) = DelimitedParserImpl.parse(format)(s0)
 
       instr match {
         case EmitRow(cells) =>
@@ -50,7 +55,7 @@ case class DelimitedParser(
         case Resume =>
           fail match {
             case Some(Fail(msg, pos)) =>
-              val context = DelimitedParser.removeRowDelim(format, s1.input.substring(s0.rowStart, s1.rowStart))
+              val context = DelimitedParserImpl.removeRowDelim(format, s1.input.substring(s0.rowStart, s1.rowStart))
               val error = DelimitedError(msg, s0.rowStart, pos, context, row, pos - s0.rowStart + 1)
               loop(s1, None, row + 1, acc :+ Left(error))
 
@@ -59,63 +64,24 @@ case class DelimitedParser(
           }
 
         case NeedInput =>
-          DelimitedParser(format, s1, fail, row) -> acc
+          DelimitedParserImpl(format, s1, fail, row) -> acc
 
         case Done =>
-          DelimitedParser(format, s1, None, row) -> acc
+          DelimitedParserImpl(format, s1, None, row) -> acc
       }
     }
 
     loop(initState, fail, row, Vector.empty)
   }
-
-  def parseAll(chunks: Iterator[String]): Iterator[Either[DelimitedError, Row]] = {
-    val input = chunks.map(Option(_)).takeWhile(_.isDefined) ++ Iterator(None)
-
-    input
-      .scanLeft((this, Vector.empty[Either[DelimitedError, Row]])) {
-        case ((parser, _), chunk) => parser.parseChunk(chunk)
-      }
-      .flatMap(_._2)
-  }
-
-  def parseReader(reader: Reader): Iterator[Either[DelimitedError, Row]] = {
-    val buffer = new Array[Char](DelimitedParser.BufferSize)
-    val chunks = Iterator.continually {
-      val len = reader.read(buffer)
-      if (len >= 0) {
-        new String(buffer, 0, len)
-      } else {
-        null
-      }
-    }.takeWhile(_ != null)
-
-    parseAll(chunks)
-  }
-
-  def parseInputStream(is: InputStream, charset: Charset = StandardCharsets.UTF_8): Iterator[Either[DelimitedError, Row]] =
-    parseReader(new InputStreamReader(is, charset))
-
-  def parseFile(file: File, charset: Charset = StandardCharsets.UTF_8): Vector[Either[DelimitedError, Row]] = {
-    val is = new FileInputStream(file)
-    try {
-      parseInputStream(is, charset).toVector
-    } finally {
-      is.close()
-    }
-  }
-
-  def parseString(input: String): Vector[Either[DelimitedError, Row]] =
-    parseAll(Iterator(input)).toVector
 }
 
-object DelimitedParser {
+object DelimitedParserImpl {
   val BufferSize = 32 * 1024
 
-  def apply(format: DelimitedFormatStrategy): DelimitedParser =
-    DelimitedParser(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L)
+  def apply(format: DelimitedFormatStrategy): DelimitedParserImpl =
+    DelimitedParserImpl(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L)
 
-  final class InputBuffer(input: Input) {
+  private final class InputBuffer(input: Input) {
     def this(state: ParserState) = {
       this(state.input)
       setPos(state.readFrom)
