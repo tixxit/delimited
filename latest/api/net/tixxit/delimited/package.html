@@ -157,8 +157,13 @@ returns a new <code>DelimitedParser</code> as well as all of the complete rows p
 in that chunk. Any partially complete rows will be returned in a future call
 to <code>parseChunk</code> in either the returned <code>DelimitedParser</code> or a future one in
 a chain of calls to <code>parseChunk</code>.</p><p>There are also convenience methods for parsing <code>File</code>s, <code>String</code>s,
-<code>InputStream</code>s, <code>Reader</code>s, etc.
-</p></div></div>
+<code>InputStream</code>s, <code>Reader</code>s, etc.</p><p>To get an instance of a <code>DelimitedParser</code> that can be used to parse a CSV,
+TSV, etc file, you can use something like:</p><pre><span class="kw">val</span> parser = DelimitedParser(DelimitedFormat.CSV)
+<span class="kw">val</span> rows: Vector[Either[DelimitedError, Row]] =
+  parser.parseFile(<span class="kw">new</span> java.io.File(<span class="lit">"some.csv"</span>))</pre><p>If you don't know the format of your delimited file ahead of time, not much
+changes:</p><pre><span class="kw">val</span> parser = DelimitedParser(DelimitedFormat.Guess)
+<span class="kw">val</span> rows: Vector[Either[DelimitedError, Row]] =
+  parser.parseFile(<span class="kw">new</span> java.io.File(<span class="lit">"some.csv"</span>))</pre></div></div>
     </li><li name="net.tixxit.delimited.GuessDelimitedFormat" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="GuessDelimitedFormatextendsDelimitedFormatStrategy"></a>
       <a id="GuessDelimitedFormat:GuessDelimitedFormat"></a>
