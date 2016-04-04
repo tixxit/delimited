@@ -3,23 +3,32 @@ package net.tixxit.delimited
 import java.io.{ Reader, PushbackReader }
 import java.util.regex.Pattern
 
-sealed abstract class RowDelim(val value: String, val alternate: Option[String] = None)
-object RowDelim {
-  case class Custom(delim: String) extends RowDelim(delim)
-  case object Unix extends RowDelim("\n")
-  case object Windows extends RowDelim("\r\n")
-  case object Both extends RowDelim("\n", Some("\r\n"))
-}
-
+/**
+ * There are 2 types of `DelimitedFormatStrategy`s: [[GuessDelimitedFormat]]
+ * and [[DelimitedFormat]]. A [[DelimitedFormat]] is delimited format that is
+ * completely specified. It can actually be used to render and parse delimited
+ * files without further work. On the other hand, [[GuessDelimitedFormat]] may
+ * have any number of parameters left unspecified, which means they need to be
+ * inferred before the format can be used to parse/render a delimited file.
+ *
+ * All the method provided in `DelimitedFormatStrategy` are ways of fixing (or
+ * updating) the various parameters used. In the case of a [[DelimitedFormat]],
+ * this just changes that parameter and keeps all others the same. In the case
+ * of [[GuessDelimitedFormat]], it will fix that parameter, so it no longer
+ * needs to be inferred.
+ */
 sealed trait DelimitedFormatStrategy {
   def withSeparator(separator: String): DelimitedFormatStrategy
   def withQuote(quote: String): DelimitedFormatStrategy
   def withQuoteEscape(quoteEscape: String): DelimitedFormatStrategy
-  def withHeader(header: Boolean): DelimitedFormatStrategy
   def withRowDelim(rowDelim: RowDelim): DelimitedFormatStrategy
   def withRowDelim(rowDelim: String): DelimitedFormatStrategy
 }
 
+/**
+ * A [[DelimitedFormatStrategy]] that can infer some or all parameters of a
+ * [[DelimitedFormat]] given an adequate sample of a delimited file.
+ */
 trait GuessDelimitedFormat extends DelimitedFormatStrategy {
 
   /**
@@ -45,33 +54,40 @@ trait GuessDelimitedFormat extends DelimitedFormatStrategy {
   def apply(str: String): DelimitedFormat
 }
 
+/**
+ * A [[DelimitedFormatStrategy]] where all parameters have been completely
+ * fixed.
+ *
+ * @param separator             the delimiter that separates fields within a row
+ * @param quote                 the character/string that indicates the
+ *                              beginning/end of a quoted value
+ * @param quoteEscape           the string that is used to escape a quote
+ *                              character, within a quoted value
+ * @param rowDelim              the delimiter used to separate rows
+ * @param allowRowDelimInQuotes if true, allow row delimiters within quotes,
+ *                              otherwise they are treated as an error
+ */
 case class DelimitedFormat(
-  /** The delimiter that separates fields within the rows. */
   separator: String,
-
-  /** The character/string that indicates the beginning/end of a quoted value. */
   quote: String = "\"",
-
-  /** The string that is used to escape a quote character, within a quote. */
   quoteEscape: String = "\"",
-
-  /** Indicates whether or not the CSV's first row is actually a header. */
-  header: Boolean = false,
-
-  /** The delimiter used to separate row. */
   rowDelim: RowDelim = RowDelim.Both,
-
-  /** If true, allow row delimiters within quotes, otherwise they are treated
-   *  as an error. */
   allowRowDelimInQuotes: Boolean = true
 ) extends DelimitedFormatStrategy {
-  val escapedQuote = quoteEscape + quote
+  private[this] val primaryRowDelim: String = rowDelim.value
+  private[this] val secondaryRowDelim: String = rowDelim.alternate.orNull
 
+  /**
+   * Returns an escaped quote that can be used to represent a literal quote
+   * within a quoted value.
+   */
+  val escapedQuote: String = quoteEscape + quote
+
+  /**
+   * Replaces all escaped quoted in a quoted value with literal quotes
+   */
   def unescape(value: String): String =
     value.replace(escapedQuote, quote)
-
-  override def toString: String =
-    s"""DelimitedFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", header = $header, rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
 
   /**
    * Replaces all instances of \r\n with \n, then escapes all quotes and wraps
@@ -79,38 +95,107 @@ case class DelimitedFormat(
    */
   def escape(text: String): String = {
     val text0 = text.replace("\r\n", "\n").replace(quote, escapedQuote)
-    s"${quote}$text0${quote}"
+    new java.lang.StringBuilder(quote)
+      .append(text0)
+      .append(quote)
+      .toString
+  }
+
+  private def match1(text: String, i: Int, value: String): Boolean = {
+    var j = i + 1
+    var k = 1
+    while (k < separator.length &&
+           j < text.length &&
+           text.charAt(j) == separator.charAt(k)) {
+      j += 1
+      k += 1
+    }
+    k == separator.length
+  }
+
+  private def mustEscape(text: String): Boolean = {
+    var i = 0
+    while (i < text.length) {
+      val ch = text.charAt(i)
+      if (ch == separator.charAt(0) && match1(text, i, separator))
+        return true
+      if (ch == quote.charAt(0) && match1(text, i, quote))
+        return true
+      if (ch == primaryRowDelim.charAt(0) && match1(text, i, primaryRowDelim))
+        return true
+      if (secondaryRowDelim != null &&
+          ch == secondaryRowDelim.charAt(0) && match1(text, i, secondaryRowDelim))
+        return true
+      i += 1
+    }
+    false
   }
 
   /**
-   * Renders a single cell of data, escaping the value if necessary.
+   * Renders a single cell of data, quoting and escaping the value if
+   * necessary. A cell is quoted and escaped if it contains a row delimiter,
+   * the separator, or a quote.
    */
   def render(text: String): String = {
-    if ((text contains '\n') ||
-        (text contains separator) ||
-        (text contains quote)) escape(text)
-    else text
+    if (mustEscape(text)) {
+      escape(text)
+    } else {
+      text
+    }
   }
 
   def withSeparator(separator: String): DelimitedFormat = copy(separator = separator)
   def withQuote(quote: String): DelimitedFormat = copy(quote = quote)
   def withQuoteEscape(quoteEscape: String): DelimitedFormat = copy(quoteEscape = quoteEscape)
-  def withHeader(header: Boolean): DelimitedFormat = copy(header = header)
   def withRowDelim(rowDelim: RowDelim): DelimitedFormat = copy(rowDelim = rowDelim)
   def withRowDelim(rowDelim: String): DelimitedFormat = copy(rowDelim = RowDelim.Custom(rowDelim))
+
+  override def toString: String =
+    s"""DelimitedFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
 }
 
 object DelimitedFormat {
+
+  /**
+   * A [[DelimitedFormat]] using the following parameters:
+   *
+   * {{{
+   * val CSV = RowDelim(
+   *   separator = ","
+   *   quote = "\""
+   *   quoteEscape = "\""
+   *   rowDelim = RowDelim.Both, // \n, but also accept \r\n during parsing
+   *   allowRowDelimInQuotes = true
+   * )
+   * }}}
+   */
   val CSV = DelimitedFormat(",")
+
+  /**
+   * A [[DelimitedFormat]] using the following parameters:
+   *
+   * {{{
+   * val TSV = RowDelim(
+   *   separator = "\t"
+   *   quote = "\""
+   *   quoteEscape = "\""
+   *   rowDelim = RowDelim.Both, // \n, but also accept \r\n during parsing
+   *   allowRowDelimInQuotes = true
+   * )
+   * }}}
+   */
   val TSV = DelimitedFormat("\t")
 
-  val Guess = Partial(header = Some(false))
+  /**
+   * A [[DelimitedFormatStrategy]] that infers *all* parameters in
+   * [[DelimitedFormat]].
+   */
+  val Guess = Partial()
 
   case class Partial(
       separator: Option[String] = None,
       quote: Option[String] = None,
       quoteEscape: Option[String] = None,
-      header: Option[Boolean] = None,
       rowDelim: Option[RowDelim] = None,
       allowRowDelimInQuotes: Boolean = true
     ) extends GuessDelimitedFormat {
@@ -118,7 +203,6 @@ object DelimitedFormat {
     def withSeparator(separator: String): Partial = copy(separator = Some(separator))
     def withQuote(quote: String): Partial = copy(quote = Some(quote))
     def withQuoteEscape(quoteEscape: String): Partial = copy(quoteEscape = Some(quoteEscape))
-    def withHeader(header: Boolean): Partial = copy(header = Some(header))
     def withRowDelim(rowDelim: RowDelim): Partial = copy(rowDelim = Some(rowDelim))
     def withRowDelim(rowDelim: String): Partial = copy(rowDelim = Some(RowDelim.Custom(rowDelim)))
 
@@ -133,11 +217,6 @@ object DelimitedFormat {
      *   * ',', '\t', ';', and '|' as field delimiters,
      *   * '"', and ''' as quote delimiter,
      *   * the quote delimiter or \ for quote escapes.
-     *
-     * Headers are guessed by using the cosine similarity of the frequency of
-     * characters (except quotes/field delimiters) between the first row and
-     * all subsequent rows. Values below 0.5 will result in a header being
-     * inferred.
      */
     def apply(str: String): DelimitedFormat = {
       def count(ndl: String): Int = {
@@ -183,46 +262,7 @@ object DelimitedFormat {
       } yield cell
       def matches(value: String): Int = cells.filter(_ == value).size
 
-      val header0 = header.getOrElse(hasHeader(str, rowDelim0.value, separator0, quote0))
-
-      DelimitedFormat(separator0, quote0, quoteEscape0, header0, rowDelim0, allowRowDelimInQuotes)
-    }
-
-    private def dot[K](u: Map[K, Double], v: Map[K, Double]): Double = {
-      if (u.size < v.size) {
-        dot(v, u)
-      } else {
-        var sum = 0D
-        v.foreach { case (k, y) =>
-          u.get(k).foreach { x =>
-            sum += x * y
-          }
-        }
-        sum
-      }
-    }
-
-    private def norm[K](v: Map[K, Double]): Double =
-      math.sqrt(dot(v, v))
-
-    private def similarity[K](u: Map[K, Double], v: Map[K, Double]): Double =
-      dot(u, v) / (norm(u) * norm(v))
-
-    def hasHeader(chunk: String, rowDelim: String, separator: String, quote: String): Boolean = {
-      def mkVec(s: String): Map[Char, Double] = {
-        val scaled = s.groupBy(c => c).map { case (k, v) => k -> v.length.toDouble }
-        val length = norm(scaled)
-        scaled.map { case (k, v) => (k, v / length) }
-      }
-
-      val headerEnd = chunk.indexOf(rowDelim)
-      if (headerEnd > 0) {
-        val (hdr, rows) = chunk.replace(separator, "").replace(quote, "").splitAt(headerEnd)
-        println(s"header = ${similarity(mkVec(hdr), mkVec(rows))}")
-        similarity(mkVec(hdr), mkVec(rows)) < 0.5
-      } else {
-        false
-      }
+      DelimitedFormat(separator0, quote0, quoteEscape0, rowDelim0, allowRowDelimInQuotes)
     }
   }
 }
