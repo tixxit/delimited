@@ -148,7 +148,7 @@ case class DelimitedFormat(
   def withQuote(quote: String): DelimitedFormat = copy(quote = quote)
   def withQuoteEscape(quoteEscape: String): DelimitedFormat = copy(quoteEscape = quoteEscape)
   def withRowDelim(rowDelim: RowDelim): DelimitedFormat = copy(rowDelim = rowDelim)
-  def withRowDelim(rowDelim: String): DelimitedFormat = copy(rowDelim = RowDelim.Custom(rowDelim))
+  def withRowDelim(rowDelim: String): DelimitedFormat = copy(rowDelim = RowDelim(rowDelim))
 
   override def toString: String =
     s"""DelimitedFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
@@ -204,7 +204,7 @@ object DelimitedFormat {
     def withQuote(quote: String): Partial = copy(quote = Some(quote))
     def withQuoteEscape(quoteEscape: String): Partial = copy(quoteEscape = Some(quoteEscape))
     def withRowDelim(rowDelim: RowDelim): Partial = copy(rowDelim = Some(rowDelim))
-    def withRowDelim(rowDelim: String): Partial = copy(rowDelim = Some(RowDelim.Custom(rowDelim)))
+    def withRowDelim(rowDelim: String): Partial = copy(rowDelim = Some(RowDelim(rowDelim)))
 
     /**
      * Performs a very naive guess of the DelimitedFormat. This uses weighted

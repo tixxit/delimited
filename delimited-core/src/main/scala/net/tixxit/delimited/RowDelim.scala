@@ -24,5 +24,5 @@ object RowDelim {
   val Windows: RowDelim = RowDelim("\r\n")
 
   /** Use \n as a row delimiter, but also accepts \r\n during parsing. */
-  val Both: RowDelim("\n", Some("\r\n"))
+  val Both: RowDelim = RowDelim("\n", Some("\r\n"))
 }

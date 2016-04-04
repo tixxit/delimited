@@ -9,7 +9,7 @@ import scala.collection.mutable.{ ArrayBuilder, Builder }
  * random access to the underlying cells in the row and convenience methods for
  * rendering the row given a [[DelimitedFormat]].
  */
-final class Row private[bonsai] (private val cells: Array[String]) extends Seq[String]
+final class Row private[delimited] (private val cells: Array[String]) extends Seq[String]
 with IndexedSeq[String] with IndexedSeqLike[String, Row] {
   def apply(idx: Int): String = cells(idx)
 
