@@ -15,6 +15,24 @@ import java.io.{ Reader, InputStreamReader }
  *
  * There are also convenience methods for parsing `File`s, `String`s,
  * `InputStream`s, `Reader`s, etc.
+ *
+ * To get an instance of a `DelimitedParser` that can be used to parse a CSV,
+ * TSV, etc file, you can use something like:
+ *
+ * {{{
+ * val parser = DelimitedParser(DelimitedFormat.CSV)
+ * val rows: Vector[Either[DelimitedError, Row]] =
+ *   parser.parseFile(new java.io.File("some.csv"))
+ * }}}
+ *
+ * If you don't know the format of your delimited file ahead of time, not much
+ * changes:
+ *
+ * {{{
+ * val parser = DelimitedParser(DelimitedFormat.Guess)
+ * val rows: Vector[Either[DelimitedError, Row]] =
+ *   parser.parseFile(new java.io.File("some.csv"))
+ * }}}
  */
 trait DelimitedParser {
 
