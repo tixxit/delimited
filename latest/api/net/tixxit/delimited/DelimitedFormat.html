@@ -47,11 +47,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">DelimitedFormat</span><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="header">header: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">DelimitedFormat</span><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> where all parameters have been completely
+fixed.
+</p></div><dl class="paramcmts block"><dt class="param">separator</dt><dd class="cmt"><p>the delimiter that separates fields within a row</p></dd><dt class="param">quote</dt><dd class="cmt"><p>the character/string that indicates the
+                             beginning/end of a quoted value</p></dd><dt class="param">quoteEscape</dt><dd class="cmt"><p>the string that is used to escape a quote
+                             character, within a quoted value</p></dd><dt class="param">rowDelim</dt><dd class="cmt"><p>the delimiter used to separate rows</p></dd><dt class="param">allowRowDelimInQuotes</dt><dd class="cmt"><p>if true, allow row delimiters within quotes,
+                             otherwise they are treated as an error</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -90,8 +95,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="net.tixxit.delimited.DelimitedFormat#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(separator:String,quote:String,quoteEscape:String,header:Boolean,rowDelim:net.tixxit.delimited.RowDelim,allowRowDelimInQuotes:Boolean):net.tixxit.delimited.DelimitedFormat"></a>
+              <ol><li name="net.tixxit.delimited.DelimitedFormat#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(separator:String,quote:String,quoteEscape:String,rowDelim:net.tixxit.delimited.RowDelim,allowRowDelimInQuotes:Boolean):net.tixxit.delimited.DelimitedFormat"></a>
       <a id="&lt;init&gt;:DelimitedFormat"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -99,14 +104,17 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DelimitedFormat</span><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="header">header: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span>
+        <span class="name">DelimitedFormat</span><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.DelimitedFormat@&lt;init&gt;(separator:String,quote:String,quoteEscape:String,header:Boolean,rowDelim:net.tixxit.delimited.RowDelim,allowRowDelimInQuotes:Boolean):net.tixxit.delimited.DelimitedFormat" title="Permalink" target="_top">
+      <a href="../../../index.html#net.tixxit.delimited.DelimitedFormat@&lt;init&gt;(separator:String,quote:String,quoteEscape:String,rowDelim:net.tixxit.delimited.RowDelim,allowRowDelimInQuotes:Boolean):net.tixxit.delimited.DelimitedFormat" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">separator</dt><dd class="cmt"><p>the delimiter that separates fields within a row</p></dd><dt class="param">quote</dt><dd class="cmt"><p>the character/string that indicates the
+                             beginning/end of a quoted value</p></dd><dt class="param">quoteEscape</dt><dd class="cmt"><p>the string that is used to escape a quote
+                             character, within a quoted value</p></dd><dt class="param">rowDelim</dt><dd class="cmt"><p>the delimiter used to separate rows</p></dd><dt class="param">allowRowDelimInQuotes</dt><dd class="cmt"><p>if true, allow row delimiters within quotes,
+                             otherwise they are treated as an error</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -183,7 +191,8 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">if true, allow row delimiters within quotes,
+                             otherwise they are treated as an error</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -268,14 +277,15 @@ the string in quotes.</p>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">escapedQuote</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">escapedQuote</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedFormat@escapedQuote:String" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns an escaped quote that can be used to represent a literal quote
+within a quoted value.</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -316,23 +326,6 @@ the string in quotes.</p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="net.tixxit.delimited.DelimitedFormat#header" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="header:Boolean"></a>
-      <a id="header:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">header</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.DelimitedFormat@header:Boolean" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -417,7 +410,8 @@ the string in quotes.</p>
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the character/string that indicates the
+                             beginning/end of a quoted value</p>
     </li><li name="net.tixxit.delimited.DelimitedFormat#quoteEscape" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="quoteEscape:String"></a>
       <a id="quoteEscape:String"></a>
@@ -434,8 +428,9 @@ the string in quotes.</p>
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.DelimitedFormat#render" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">the string that is used to escape a quote
+                             character, within a quoted value</p>
+    </li><li name="net.tixxit.delimited.DelimitedFormat#render" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="render(text:String):String"></a>
       <a id="render(String):String"></a>
       <h4 class="signature">
@@ -451,7 +446,11 @@ the string in quotes.</p>
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Renders a single cell of data, escaping the value if necessary.</p>
+      <p class="shortcomment cmt">Renders a single cell of data, quoting and escaping the value if
+necessary.</p><div class="fullcomment"><div class="comment cmt"><p>Renders a single cell of data, quoting and escaping the value if
+necessary. A cell is quoted and escaped if it contains a row delimiter,
+the separator, or a quote.
+</p></div></div>
     </li><li name="net.tixxit.delimited.DelimitedFormat#rowDelim" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="rowDelim:net.tixxit.delimited.RowDelim"></a>
       <a id="rowDelim:RowDelim"></a>
@@ -468,7 +467,7 @@ the string in quotes.</p>
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the delimiter used to separate rows</p>
     </li><li name="net.tixxit.delimited.DelimitedFormat#separator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="separator:String"></a>
       <a id="separator:String"></a>
@@ -485,7 +484,7 @@ the string in quotes.</p>
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the delimiter that separates fields within a row</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -536,7 +535,8 @@ the string in quotes.</p>
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Replaces all escaped quoted in a quoted value with literal quotes
+</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -606,23 +606,6 @@ the string in quotes.</p>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="net.tixxit.delimited.DelimitedFormat#withHeader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withHeader(header:Boolean):net.tixxit.delimited.DelimitedFormat"></a>
-      <a id="withHeader(Boolean):DelimitedFormat"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">withHeader</span><span class="params">(<span name="header">header: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.DelimitedFormat@withHeader(header:Boolean):net.tixxit.delimited.DelimitedFormat" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> → <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></dd></dl></div>
     </li><li name="net.tixxit.delimited.DelimitedFormat#withQuote" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="withQuote(quote:String):net.tixxit.delimited.DelimitedFormat"></a>
       <a id="withQuote(String):DelimitedFormat"></a>

@@ -101,7 +101,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DelimitedFormat$$Partial.html"><span class="name">Partial</span></a><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="quote">quote: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="header">header: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>] = <span class="symbol">None</span></span>, <span name="rowDelim">rowDelim: <span class="extype" name="scala.Option">Option</span>[<a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a>] = <span class="symbol">None</span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DelimitedFormat$$Partial.html"><span class="name">Partial</span></a><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="quote">quote: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="rowDelim">rowDelim: <span class="extype" name="scala.Option">Option</span>[<a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a>] = <span class="symbol">None</span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedFormat$@PartialextendsGuessDelimitedFormatwithProductwithSerializable" title="Permalink" target="_top">
@@ -167,7 +167,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="net.tixxit.delimited.DelimitedFormat#CSV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.tixxit.delimited.DelimitedFormat#CSV" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="CSV:net.tixxit.delimited.DelimitedFormat"></a>
       <a id="CSV:DelimitedFormat"></a>
       <h4 class="signature">
@@ -183,7 +183,13 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> using the following parameters:</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> using the following parameters:</p><pre><span class="kw">val</span> CSV = RowDelim(
+  separator = <span class="lit">","</span>
+  quote = <span class="lit">"\""</span>
+  quoteEscape = <span class="lit">"\""</span>
+  rowDelim = RowDelim.Both, <span class="cmt">// \n, but also accept \r\n during parsing</span>
+  allowRowDelimInQuotes = <span class="kw">true</span>
+)</pre></div></div>
     </li><li name="net.tixxit.delimited.DelimitedFormat#Guess" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Guess:net.tixxit.delimited.DelimitedFormat.Partial"></a>
       <a id="Guess:Partial"></a>
@@ -200,8 +206,9 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.DelimitedFormat#TSV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">A <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> that infers *all* parameters in
+<a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>.</p>
+    </li><li name="net.tixxit.delimited.DelimitedFormat#TSV" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="TSV:net.tixxit.delimited.DelimitedFormat"></a>
       <a id="TSV:DelimitedFormat"></a>
       <h4 class="signature">
@@ -217,7 +224,13 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> using the following parameters:</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> using the following parameters:</p><pre><span class="kw">val</span> TSV = RowDelim(
+  separator = <span class="lit">"\t"</span>
+  quote = <span class="lit">"\""</span>
+  quoteEscape = <span class="lit">"\""</span>
+  rowDelim = RowDelim.Both, <span class="cmt">// \n, but also accept \r\n during parsing</span>
+  allowRowDelimInQuotes = <span class="kw">true</span>
+)</pre></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

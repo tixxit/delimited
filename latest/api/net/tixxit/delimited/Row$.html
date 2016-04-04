@@ -163,7 +163,7 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns a new <code>Row</code> from a sequence unescaped cells.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -261,6 +261,28 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="net.tixxit.delimited.Row#fromArray" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromArray(cells:Array[String]):net.tixxit.delimited.Row"></a>
+      <a id="fromArray(Array[String]):Row"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromArray</span><span class="params">(<span name="cells">cells: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.tixxit.delimited.Row$@fromArray(cells:Array[String]):net.tixxit.delimited.Row" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This will construct a new <code>Row</code> that wraps an array of strings.</p><div class="fullcomment"><div class="comment cmt"><p>This will construct a new <code>Row</code> that wraps an array of strings. This will
+not make a defensive copy - any mutations to the provided array will be
+reflected in <code>Row</code>. Since <code>Row</code> is expected to be immutable, mutating the
+array after calling this method is considered unsafe and cause
+unpredictable results. You have been warned.
+</p></div></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>

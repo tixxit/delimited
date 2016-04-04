@@ -51,7 +51,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A single row in a CSV file.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A row in a delimited file, as a sequence of *unescaped* strings. The values
+must be rendered first to be used in a delimited file. This provides fast,
+random access to the underlying cells in the row and convenience methods for
+rendering the row given a <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.collection.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.IndexedSeqLike">IndexedSeqLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.SeqLike">SeqLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.collection.GenSeq">GenSeq</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.GenSeqLike">GenSeqLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.collection.Iterable">Iterable</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.IterableLike">IterableLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.collection.GenIterable">GenIterable</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.GenIterableLike">GenIterableLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.collection.Traversable">Traversable</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.GenTraversable">GenTraversable</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.collection.IndexedSeq">IndexedSeq</span>], <span class="extype" name="scala.collection.TraversableLike">TraversableLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.collection.GenTraversableLike">GenTraversableLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.collection.Parallelizable">Parallelizable</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.collection.parallel.ParSeq">ParSeq</span>[<span class="extype" name="scala.Predef.String">String</span>]], <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.GenTraversableOnce">GenTraversableOnce</span>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.Row">Row</a>], <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>], (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -89,27 +92,7 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="net.tixxit.delimited.Row#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(cells:Array[String]):net.tixxit.delimited.Row"></a>
-      <a id="&lt;init&gt;:Row"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Row</span><span class="params">(<span name="cells">cells: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.Row@&lt;init&gt;(cells:Array[String]):net.tixxit.delimited.Row" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
@@ -609,7 +592,7 @@
               
         </dd></dl></div>
     </li><li name="scala.collection.SeqLike#contains" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="contains[A1&gt;:A](elem:A1):Boolean"></a>
+      <a id="contains[A1&lt;:&lt;?&gt;](elem:&lt;?&gt;):Boolean"></a>
       <a id="contains[A1&gt;:String](A1):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -2144,7 +2127,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableOnce → GenTraversableOnce</dd></dl></div>
-    </li><li name="net.tixxit.delimited.Row#render" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.tixxit.delimited.Row#render" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="render(format:net.tixxit.delimited.DelimitedFormat):String"></a>
       <a id="render(DelimitedFormat):String"></a>
       <h4 class="signature">
@@ -2160,7 +2143,10 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns this row rendered to a String using the given format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this row rendered to a String using the given format. This will
+not add any row delimiters; it renders the cells then joins them together
+using <code>format.separator</code>.
+</p></div></div>
     </li><li name="scala.collection.TraversableLike#repr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="repr:Repr"></a>
       <a id="repr:Row"></a>
@@ -2691,7 +2677,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>IterableLike → TraversableLike → GenTraversableLike</dd></dl></div>
-    </li><li name="net.tixxit.delimited.Row#text" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.tixxit.delimited.Row#text" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="text(format:net.tixxit.delimited.DelimitedFormat):Vector[String]"></a>
       <a id="text(DelimitedFormat):Vector[String]"></a>
       <h4 class="signature">
@@ -2707,7 +2693,8 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns a Vector of the *rendered* cells of this row.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a Vector of the *rendered* cells of this row.
+</p></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>the format to use when rendering the cells</p></dd></dl></div>
     </li><li name="scala.collection.IndexedSeqLike#thisCollection" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="thisCollection:IndexedSeq[A]"></a>
       <a id="thisCollection:IndexedSeq[String]"></a>

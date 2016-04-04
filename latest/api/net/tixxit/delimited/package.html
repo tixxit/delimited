@@ -66,7 +66,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="net.tixxit.delimited.DelimitedError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="net.tixxit.delimited.DelimitedError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DelimitedErrorextendsProductwithSerializable"></a>
       <a id="DelimitedError:DelimitedError"></a>
       <h4 class="signature">
@@ -82,8 +82,9 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.DelimitedFormat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">An error that happened while parsing a row from a delimted file.</p><div class="fullcomment"><div class="comment cmt"><p>An error that happened while parsing a row from a delimted file.
+</p></div><dl class="paramcmts block"><dt class="param">message</dt><dd class="cmt"><p>a message describing the error</p></dd><dt class="param">rowStart</dt><dd class="cmt"><p>the offset (# of chars), into the file, where the row starts</p></dd><dt class="param">pos</dt><dd class="cmt"><p>the position (chars) in the file where the error occured</p></dd><dt class="param">context</dt><dd class="cmt"><p>the text of the row, up to at least where the error occured</p></dd><dt class="param">row</dt><dd class="cmt"><p>the row (0-based) where the error occured</p></dd><dt class="param">col</dt><dd class="cmt"><p>the column (0-based) where the error occured</p></dd></dl></div>
+    </li><li name="net.tixxit.delimited.DelimitedFormat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DelimitedFormatextendsDelimitedFormatStrategywithProductwithSerializable"></a>
       <a id="DelimitedFormat:DelimitedFormat"></a>
       <h4 class="signature">
@@ -92,15 +93,21 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DelimitedFormat.html"><span class="name">DelimitedFormat</span></a><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="header">header: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DelimitedFormat.html"><span class="name">DelimitedFormat</span></a><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@DelimitedFormatextendsDelimitedFormatStrategywithProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.DelimitedFormatStrategy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">A <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> where all parameters have been completely
+fixed.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> where all parameters have been completely
+fixed.
+</p></div><dl class="paramcmts block"><dt class="param">separator</dt><dd class="cmt"><p>the delimiter that separates fields within a row</p></dd><dt class="param">quote</dt><dd class="cmt"><p>the character/string that indicates the
+                             beginning/end of a quoted value</p></dd><dt class="param">quoteEscape</dt><dd class="cmt"><p>the string that is used to escape a quote
+                             character, within a quoted value</p></dd><dt class="param">rowDelim</dt><dd class="cmt"><p>the delimiter used to separate rows</p></dd><dt class="param">allowRowDelimInQuotes</dt><dd class="cmt"><p>if true, allow row delimiters within quotes,
+                             otherwise they are treated as an error</p></dd></dl></div>
+    </li><li name="net.tixxit.delimited.DelimitedFormatStrategy" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="DelimitedFormatStrategyextendsAnyRef"></a>
       <a id="DelimitedFormatStrategy:DelimitedFormatStrategy"></a>
       <h4 class="signature">
@@ -116,7 +123,18 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">There are 2 types of <code>DelimitedFormatStrategy</code>s: <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a>
+and <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>.</p><div class="fullcomment"><div class="comment cmt"><p>There are 2 types of <code>DelimitedFormatStrategy</code>s: <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a>
+and <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>. A <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> is delimited format that is
+completely specified. It can actually be used to render and parse delimited
+files without further work. On the other hand, <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a> may
+have any number of parameters left unspecified, which means they need to be
+inferred before the format can be used to parse/render a delimited file.</p><p>All the method provided in <code>DelimitedFormatStrategy</code> are ways of fixing (or
+updating) the various parameters used. In the case of a <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>,
+this just changes that parameter and keeps all others the same. In the case
+of <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a>, it will fix that parameter, so it no longer
+needs to be inferred.
+</p></div></div>
     </li><li name="net.tixxit.delimited.DelimitedParser" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="DelimitedParserextendsAnyRef"></a>
       <a id="DelimitedParser:DelimitedParser"></a>
@@ -157,8 +175,9 @@ a chain of calls to <code>parseChunk</code>.</p><p>There are also convenience me
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.Row" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">A <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> that can infer some or all parameters of a
+<a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> given an adequate sample of a delimited file.</p>
+    </li><li name="net.tixxit.delimited.Row" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="RowextendsSeq[String]withIndexedSeq[String]withIndexedSeqLike[String,net.tixxit.delimited.Row]"></a>
       <a id="Row:Row"></a>
       <h4 class="signature">
@@ -174,24 +193,34 @@ a chain of calls to <code>parseChunk</code>.</p><p>There are also convenience me
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A single row in a CSV file.</p>
-    </li><li name="net.tixxit.delimited.RowDelim" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="RowDelimextendsAnyRef"></a>
+      <p class="shortcomment cmt">A row in a delimited file, as a sequence of *unescaped* strings.</p><div class="fullcomment"><div class="comment cmt"><p>A row in a delimited file, as a sequence of *unescaped* strings. The values
+must be rendered first to be used in a delimited file. This provides fast,
+random access to the underlying cells in the row and convenience methods for
+rendering the row given a <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>.
+</p></div></div>
+    </li><li name="net.tixxit.delimited.RowDelim" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RowDelimextendsProductwithSerializable"></a>
       <a id="RowDelim:RowDelim"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">sealed abstract </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="RowDelim.html"><span class="name">RowDelim</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="RowDelim.html"><span class="name">RowDelim</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="alternate">alternate: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.package@RowDelimextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../index.html#net.tixxit.delimited.package@RowDelimextendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">The row delimiter used to separate rows in a delimited file.</p><div class="fullcomment"><div class="comment cmt"><p>The row delimiter used to separate rows in a delimited file. The primary
+<code>value</code> specified is always used as the row delimtier when rendering. The
+<code>alternate</code> value is an optional 2nd delimiter that may be used only when
+parsing a delimited file.</p><p>In general, you'll want to use <code>RowDelim.Both</code> as your row delimiter. This
+will use \n to delimit rows, but will also accept \r\n as a row delimiter
+since that happens often.
+</p></div><dl class="paramcmts block"><dt class="param">value</dt><dd class="cmt"><p>the row delimiter to use when parsing/rendering</p></dd><dt class="param">alternate</dt><dd class="cmt"><p>an optional alternative that may be accepted during parsing</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -259,7 +288,7 @@ a chain of calls to <code>parseChunk</code>.</p><p>There are also convenience me
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="RowDelim$.html"><span class="name">RowDelim</span></a>
+        <a href="RowDelim$.html"><span class="name">RowDelim</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@RowDelim" title="Permalink" target="_top">

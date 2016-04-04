@@ -47,13 +47,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">RowDelim</span>
+        <span class="name">RowDelim</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -71,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="net.tixxit.delimited.RowDelim"><span>RowDelim</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="net.tixxit.delimited.RowDelim"><span>RowDelim</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -90,27 +90,7 @@
         <div id="allMembers">
         
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="net.tixxit.delimited.RowDelim.Custom" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CustomextendsRowDelimwithProductwithSerializable"></a>
-      <a id="Custom:Custom"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="RowDelim$$Custom.html"><span class="name">Custom</span></a><span class="params">(<span name="delim">delim: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.RowDelim$@CustomextendsRowDelimwithProductwithSerializable" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         
 
@@ -167,57 +147,57 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="net.tixxit.delimited.RowDelim.Both" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Both"></a>
-      <a id="Both:Both"></a>
+    </li><li name="net.tixxit.delimited.RowDelim#Both" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Both:net.tixxit.delimited.RowDelim"></a>
+      <a id="Both:RowDelim"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <a href="RowDelim$$Both$.html"><span class="name">Both</span></a><span class="result"> extends <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Both</span><span class="result">: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.RowDelim$@Both" title="Permalink" target="_top">
+      <a href="../../../index.html#net.tixxit.delimited.RowDelim$@Both:net.tixxit.delimited.RowDelim" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.RowDelim.Unix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Unix"></a>
-      <a id="Unix:Unix"></a>
+      <p class="shortcomment cmt">Use \n as a row delimiter, but also accepts \r\n during parsing.</p>
+    </li><li name="net.tixxit.delimited.RowDelim#Unix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Unix:net.tixxit.delimited.RowDelim"></a>
+      <a id="Unix:RowDelim"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <a href="RowDelim$$Unix$.html"><span class="name">Unix</span></a><span class="result"> extends <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Unix</span><span class="result">: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.RowDelim$@Unix" title="Permalink" target="_top">
+      <a href="../../../index.html#net.tixxit.delimited.RowDelim$@Unix:net.tixxit.delimited.RowDelim" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.RowDelim.Windows" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Windows"></a>
-      <a id="Windows:Windows"></a>
+      <p class="shortcomment cmt">Use \n as a row delimiter.</p>
+    </li><li name="net.tixxit.delimited.RowDelim#Windows" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Windows:net.tixxit.delimited.RowDelim"></a>
+      <a id="Windows:RowDelim"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <a href="RowDelim$$Windows$.html"><span class="name">Windows</span></a><span class="result"> extends <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Windows</span><span class="result">: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.RowDelim$@Windows" title="Permalink" target="_top">
+      <a href="../../../index.html#net.tixxit.delimited.RowDelim$@Windows:net.tixxit.delimited.RowDelim" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Use \r\n as a row delimiter.</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -529,7 +509,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

@@ -49,7 +49,17 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>There are 2 types of <code>DelimitedFormatStrategy</code>s: <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a>
+and <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>. A <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a> is delimited format that is
+completely specified. It can actually be used to render and parse delimited
+files without further work. On the other hand, <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a> may
+have any number of parameters left unspecified, which means they need to be
+inferred before the format can be used to parse/render a delimited file.</p><p>All the method provided in <code>DelimitedFormatStrategy</code> are ways of fixing (or
+updating) the various parameters used. In the case of a <a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>,
+this just changes that parameter and keeps all others the same. In the case
+of <a href="GuessDelimitedFormat.html" class="extype" name="net.tixxit.delimited.GuessDelimitedFormat">GuessDelimitedFormat</a>, it will fix that parameter, so it no longer
+needs to be inferred.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -95,24 +105,7 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="net.tixxit.delimited.DelimitedFormatStrategy#withHeader" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="withHeader(header:Boolean):net.tixxit.delimited.DelimitedFormatStrategy"></a>
-      <a id="withHeader(Boolean):DelimitedFormatStrategy"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">withHeader</span><span class="params">(<span name="header">header: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.DelimitedFormatStrategy@withHeader(header:Boolean):net.tixxit.delimited.DelimitedFormatStrategy" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="net.tixxit.delimited.DelimitedFormatStrategy#withQuote" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="net.tixxit.delimited.DelimitedFormatStrategy#withQuote" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="withQuote(quote:String):net.tixxit.delimited.DelimitedFormatStrategy"></a>
       <a id="withQuote(String):DelimitedFormatStrategy"></a>
       <h4 class="signature">
