@@ -17,8 +17,7 @@ class DelimitedSpec extends Specification {
       separator = ",",
       quote = "'",
       quoteEscape = "'",
-      header = false,
-      rowDelim = RowDelim.Custom("|"),
+      rowDelim = RowDelim("|"),
       allowRowDelimInQuotes = true
     )
 
