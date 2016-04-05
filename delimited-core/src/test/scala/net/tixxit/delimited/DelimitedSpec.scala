@@ -2,7 +2,7 @@ package net.tixxit.delimited
 
 import org.specs2.mutable._
 
-class DelimitedSpec extends Specification {
+class DelimitedParserSpec extends Specification {
   val TestFormat = DelimitedFormat(
     separator = ",",
     quote = "'",
@@ -11,7 +11,7 @@ class DelimitedSpec extends Specification {
     allowRowDelimInQuotes = true
   )
 
-  "DelimitedParser" should {
+  "parseString" should {
     "parse CSV with separator in quote" in {
       val data = """a,"b","c,d"|"e,f,g""""
       val csv = DelimitedParser(DelimitedFormat.Guess.withRowDelim("|")).parseString(data)
