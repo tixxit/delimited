@@ -3,6 +3,14 @@ package net.tixxit.delimited
 import org.specs2.mutable._
 
 class DelimitedSpec extends Specification {
+  val TestFormat = DelimitedFormat(
+    separator = ",",
+    quote = "'",
+    quoteEscape = "'",
+    rowDelim = RowDelim("|"),
+    allowRowDelimInQuotes = true
+  )
+
   "DelimitedParser" should {
     "parse CSV with separator in quote" in {
       val data = """a,"b","c,d"|"e,f,g""""
@@ -12,14 +20,6 @@ class DelimitedSpec extends Specification {
         Right(Row("e,f,g"))
       )
     }
-
-    val TestFormat = DelimitedFormat(
-      separator = ",",
-      quote = "'",
-      quoteEscape = "'",
-      rowDelim = RowDelim("|"),
-      allowRowDelimInQuotes = true
-    )
 
     "parse escaped quotes" in {
       DelimitedParser(TestFormat).parseString(
@@ -62,6 +62,30 @@ class DelimitedSpec extends Specification {
       csv must_== Vector(
         Right(Row(" a ", " ", " 'a'", "b")),
         Right(Row("  b  ", "c  ", "   ")))
+    }
+  }
+
+  "parseChunk" should {
+    "work over multiple inputs, where one yields 0 rows" in {
+      val parser0 = DelimitedParser(TestFormat)
+      val (parser1, rows1) = parser0.parseChunk(Some("a,b,"))
+      val (parser2, rows2) = parser1.parseChunk(Some("c|d,e,f"))
+      val (parser3, rows3) = parser2.parseChunk(None)
+
+      rows1 must_== Vector.empty
+      rows2 must_== Vector(Right(Row("a", "b", "c")))
+      rows3 must_== Vector(Right(Row("d", "e", "f")))
+    }
+
+    "work over multiple inputs, where both yield 1 row" in {
+      val parser0 = DelimitedParser(TestFormat)
+      val (parser1, rows1) = parser0.parseChunk(Some("a,b,c|d"))
+      val (parser2, rows2) = parser1.parseChunk(Some(",e,f"))
+      val (parser3, rows3) = parser2.parseChunk(None)
+
+      rows1 must_== Vector(Right(Row("a", "b", "c")))
+      rows2 must_== Vector.empty
+      rows3 must_== Vector(Right(Row("d", "e", "f")))
     }
   }
 }

@@ -96,7 +96,7 @@ object DelimitedParserImpl {
     def getChar(): Char = chunk.charAt(pos)
     def advance(i: Int): Unit = pos += i
     def retreat(i: Int): Unit = pos -= i
-    def endOfInput(): Boolean = pos >= input.length
+    def endOfInput(): Boolean = pos >= chunk.length
     def endOfFile(): Boolean = endOfInput() && input.isLast
 
     def isFlag(str: String): Int = {
