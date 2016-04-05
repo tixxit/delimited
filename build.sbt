@@ -14,11 +14,16 @@ addCommandAlias("publishDocs", ";delimitedCore/packageDoc;delimitedCore/ghpagesP
 
 lazy val root = project.
   in(file(".")).
-  aggregate(delimitedCore).
+  aggregate(delimitedCore, delimitedIteratee).
   settings(Publish.skip: _*)
 
 lazy val delimitedCore = project.
   in(file("delimited-core")).
+  settings(Publish.settings: _*)
+
+lazy val delimitedIteratee = project.
+  in(file("delimited-iteratee")).
+  dependsOn(delimitedCore).
   settings(Publish.settings: _*)
 
 lazy val delimitedBenchmark = project.
