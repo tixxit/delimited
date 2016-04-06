@@ -90,16 +90,10 @@ case class DelimitedFormat(
     value.replace(escapedQuote, quote)
 
   /**
-   * Replaces all instances of \r\n with \n, then escapes all quotes and wraps
-   * the string in quotes.
+   * Escapes all quotes.
    */
-  def escape(text: String): String = {
-    val text0 = text.replace("\r\n", "\n").replace(quote, escapedQuote)
-    new java.lang.StringBuilder(quote)
-      .append(text0)
-      .append(quote)
-      .toString
-  }
+  def escape(text: String): String =
+    text.replace(quote, escapedQuote)
 
   private def match1(text: String, i: Int, value: String): Boolean = {
     var j = i + 1
@@ -138,7 +132,10 @@ case class DelimitedFormat(
    */
   def render(text: String): String = {
     if (mustEscape(text)) {
-      escape(text)
+      new java.lang.StringBuilder(quote)
+        .append(escape(text))
+        .append(quote)
+        .toString
     } else {
       text
     }
@@ -251,7 +248,7 @@ object DelimitedFormat {
         choose(","  -> 2.0, "\t" -> 3.0, ";"  -> 2.0, "|"  -> 1.0)(count)
       }
       val quote0 = quote.getOrElse(choose("\"" -> 1.2, "\'" -> 1)(count))
-      val quoteEscape0 = choose(s"$quote0$quote0" -> 1.1, s"\\$quote0" -> 1)(count).dropRight(quote0.length)
+      val quoteEscape0 = quoteEscape.getOrElse(choose(s"$quote0$quote0" -> 1.1, s"\\$quote0" -> 1)(count).dropRight(quote0.length))
 
       val cells = for {
         row0 <- str.split(Pattern.quote(rowDelim0.value))
