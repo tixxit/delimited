@@ -114,8 +114,12 @@ class DelimitedFormatSpec extends WordSpec with Matchers with Checkers {
 
     "fix rowDelim with withRowDelim" in {
       check { (rowDelim: RowDelim, text: String) =>
-        val format = DelimitedFormat.Guess.withRowDelim(rowDelim)
-        format(text).rowDelim == rowDelim
+        val format1 = DelimitedFormat.Guess.withRowDelim(rowDelim)
+        val format2 = DelimitedFormat.Guess.withRowDelim(rowDelim.value)
+        (
+          format1(text).rowDelim == rowDelim &&
+          format2(text).rowDelim == RowDelim(rowDelim.value)
+        )
       }
     }
   }

@@ -274,7 +274,6 @@ object DelimitedFormat {
           }
         cell <- row.split(Pattern.quote(separator0))
       } yield cell
-      def matches(value: String): Int = cells.filter(_ == value).size
 
       DelimitedFormat(separator0, quote0, quoteEscape0, rowDelim0, allowRowDelimInQuotes)
     }
