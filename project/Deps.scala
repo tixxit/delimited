@@ -6,6 +6,6 @@ object Deps {
     val scalaCheck = "1.12.5"
   }
 
-  val scalaTest  = "org.scalaTest"  %% "scalaTest"  % V.scalaTest  % "test"
+  val scalaTest  = "org.scalatest"  %% "scalatest"  % V.scalaTest  % "test"
   val scalaCheck = "org.scalacheck" %% "scalacheck" % V.scalaCheck % "test"
 }
