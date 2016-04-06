@@ -39,15 +39,54 @@ class DelimitedFormatSpec extends WordSpec with Matchers with Checkers {
   }
 
   "render" should {
-    "escape quoted values" in {
+    "round-trip through unquote" in {
       check { (format: DelimitedFormat, text: String) =>
         val rendered = format.render(text)
         val start = format.quote.length
         val end = rendered.length - 2 * start
-        rendered.startsWith(format.quote) &&
-          format.unescape(rendered.substring(start, end)) == text ||
-          rendered == text
+        format.unquote(rendered) == text
       }
+    }
+
+    "quote values with separator in them" in {
+      check { (format: DelimitedFormat) =>
+        val quoted = format.render(format.separator)
+        (
+          quoted == s"${format.quote}${format.separator}${format.quote}" &&
+          format.unquote(quoted) == format.separator
+        )
+      }
+    }
+
+    "quote values with quote in them" in {
+      check { (format: DelimitedFormat) =>
+        val quoted = format.render(format.quote)
+        (
+          quoted == s"${format.quote}${format.quoteEscape}${format.quote}${format.quote}" &&
+          format.unquote(quoted) == format.quote
+        )
+      }
+    }
+
+    "quote values with primary row delimiter in them" in {
+      check { (format: DelimitedFormat) =>
+        val quoted = format.render(format.rowDelim.value)
+        (
+          quoted == s"${format.quote}${format.rowDelim.value}${format.quote}" &&
+          format.unquote(quoted) == format.rowDelim.value
+        )
+      }
+    }
+
+    "quote values with secondary row delimiter in them" in {
+      check(Prop.forAll(genDelimitedFormat.filter(_.rowDelim.alternate.nonEmpty)) { format =>
+        val rowDelim2 = format.rowDelim.alternate.get
+        val quoted = format.render(rowDelim2)
+        (
+          quoted == s"${format.quote}${rowDelim2}${format.quote}" &&
+          format.unquote(quoted) == rowDelim2
+        )
+      })
     }
   }
 

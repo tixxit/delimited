@@ -98,16 +98,30 @@ case class DelimitedFormat(
   def escape(text: String): String =
     text.replace(quote, escapedQuote)
 
+  /**
+   * If `text` starts with a quote, then this removes the wrapping quotes, then
+   * unescapes the resulting text. If text does not start with a quote, then it
+   * is returned unchanged.
+   *
+   * This is the opposite of `render`.
+   */
+  def unquote(text: String): String =
+    if (text.startsWith(quote)) {
+      unescape(text.substring(quote.length, text.length - quote.length))
+    } else {
+      text
+    }
+
   private def match1(text: String, i: Int, value: String): Boolean = {
     var j = i + 1
     var k = 1
-    while (k < separator.length &&
+    while (k < value.length &&
            j < text.length &&
-           text.charAt(j) == separator.charAt(k)) {
+           text.charAt(j) == value.charAt(k)) {
       j += 1
       k += 1
     }
-    k == separator.length
+    k == value.length
   }
 
   private def mustEscape(text: String): Boolean = {
