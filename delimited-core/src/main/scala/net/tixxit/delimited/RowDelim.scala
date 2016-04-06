@@ -13,7 +13,15 @@ package net.tixxit.delimited
  * @param value     the row delimiter to use when parsing/rendering
  * @param alternate an optional alternative that may be accepted during parsing
  */
-case class RowDelim(value: String, alternate: Option[String] = None)
+case class RowDelim(value: String, alternate: Option[String] = None) {
+  override def toString: String = this match {
+    case RowDelim.Unix => "Unix"
+    case RowDelim.Windows => "Windows"
+    case RowDelim.Both => "Unix+Windows"
+    case RowDelim(value, None) => s"""RowDelim("$value")"""
+    case RowDelim(value, Some(alternate)) => s"""RowDelim("$value", Some("$alternate"))"""
+  }
+}
 
 object RowDelim {
 
