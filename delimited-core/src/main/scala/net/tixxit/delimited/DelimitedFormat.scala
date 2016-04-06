@@ -41,11 +41,14 @@ trait GuessDelimitedFormat extends DelimitedFormatStrategy {
     val reader0 = new PushbackReader(reader, DelimitedParser.BufferSize)
     val buffer = new Array[Char](DelimitedParser.BufferSize)
     val len = reader0.read(buffer)
-    reader0.unread(buffer, 0, len)
-
-    val chunk = new String(buffer, 0, len)
-    val format = apply(chunk)
-    (format, reader0)
+    if (len < 0) {
+      (apply(""), reader)
+    } else {
+      reader0.unread(buffer, 0, len)
+      val chunk = new String(buffer, 0, len)
+      val format = apply(chunk)
+      (format, reader0)
+    }
   }
 
   /**
