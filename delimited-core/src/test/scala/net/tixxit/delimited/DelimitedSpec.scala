@@ -52,6 +52,8 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
     "respect DelimitedFormat row delimiter" in {
       DelimitedParser(TestFormat).parseString("a,b|c,d|e,f") shouldBe
         DelimitedParser(TestFormat.withRowDelim(RowDelim.Unix)).parseString("a,b\nc,d\ne,f")
+      DelimitedParser(TestFormat).parseString("a,b|c,d|e,f") shouldBe
+        DelimitedParser(TestFormat.withRowDelim("%")).parseString("a,b%c,d%e,f")
     }
 
     "parse CSV with row delimiter in quote" in {

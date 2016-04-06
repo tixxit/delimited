@@ -41,11 +41,14 @@ trait GuessDelimitedFormat extends DelimitedFormatStrategy {
     val reader0 = new PushbackReader(reader, DelimitedParser.BufferSize)
     val buffer = new Array[Char](DelimitedParser.BufferSize)
     val len = reader0.read(buffer)
-    reader0.unread(buffer, 0, len)
-
-    val chunk = new String(buffer, 0, len)
-    val format = apply(chunk)
-    (format, reader0)
+    if (len < 0) {
+      (apply(""), reader)
+    } else {
+      reader0.unread(buffer, 0, len)
+      val chunk = new String(buffer, 0, len)
+      val format = apply(chunk)
+      (format, reader0)
+    }
   }
 
   /**
@@ -90,27 +93,35 @@ case class DelimitedFormat(
     value.replace(escapedQuote, quote)
 
   /**
-   * Replaces all instances of \r\n with \n, then escapes all quotes and wraps
-   * the string in quotes.
+   * Escapes all quotes.
    */
-  def escape(text: String): String = {
-    val text0 = text.replace("\r\n", "\n").replace(quote, escapedQuote)
-    new java.lang.StringBuilder(quote)
-      .append(text0)
-      .append(quote)
-      .toString
-  }
+  def escape(text: String): String =
+    text.replace(quote, escapedQuote)
+
+  /**
+   * If `text` starts with a quote, then this removes the wrapping quotes, then
+   * unescapes the resulting text. If text does not start with a quote, then it
+   * is returned unchanged.
+   *
+   * This is the opposite of `render`.
+   */
+  def unquote(text: String): String =
+    if (text.startsWith(quote)) {
+      unescape(text.substring(quote.length, text.length - quote.length))
+    } else {
+      text
+    }
 
   private def match1(text: String, i: Int, value: String): Boolean = {
     var j = i + 1
     var k = 1
-    while (k < separator.length &&
+    while (k < value.length &&
            j < text.length &&
-           text.charAt(j) == separator.charAt(k)) {
+           text.charAt(j) == value.charAt(k)) {
       j += 1
       k += 1
     }
-    k == separator.length
+    k == value.length
   }
 
   private def mustEscape(text: String): Boolean = {
@@ -138,7 +149,10 @@ case class DelimitedFormat(
    */
   def render(text: String): String = {
     if (mustEscape(text)) {
-      escape(text)
+      new java.lang.StringBuilder(quote)
+        .append(escape(text))
+        .append(quote)
+        .toString
     } else {
       text
     }
@@ -235,13 +249,19 @@ object DelimitedFormat {
 
       def choose(weightedOptions: (String, Double)*)(f: String => Int): String = {
         val weights = Map(weightedOptions: _*)
-        val (best, weight) = weights.maxBy { case (c, w) => w * f(c) }
-        if (weight > 0) best else weights.maxBy(_._2)._1
+        val weightedCounts = weights.map { case (c, w) => (c, w * f(c)) }
+        val (best, weight) = weightedCounts.maxBy(_._2)
+        val candidates = weightedCounts.collect {
+          case (c, w) if weight == w => c
+        }
+        // Amongst all equally good choices, choose the one with the best a
+        // prior weight.
+        candidates.maxBy(weights)
       }
 
       val rowDelim0 = rowDelim.getOrElse {
         val windCnt = count("\r\n")
-        val unixCnt = count("\n")
+        val unixCnt = count("\n") - windCnt
 
         if ((windCnt < 4 * unixCnt) && (unixCnt < 4 * windCnt)) RowDelim.Both
         else if (windCnt < 4 * unixCnt) RowDelim.Unix
@@ -251,7 +271,7 @@ object DelimitedFormat {
         choose(","  -> 2.0, "\t" -> 3.0, ";"  -> 2.0, "|"  -> 1.0)(count)
       }
       val quote0 = quote.getOrElse(choose("\"" -> 1.2, "\'" -> 1)(count))
-      val quoteEscape0 = choose(s"$quote0$quote0" -> 1.1, s"\\$quote0" -> 1)(count).dropRight(quote0.length)
+      val quoteEscape0 = quoteEscape.getOrElse(choose(s"$quote0$quote0" -> 1.1, s"\\$quote0" -> 1)(count).dropRight(quote0.length))
 
       val cells = for {
         row0 <- str.split(Pattern.quote(rowDelim0.value))
@@ -260,7 +280,6 @@ object DelimitedFormat {
           }
         cell <- row.split(Pattern.quote(separator0))
       } yield cell
-      def matches(value: String): Int = cells.filter(_ == value).size
 
       DelimitedFormat(separator0, quote0, quoteEscape0, rowDelim0, allowRowDelimInQuotes)
     }
