@@ -7,8 +7,8 @@ package net.tixxit.delimited
  * @param rowStart the offset (# of chars), into the file, where the row starts
  * @param pos      the position (chars) in the file where the error occured
  * @param context  the text of the row, up to at least where the error occured
- * @param row      the row (0-based) where the error occured
- * @param col      the column (0-based) where the error occured
+ * @param row      the row (1-based) where the error occured
+ * @param col      the column (1-based) where the error occured
  */
 case class DelimitedError(message: String, rowStart: Long, pos: Long, context: String, row: Long, col: Long) {
 
@@ -17,11 +17,10 @@ case class DelimitedError(message: String, rowStart: Long, pos: Long, context: S
    * consumption when printed to a console with a monospaced font.
    */
   def description: String = {
-    val msg = s"Error parsing CSV row: $message"
-    val prefix = s"Row $row: "
-    val padLength = col.toInt - 1 + prefix.length
+    val msg = s"Error parsing CSV at row $row, column $col: $message"
+    val padLength = col.toInt - 1
     val pointer = (" " * padLength) + "^"
 
-    s"$msg\n\n$prefix$context\n$pointer"
+    s"$msg\n\n$context\n$pointer"
   }
 }
