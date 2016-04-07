@@ -114,5 +114,14 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
       rows3 shouldBe Vector(Left(error2))
       rows4 shouldBe Vector(Right(Row("h", "i", "j")))
     }
+
+    "error when unfinished quote at EOF" in {
+      val parser = DelimitedParser(TestFormat)
+      val rows = parser
+        .parseChunk(Some("a,b,c|d,'e,f"))._1
+        .parseChunk(None)._2
+      val error = DelimitedError("Unmatched quoted string at end of file", 6, 12, "d,'e,f", 2, 7)
+      rows shouldBe Vector(Left(error))
+    }
   }
 }
