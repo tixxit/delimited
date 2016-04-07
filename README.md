@@ -17,6 +17,8 @@ libraryDependencies += "net.tixxit" %% "delimited-core" % "0.6.2"
 
 ## [API Docs (Scaladoc)](http://tixxit.github.io/delimited/latest/api/)
 
+The latest version of the API docs are available here: [http://tixxit.github.io/delimited/latest/api/](http://tixxit.github.io/delimited/latest/api/)
+
 # Overview
 
 ## Fully Configurable Formats
