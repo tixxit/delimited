@@ -125,12 +125,6 @@ object DelimitedParser {
   val BufferSize = 64 * 1024
 
   /**
-   * Returns a `DelimitedParser` that will infer all parameters in its
-   * [[DelimitedFormat]].
-   */
-  def apply(): DelimitedParser = apply(DelimitedFormat.Guess)
-
-  /**
    * Returns a `DelimitedParser` that can parse delimited files using the
    * strategy or format provided.
    */

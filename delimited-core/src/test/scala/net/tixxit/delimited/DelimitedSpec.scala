@@ -1,5 +1,7 @@
 package net.tixxit.delimited
 
+import java.io.{ BufferedWriter, ByteArrayInputStream, File, FileOutputStream, OutputStreamWriter }
+
 import org.scalatest.{ WordSpec, Matchers }
 import org.scalatest.prop.Checkers
 import org.scalacheck._
@@ -122,6 +124,36 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
         .parseChunk(None)._2
       val error = DelimitedError("Unmatched quoted string at end of file", 6, 12, "d,'e,f", 2, 7)
       rows shouldBe Vector(Left(error))
+    }
+  }
+
+  val simpleCsv = List.fill(DelimitedParser.BufferSize)("a,'b',c").mkString("\n")
+
+  "parseInputStream" should {
+    "parse large, simple CSV" in {
+      val parser = DelimitedParser(DelimitedFormat.Guess)
+      val in = new ByteArrayInputStream(simpleCsv.getBytes("utf-8"))
+      val rows = parser.parseInputStream(in).toVector
+      rows.foreach { row =>
+        row shouldBe Right(Row("a", "b", "c"))
+      }
+    }
+  }
+
+  "parseFile" should {
+    "parse large, simple CSV" in {
+      val file = File.createTempFile("simple", "csv") // create the fixture
+      val writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"))
+      try {
+        writer.write(simpleCsv)
+      } finally {
+        writer.close()
+      }
+      val parser = DelimitedParser(DelimitedFormat.Guess)
+      val rows = parser.parseFile(file)
+      rows.foreach { row =>
+        row shouldBe Right(Row("a", "b", "c"))
+      }
     }
   }
 }
