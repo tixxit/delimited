@@ -125,6 +125,67 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
       val error = DelimitedError("Unmatched quoted string at end of file", 6, 12, "d,'e,f", 2, 7)
       rows shouldBe Vector(Left(error))
     }
+
+    "error on bad quote" in {
+      val parser0 = DelimitedParser(TestFormat)
+      val (parser1, rows1) = parser0.parseChunk(Some("'a'x,b,c|d,e,f"))
+      val (parser2, rows2) = parser1.parseChunk(None)
+      rows1 shouldBe Vector(Left(DelimitedError("Expected separator, row delimiter, or end of file", 0, 3, "'a'x,b,c", 1, 4)))
+      rows2 shouldBe Vector(Right(Row("d", "e", "f")))
+    }
+
+    "error on bad quote over chunks" in {
+      val parser0 = DelimitedParser(TestFormat)
+      val (parser1, rows1) = parser0.parseChunk(Some("'a'x,b"))
+      val (parser2, rows2) = parser1.parseChunk(Some(","))
+      val (parser3, rows3) = parser2.parseChunk(Some("c|d,e,f"))
+      val (parser4, rows4) = parser3.parseChunk(None)
+
+      rows1 shouldBe Vector()
+      rows2 shouldBe Vector()
+      // Vector(Left(DelimitedError(Expected separator, row delimiter, or end of file,0,3,'a'x,bc,1,4))) was not equal to Vector(Left(
+      //             DelimitedError(Expected separator, row delimiter, or end of file,0,3,'a'x,b,c,1,4)))
+      rows3 shouldBe Vector(Left(DelimitedError("Expected separator, row delimiter, or end of file", 0, 3, "'a'x,b,c", 1, 4)))
+      rows4 shouldBe Vector(Right(Row("d", "e", "f")))
+    }
+
+    "row delim split over chunks" in {
+      // We want the separator to be parsed, but the row delim to not.
+      val parser0 = DelimitedParser(TestFormat.withRowDelim("||"))
+      val (parser1, rows1) = parser0.parseChunk(Some("'a'|"))
+      val (parser2, rows2) = parser1.parseChunk(Some("|b"))
+      val (parser3, rows3) = parser2.parseChunk(None)
+      rows1 shouldBe Vector()
+      rows2 shouldBe Vector(Right(Row("a")))
+      rows3 shouldBe Vector(Right(Row("b")))
+    }
+
+    "error at end of file" in {
+      val parser0 = DelimitedParser(TestFormat)
+      val (parser1, rows1) = parser0.parseChunk(Some("'a'x"))
+      val (parser2, rows2) = parser1.parseChunk(None)
+      rows1 shouldBe Vector()
+      rows2 shouldBe Vector(Left(DelimitedError("Expected separator, row delimiter, or end of file", 0, 3, "'a'x", 1, 4)))
+    }
+  }
+
+  "format" should {
+    "be available after parsing has finished" in {
+      val parser0 = DelimitedParser(DelimitedFormat.Guess)
+      val (parser1, rows1) = parser0.parseChunk(Some("a,b,c\n"))
+      val (parser2, rows2) = parser1.parseChunk(Some("a,b,c\r\n"))
+      val (parser3, rows3) = parser2.parseChunk(Some("a,b,c\n"))
+      val (parser4, rows4) = parser3.parseChunk(Some("a,b,c"))
+      val (parser5, rows5) = parser4.parseChunk(None)
+      parser5.format shouldBe Some(DelimitedFormat.CSV)
+    }
+
+    "not be available if not much data has been parsed" in {
+      val parser0 = DelimitedParser(DelimitedFormat.Guess)
+      val (parser1, rows1) = parser0.parseChunk(Some("a,b,c\n"))
+      val (parser2, rows2) = parser1.parseChunk(Some("a,b,c\r\n"))
+      parser2.format shouldBe None
+    }
   }
 
   val simpleCsv = List.fill(DelimitedParser.BufferSize)("a,'b',c").mkString("\n")
