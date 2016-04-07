@@ -93,5 +93,26 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
       rows2 shouldBe Vector.empty
       rows3 shouldBe Vector(Right(Row("d", "e", "f")))
     }
+
+    "work over multiple inputs, with an error in a row" in {
+      val parser0 = DelimitedParser(TestFormat.withRowDelimInQuotes(false))
+
+      // a,b,c|d,'e|',f|h,"i",j
+      // 01234567890123456789012345
+      //           1         2
+      //      ^    ^   ^
+
+      val (parser1, rows1) = parser0.parseChunk(Some("a,b,c|d"))
+      val (parser2, rows2) = parser1.parseChunk(Some(",'e|',f"))
+      val (parser3, rows3) = parser2.parseChunk(Some("|h,'i',j"))
+      val (parser4, rows4) = parser3.parseChunk(None)
+
+      rows1 shouldBe Vector(Right(Row("a", "b", "c")))
+      val error1 = DelimitedError("Unmatched quoted string at row delimiter", 6, 10, "d,'e", 2, 5)
+      rows2 shouldBe Vector(Left(error1))
+      val error2 = DelimitedError("Unmatched quoted string at row delimiter", 11, 14, "',f", 3, 4)
+      rows3 shouldBe Vector(Left(error2))
+      rows4 shouldBe Vector(Right(Row("h", "i", "j")))
+    }
   }
 }

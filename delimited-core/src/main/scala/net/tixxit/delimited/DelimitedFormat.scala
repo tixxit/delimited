@@ -23,6 +23,7 @@ sealed trait DelimitedFormatStrategy {
   def withQuoteEscape(quoteEscape: String): DelimitedFormatStrategy
   def withRowDelim(rowDelim: RowDelim): DelimitedFormatStrategy
   def withRowDelim(rowDelim: String): DelimitedFormatStrategy
+  def withRowDelimInQuotes(allowRowDelimInQuotes: Boolean): DelimitedFormatStrategy
 }
 
 /**
@@ -163,6 +164,7 @@ case class DelimitedFormat(
   def withQuoteEscape(quoteEscape: String): DelimitedFormat = copy(quoteEscape = quoteEscape)
   def withRowDelim(rowDelim: RowDelim): DelimitedFormat = copy(rowDelim = rowDelim)
   def withRowDelim(rowDelim: String): DelimitedFormat = copy(rowDelim = RowDelim(rowDelim))
+  def withRowDelimInQuotes(allowRowDelimInQuotes: Boolean): DelimitedFormat = copy(allowRowDelimInQuotes = allowRowDelimInQuotes)
 
   override def toString: String =
     s"""DelimitedFormat(separator = "$separator", quote = "$quote", quoteEscape = "$quoteEscape", rowDelim = $rowDelim, allowRowDelimInQuotes = $allowRowDelimInQuotes)"""
@@ -219,6 +221,7 @@ object DelimitedFormat {
     def withQuoteEscape(quoteEscape: String): Partial = copy(quoteEscape = Some(quoteEscape))
     def withRowDelim(rowDelim: RowDelim): Partial = copy(rowDelim = Some(rowDelim))
     def withRowDelim(rowDelim: String): Partial = copy(rowDelim = Some(RowDelim(rowDelim)))
+    def withRowDelimInQuotes(allowRowDelimInQuotes: Boolean): Partial = copy(allowRowDelimInQuotes = allowRowDelimInQuotes)
 
     /**
      * Performs a very naive guess of the DelimitedFormat. This uses weighted
