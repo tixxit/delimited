@@ -116,6 +116,13 @@ class DelimitedFormatSpec extends WordSpec with Matchers with Checkers {
       }
     }
 
+    "fix allowRowDelimInQuotes with withRowDelimInQuotes" in {
+      check { (fmt: DelimitedFormat, text: String) =>
+        val format = DelimitedFormat.Guess.withRowDelimInQuotes(fmt.allowRowDelimInQuotes)
+        format(text).allowRowDelimInQuotes == fmt.allowRowDelimInQuotes
+      }
+    }
+
     "choose arbitrary best when choice not obvious" in {
       // We prioritize tabs over commas at 3:2 ratio. So, all else equal
       // (eg 3 * # tabs == 2 * # commas), we'd expect tabs to be chosen.
