@@ -103,8 +103,8 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
       //      ^    ^   ^
 
       val (parser1, rows1) = parser0.parseChunk(Some("a,b,c|d"))
-      val (parser2, rows2) = parser1.parseChunk(Some(",'e|',f"))
-      val (parser3, rows3) = parser2.parseChunk(Some("|h,'i',j"))
+      val (parser2, rows2) = parser1.parseChunk(Some(",'e|',"))
+      val (parser3, rows3) = parser2.parseChunk(Some("f|h,'i',j"))
       val (parser4, rows4) = parser3.parseChunk(None)
 
       rows1 shouldBe Vector(Right(Row("a", "b", "c")))
