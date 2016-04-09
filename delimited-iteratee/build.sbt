@@ -1,5 +1,9 @@
 name := "delimited-iteratee"
 
-libraryDependencies += Deps.iteratee
+libraryDependencies ++= Seq(
+  Deps.iteratee,
+  Deps.scalaCheck,
+  Deps.scalaTest
+)
 
 Publish.settings
