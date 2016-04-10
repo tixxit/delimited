@@ -4,7 +4,7 @@ package iteratee
 import cats.Applicative
 
 import io.iteratee._
-import io.iteratee.internal.Step
+import io.iteratee.internal.{ Step, Input }
 
 object Delimited {
 
@@ -21,7 +21,8 @@ object Delimited {
 
       protected final def doneOrLoop[A](parser: DelimitedParser)(step: Step[F, Row, A]): Step[F, String, Step[F, Row, A]] = {
         if (step.isDone) {
-          Step.done[F, String, Step[F, Row, A]](step)
+          val (leftOver, _) = parser.reset
+          Step.doneWithLeftoverInput[F, String, Step[F, Row, A]](step, Input.el(leftOver))
         } else {
           stepWith(parser, step)
         }

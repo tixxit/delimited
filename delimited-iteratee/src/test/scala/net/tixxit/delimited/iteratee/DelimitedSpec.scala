@@ -57,6 +57,19 @@ class DelimitedSpec extends WordSpec with Matchers with Checkers {
       rows shouldBe Vector(Row("a", "b", "c"), Row("d", "e", "f"))
     }
 
+    "parse header, then rest" in {
+      import io.iteratee.pure._
+
+      val withHeader: Iteratee[Id, Row, (Row, Vector[Row])] = for {
+        header <- Iteratee.head
+        rest   <- Iteratee.consume
+      } yield (header.get -> rest)
+      val rows = enumList[String](List("a,b,", "c\nd,e", ",", "f\n", "g,h,i"))
+        .mapE(Delimited.parseChunks[Id](DelimitedFormat.CSV))
+        .run(withHeader)
+      rows shouldBe (Row("a", "b", "c"), Vector(Row("d", "e", "f"), Row("g", "h", "i")))
+    }
+
     "parse larges files, in chunks" in {
       import io.iteratee.eval._
 
