@@ -75,7 +75,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DelimitedParserImpl.html"><span class="name">DelimitedParserImpl</span></a><span class="params">(<span name="strategy">strategy: <a href="../DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>, <span name="parserState">parserState: <a href="ParserState.html" class="extype" name="net.tixxit.delimited.parser.ParserState">ParserState</a></span>, <span name="fail">fail: <span class="extype" name="scala.Option">Option</span>[<a href="Instr$$Fail.html" class="extype" name="net.tixxit.delimited.parser.Instr.Fail">Fail</a>]</span>, <span name="row">row: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <a href="../DelimitedParser.html" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DelimitedParserImpl.html"><span class="name">DelimitedParserImpl</span></a><span class="params">(<span name="strategy">strategy: <a href="../DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>, <span name="parserState">parserState: <a href="ParserState.html" class="extype" name="net.tixxit.delimited.parser.ParserState">ParserState</a></span>, <span name="fail">fail: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="Instr$$Fail.html" class="extype" name="net.tixxit.delimited.parser.Instr.Fail">Fail</a>]</span>, <span name="row">row: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result"> extends <a href="../DelimitedParser.html" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.package@DelimitedParserImplextendsDelimitedParserwithProductwithSerializable" title="Permalink" target="_top">
@@ -83,7 +83,7 @@
       </a>
     </span>
       
-    </li><li name="net.tixxit.delimited.parser.Input" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.tixxit.delimited.parser.Input" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="InputextendsProductwithSerializable"></a>
       <a id="Input:Input"></a>
       <h4 class="signature">
@@ -92,10 +92,35 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Input.html"><span class="name">Input</span></a><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="mark">mark: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Input.html"><span class="name">Input</span></a><span class="params">(<span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="mark">mark: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.package@InputextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An immutable window into a stream of character data.</p><div class="fullcomment"><div class="comment cmt"><p>An immutable window into a stream of character data. The size of the window
+is determined by 2 methods: <code>marked(pos)</code> and <code>append(chunk)</code>, which shrink
+and expand the window respectively. All positions used with <code>Input</code> are
+always relative to the entire stream, though only positions within the
+current window are valid at any given point in time.</p><p>The method <code>marked</code> returns a new <code>Input</code> which may drop all data before the
+marked position. Accessing data before the marked position in the returned
+<code>Input</code> is undefined and should be expected to fail in hilarious ways.</p><p>The method <code>append</code> is used to append new chunks of data from the stream
+onto the input.
+</p></div><dl class="paramcmts block"><dt class="param">offset</dt><dd class="cmt"><p>the offset, in chars, of the start of <code>data</code> in the stream</p></dd><dt class="param">data</dt><dd class="cmt"><p>the currently readable window into the stream</p></dd><dt class="param">isLast</dt><dd class="cmt"><p>true if this window covers the end of the stream</p></dd><dt class="param">mark</dt><dd class="cmt"><p>the position in the stream we are able to truncate data to</p></dd></dl></div>
+    </li><li name="net.tixxit.delimited.parser.InputBuffer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InputBufferextendsAnyRef"></a>
+      <a id="InputBuffer:InputBuffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="InputBuffer.html"><span class="name">InputBuffer</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@InputBufferextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -167,7 +192,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="DelimitedParserImpl$.html"><span class="name">DelimitedParserImpl</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DelimitedParserImpl$.html"><span class="name">DelimitedParserImpl</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.package@DelimitedParserImpl" title="Permalink" target="_top">
@@ -184,7 +209,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Input$.html"><span class="name">Input</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Input$.html"><span class="name">Input</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.package@Input" title="Permalink" target="_top">

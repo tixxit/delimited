@@ -47,13 +47,21 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Input</span><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="mark">mark: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Input</span><span class="params">(<span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="mark">mark: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An immutable window into a stream of character data. The size of the window
+is determined by 2 methods: <code>marked(pos)</code> and <code>append(chunk)</code>, which shrink
+and expand the window respectively. All positions used with <code>Input</code> are
+always relative to the entire stream, though only positions within the
+current window are valid at any given point in time.</p><p>The method <code>marked</code> returns a new <code>Input</code> which may drop all data before the
+marked position. Accessing data before the marked position in the returned
+<code>Input</code> is undefined and should be expected to fail in hilarious ways.</p><p>The method <code>append</code> is used to append new chunks of data from the stream
+onto the input.
+</p></div><dl class="paramcmts block"><dt class="param">offset</dt><dd class="cmt"><p>the offset, in chars, of the start of <code>data</code> in the stream</p></dd><dt class="param">data</dt><dd class="cmt"><p>the currently readable window into the stream</p></dd><dt class="param">isLast</dt><dd class="cmt"><p>true if this window covers the end of the stream</p></dd><dt class="param">mark</dt><dd class="cmt"><p>the position in the stream we are able to truncate data to</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,7 +72,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -77,7 +85,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -90,7 +98,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="net.tixxit.delimited.parser.Input#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="net.tixxit.delimited.parser.Input#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(offset:Long,data:String,isLast:Boolean,mark:Long):net.tixxit.delimited.parser.Input"></a>
       <a id="&lt;init&gt;:Input"></a>
       <h4 class="signature">
@@ -99,14 +107,14 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Input</span><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Long">Long</span></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="mark">mark: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="name">Input</span><span class="params">(<span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="mark">mark: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@&lt;init&gt;(offset:Long,data:String,isLast:Boolean,mark:Long):net.tixxit.delimited.parser.Input" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">offset</dt><dd class="cmt"><p>the offset, in chars, of the start of <code>data</code> in the stream</p></dd><dt class="param">data</dt><dd class="cmt"><p>the currently readable window into the stream</p></dd><dt class="param">isLast</dt><dd class="cmt"><p>true if this window covers the end of the stream</p></dd><dt class="param">mark</dt><dd class="cmt"><p>the position in the stream we are able to truncate data to</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -125,7 +133,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -142,7 +150,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@##():Int" title="Permalink" target="_top">
@@ -159,7 +167,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -167,7 +175,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="net.tixxit.delimited.parser.Input#append" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.tixxit.delimited.parser.Input#append" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="append(chunk:String,last:Boolean):net.tixxit.delimited.parser.Input"></a>
       <a id="append(String,Boolean):Input"></a>
       <h4 class="signature">
@@ -176,14 +184,18 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">append</span><span class="params">(<span name="chunk">chunk: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="last">last: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="" class="extype" name="net.tixxit.delimited.parser.Input">Input</a></span>
+        <span class="name">append</span><span class="params">(<span name="chunk">chunk: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="last">last: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="" class="extype" name="net.tixxit.delimited.parser.Input">Input</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@append(chunk:String,last:Boolean):net.tixxit.delimited.parser.Input" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns an <code>Input</code> with the chunk of data appended to the currently
+readable window.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an <code>Input</code> with the chunk of data appended to the currently
+readable window. If <code>last</code> is true, then the returned <code>Input</code>'s <code>isLast</code>
+method returns <code>true</code>.
+</p></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -201,7 +213,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="net.tixxit.delimited.parser.Input#charAt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.tixxit.delimited.parser.Input#charAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="charAt(i:Long):Char"></a>
       <a id="charAt(Long):Char"></a>
       <h4 class="signature">
@@ -210,14 +222,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">charAt</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Char">Char</span></span>
+        <span class="name">charAt</span><span class="params">(<span name="i">i: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Char" class="extype" target="_top">Char</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@charAt(i:Long):Char" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the character at the given position.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the character at the given position. This method will do some
+aggressive bounds checking.
+</p></div></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -257,7 +271,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the currently readable window into the stream</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -267,7 +281,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -284,7 +298,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@finalize():Unit" title="Permalink" target="_top">
@@ -314,7 +328,7 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns a copy of this <code>Input</code> where <code>isLast</code> is true.</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -341,7 +355,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
@@ -358,31 +372,33 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">isLast</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isLast</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@isLast:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.parser.Input#length" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="length:Long"></a>
-      <a id="length:Long"></a>
+      <p class="shortcomment cmt">true if this window covers the end of the stream</p>
+    </li><li name="net.tixxit.delimited.parser.Input#limit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="limit:Long"></a>
+      <a id="limit:Long"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+        <span class="name">limit</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#net.tixxit.delimited.parser.Input@length:Long" title="Permalink" target="_top">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.Input@limit:Long" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the index of the first position that cannot be read.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the index of the first position that cannot be read. If <code>isLast</code>
+is <code>true</code>, then this is the length of the stream.
+</p></div></div>
     </li><li name="net.tixxit.delimited.parser.Input#mark" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="mark:Long"></a>
       <a id="mark:Long"></a>
@@ -392,14 +408,14 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">mark</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+        <span class="name">mark</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@mark:Long" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">the position in the stream we are able to truncate data to</p>
     </li><li name="net.tixxit.delimited.parser.Input#marked" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="marked(pos:Long):net.tixxit.delimited.parser.Input"></a>
       <a id="marked(Long):Input"></a>
@@ -409,14 +425,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">marked</span><span class="params">(<span name="pos">pos: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <a href="" class="extype" name="net.tixxit.delimited.parser.Input">Input</a></span>
+        <span class="name">marked</span><span class="params">(<span name="pos">pos: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="" class="extype" name="net.tixxit.delimited.parser.Input">Input</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@marked(pos:Long):net.tixxit.delimited.parser.Input" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns an <code>Input</code> whose <code>mark</code> is at the given position.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -426,7 +442,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -443,7 +459,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@notify():Unit" title="Permalink" target="_top">
@@ -460,7 +476,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@notifyAll():Unit" title="Permalink" target="_top">
@@ -477,15 +493,15 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">offset</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+        <span class="name">offset</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@offset:Long" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="net.tixxit.delimited.parser.Input#substring" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">the offset, in chars, of the start of <code>data</code> in the stream</p>
+    </li><li name="net.tixxit.delimited.parser.Input#substring" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="substring(from:Long,until:Long):String"></a>
       <a id="substring(Long,Long):String"></a>
       <h4 class="signature">
@@ -494,14 +510,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">substring</span><span class="params">(<span name="from">from: <span class="extype" name="scala.Long">Long</span></span>, <span name="until">until: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">substring</span><span class="params">(<span name="from">from: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="until">until: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@substring(from:Long,until:Long):String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Returns the substring between <code>from</code> (inclusive) and <code>until</code> (exclusive).</p><div class="fullcomment"><div class="comment cmt"><p>Returns the substring between <code>from</code> (inclusive) and <code>until</code> (exclusive).
+It is expected that <code>mark &lt;= from &lt;= until &lt;= limit</code>.
+</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -528,7 +546,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@wait():Unit" title="Permalink" target="_top">
@@ -551,7 +569,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
@@ -574,7 +592,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@wait(x$1:Long):Unit" title="Permalink" target="_top">
@@ -598,13 +616,13 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
             </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

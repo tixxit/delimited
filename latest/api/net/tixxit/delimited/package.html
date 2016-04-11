@@ -75,7 +75,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DelimitedError.html"><span class="name">DelimitedError</span></a><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="rowStart">rowStart: <span class="extype" name="scala.Long">Long</span></span>, <span name="pos">pos: <span class="extype" name="scala.Long">Long</span></span>, <span name="context">context: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="row">row: <span class="extype" name="scala.Long">Long</span></span>, <span name="col">col: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DelimitedError.html"><span class="name">DelimitedError</span></a><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="rowStart">rowStart: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="pos">pos: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="context">context: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="row">row: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="col">col: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@DelimitedErrorextendsProductwithSerializable" title="Permalink" target="_top">
@@ -83,7 +83,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">An error that happened while parsing a row from a delimted file.</p><div class="fullcomment"><div class="comment cmt"><p>An error that happened while parsing a row from a delimted file.
-</p></div><dl class="paramcmts block"><dt class="param">message</dt><dd class="cmt"><p>a message describing the error</p></dd><dt class="param">rowStart</dt><dd class="cmt"><p>the offset (# of chars), into the file, where the row starts</p></dd><dt class="param">pos</dt><dd class="cmt"><p>the position (chars) in the file where the error occured</p></dd><dt class="param">context</dt><dd class="cmt"><p>the text of the row, up to at least where the error occured</p></dd><dt class="param">row</dt><dd class="cmt"><p>the row (0-based) where the error occured</p></dd><dt class="param">col</dt><dd class="cmt"><p>the column (0-based) where the error occured</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">message</dt><dd class="cmt"><p>a message describing the error</p></dd><dt class="param">rowStart</dt><dd class="cmt"><p>the offset (# of chars), into the file, where the row starts</p></dd><dt class="param">pos</dt><dd class="cmt"><p>the position (chars) in the file where the error occured</p></dd><dt class="param">context</dt><dd class="cmt"><p>the text of the row, up to at least where the error occured</p></dd><dt class="param">row</dt><dd class="cmt"><p>the row (1-based) where the error occured</p></dd><dt class="param">col</dt><dd class="cmt"><p>the column (1-based) where the error occured</p></dd></dl></div>
     </li><li name="net.tixxit.delimited.DelimitedFormat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DelimitedFormatextendsDelimitedFormatStrategywithProductwithSerializable"></a>
       <a id="DelimitedFormat:DelimitedFormat"></a>
@@ -93,7 +93,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DelimitedFormat.html"><span class="name">DelimitedFormat</span></a><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DelimitedFormat.html"><span class="name">DelimitedFormat</span></a><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="quote">quote: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="quoteEscape">quoteEscape: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\&quot;&quot;</span></span>, <span name="rowDelim">rowDelim: <a href="RowDelim.html" class="extype" name="net.tixxit.delimited.RowDelim">RowDelim</a> = <span class="symbol"><span class="name"><a href="RowDelim$.html">RowDelim.Both</a></span></span></span>, <span name="allowRowDelimInQuotes">allowRowDelimInQuotes: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@DelimitedFormatextendsDelimitedFormatStrategywithProductwithSerializable" title="Permalink" target="_top">
@@ -191,7 +191,7 @@ changes:</p><pre><span class="kw">val</span> parser = DelimitedParser(DelimitedF
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Row.html"><span class="name">Row</span></a><span class="result"> extends <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="scala.collection.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="scala.collection.IndexedSeqLike">IndexedSeqLike</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>]</span>
+        <a href="Row.html"><span class="name">Row</span></a><span class="result"> extends <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.collection.IndexedSeq" class="extype" target="_top">IndexedSeq</a>[<span class="extype" name="scala.Predef.String">String</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.collection.IndexedSeqLike" class="extype" target="_top">IndexedSeqLike</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@RowextendsSeq[String]withIndexedSeq[String]withIndexedSeqLike[String,net.tixxit.delimited.Row]" title="Permalink" target="_top">
@@ -212,7 +212,7 @@ rendering the row given a <a href="DelimitedFormat.html" class="extype" name="ne
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="RowDelim.html"><span class="name">RowDelim</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="alternate">alternate: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="RowDelim.html"><span class="name">RowDelim</span></a><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="alternate">alternate: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@RowDelimextendsProductwithSerializable" title="Permalink" target="_top">
@@ -242,7 +242,7 @@ since that happens often.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="DelimitedFormat$.html"><span class="name">DelimitedFormat</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DelimitedFormat$.html"><span class="name">DelimitedFormat</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@DelimitedFormat" title="Permalink" target="_top">
@@ -293,10 +293,44 @@ since that happens often.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="RowDelim$.html"><span class="name">RowDelim</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="RowDelim$.html"><span class="name">RowDelim</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.package@RowDelim" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.benchmark" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="benchmark"></a>
+      <a id="benchmark:benchmark"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="benchmark/package.html"><span class="name">benchmark</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.tixxit.delimited.package@benchmark" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="net.tixxit.delimited.iteratee" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="iteratee"></a>
+      <a id="iteratee:iteratee"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="iteratee/package.html"><span class="name">iteratee</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.tixxit.delimited.package@iteratee" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

@@ -79,7 +79,7 @@ changes:</p><pre><span class="kw">val</span> parser = DelimitedParser(DelimitedF
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -92,7 +92,7 @@ changes:</p><pre><span class="kw">val</span> parser = DelimitedParser(DelimitedF
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -118,7 +118,7 @@ changes:</p><pre><span class="kw">val</span> parser = DelimitedParser(DelimitedF
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">format</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>]</span>
+        <span class="name">format</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="DelimitedFormat.html" class="extype" name="net.tixxit.delimited.DelimitedFormat">DelimitedFormat</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@format:Option[net.tixxit.delimited.DelimitedFormat]" title="Permalink" target="_top">
@@ -137,7 +137,7 @@ been returned by <code>parseChunk</code>).</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseChunk</span><span class="params">(<span name="chunk">chunk: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: (<a href="" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Either">Either</span>[<a href="DelimitedError.html" class="extype" name="net.tixxit.delimited.DelimitedError">DelimitedError</a>, <a href="Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>]])</span>
+        <span class="name">parseChunk</span><span class="params">(<span name="chunk">chunk: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: (<a href="" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a>, <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Either">Either</span>[<a href="DelimitedError.html" class="extype" name="net.tixxit.delimited.DelimitedError">DelimitedError</a>, <a href="Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>]])</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@parseChunk(chunk:Option[String]):(net.tixxit.delimited.DelimitedParser,Vector[Either[net.tixxit.delimited.DelimitedError,net.tixxit.delimited.Row]])" title="Permalink" target="_top">
@@ -150,6 +150,24 @@ case (<code>chunk</code> is <code>None</code>), all remaining input will be cons
 returned as rows (or errors).</p><p>This returns a new <code>DelimitedParser</code> to use to parse the next chunk, as
 well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code>.
 </p></div><dl class="paramcmts block"><dt class="param">chunk</dt><dd class="cmt"><p>the next chunk of data as a String, or None if eof</p></dd></dl></div>
+    </li><li name="net.tixxit.delimited.DelimitedParser#reset" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="reset:(String,net.tixxit.delimited.DelimitedParser)"></a>
+      <a id="reset:(String,DelimitedParser)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reset</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <a href="" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@reset:(String,net.tixxit.delimited.DelimitedParser)" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns all unparsed data and a DelimitedParser whose state is completely
+reset.</p>
     </li></ol>
             </div>
 
@@ -164,7 +182,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -181,7 +199,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@##():Int" title="Permalink" target="_top">
@@ -198,7 +216,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -255,7 +273,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -272,7 +290,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@equals(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -289,7 +307,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@finalize():Unit" title="Permalink" target="_top">
@@ -329,7 +347,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@hashCode():Int" title="Permalink" target="_top">
@@ -346,7 +364,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
@@ -363,7 +381,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -380,7 +398,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@notify():Unit" title="Permalink" target="_top">
@@ -397,7 +415,7 @@ well as a <code>Vector</code> of all complete rows parsed from <code>chunk</code
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@notifyAll():Unit" title="Permalink" target="_top">
@@ -542,7 +560,7 @@ consumed.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@wait():Unit" title="Permalink" target="_top">
@@ -565,7 +583,7 @@ consumed.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
@@ -588,7 +606,7 @@ consumed.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.tixxit.delimited.DelimitedParser@wait(x$1:Long):Unit" title="Permalink" target="_top">
