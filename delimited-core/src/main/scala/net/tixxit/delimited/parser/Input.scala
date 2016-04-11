@@ -30,12 +30,7 @@ final class Input private (
   private def check(i: Long): Int = if ((i < offset) || (i > (offset + data.length))) {
     throw new IndexOutOfBoundsException(i.toString)
   } else {
-    val j = i - offset
-    if (j <= Int.MaxValue) {
-      j.toInt
-    } else {
-      throw new IndexOutOfBoundsException(i.toString)
-    }
+    (i - offset).toInt
   }
 
   /**
