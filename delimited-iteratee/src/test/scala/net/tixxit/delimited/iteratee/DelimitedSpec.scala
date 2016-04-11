@@ -81,17 +81,18 @@ class DelimitedSpec extends WordSpec with Matchers with Checkers {
       val parser: Iteratee[Id, String, Vector[Row]] =
         Iteratee.consume.through(Delimited.parseString(DelimitedFormat.Guess))
 
-      val iteratee: Iteratee[Id, String, (DelimitedFormat, Vector[Row])] =
-        Delimited.inferDelimitedFormat(bufferSize = 10).zip(parser)
-
-      val chunks = Enumerator.enumStream[Id, String](
-        Stream("a,b,", "c\nd,e", ",", "f\n", "g,h,i\nj,k", ",", "l"),
-        chunkSize = 2
-      )
-      val (format, rows) = chunks.run(iteratee)
-      format.separator shouldBe ","
-      format.rowDelim.value shouldBe "\n"
-      rows shouldBe Vector(Row("a", "b", "c"), Row("d", "e", "f"), Row("g", "h", "i"), Row("j", "k", "l"))
+      List(10, 100).foreach { bufferSize =>
+        val iteratee: Iteratee[Id, String, (DelimitedFormat, Vector[Row])] =
+          Delimited.inferDelimitedFormat(bufferSize = bufferSize).zip(parser)
+        val chunks = Enumerator.enumStream[Id, String](
+          Stream("a,b,", "c\nd,e", ",", "f\n", "g,h,i\nj,k", ",", "l"),
+          chunkSize = 2
+        )
+        val (format, rows) = chunks.run(iteratee)
+        format.separator shouldBe ","
+        format.rowDelim.value shouldBe "\n"
+        rows shouldBe Vector(Row("a", "b", "c"), Row("d", "e", "f"), Row("g", "h", "i"), Row("j", "k", "l"))
+      }
     }
   }
 
