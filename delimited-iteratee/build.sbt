@@ -5,5 +5,3 @@ libraryDependencies ++= Seq(
   Deps.scalaCheck,
   Deps.scalaTest
 )
-
-Publish.settings
