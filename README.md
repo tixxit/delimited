@@ -12,7 +12,14 @@ Delimited is published for both Scala 2.10 and 2.11. To get started with SBT,
 use the following in your SBT build file:
 
 ```scala
-libraryDependencies += "net.tixxit" %% "delimited-core" % "0.6.2"
+libraryDependencies += "net.tixxit" %% "delimited-core" % "0.7.0"
+```
+
+If you are using [Delimited's iteratee library](http://tixxit.github.io/delimited/latest/api/#net.tixxit.delimited.iteratee.Delimited$)
+then you will also want to include:
+
+```scala
+libraryDependencies += "net.tixxit" %% "delimited-iteratee" % "0.7.0"
 ```
 
 ## [API Docs (Scaladoc)](http://tixxit.github.io/delimited/latest/api/)
@@ -48,11 +55,9 @@ means you can parse a huge CSV in a constant amount of memory. Don't know the
 format ahead of time? No problem! Format inference works just fine with
 streaming parsing.
 
-## Coming Soon
+### Iteratee Support (Cats)
 
- * more library interop
-   * scalaz-stream support
- * per-column schema support
-   * per-column inference of empty field values
-   * validation
-   * etc
+Delimited also has support for [Travis Brown's Iteratee](https://github.com/travisbrown/iteratee)
+library for [cats](https://github.com/typelevel/cats) in the
+`delimited-iteratee` library. You can 
+[review the scaladoc for some more details](http://tixxit.github.io/delimited/latest/api/#net.tixxit.delimited.iteratee.Delimited$).
