@@ -43,11 +43,11 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Input</span><span class="params">(<span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="mark">mark: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">Input</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -58,10 +58,11 @@ always relative to the entire stream, though only positions within the
 current window are valid at any given point in time.</p><p>The method <code>marked</code> returns a new <code>Input</code> which may drop all data before the
 marked position. Accessing data before the marked position in the returned
 <code>Input</code> is undefined and should be expected to fail in hilarious ways.</p><p>The method <code>append</code> is used to append new chunks of data from the stream
-onto the input.
-</p></div><dl class="paramcmts block"><dt class="param">offset</dt><dd class="cmt"><p>the offset, in chars, of the start of <code>data</code> in the stream</p></dd><dt class="param">data</dt><dd class="cmt"><p>the currently readable window into the stream</p></dd><dt class="param">isLast</dt><dd class="cmt"><p>true if this window covers the end of the stream</p></dd><dt class="param">mark</dt><dd class="cmt"><p>the position in the stream we are able to truncate data to</p></dd></dl><div class="toggleContainer block">
+onto the input. The <code>Input</code> returned by <code>append</code> will have all its data
+up-to <code>mark</code> removed.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -79,7 +80,7 @@ onto the input.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="net.tixxit.delimited.parser.Input"><span>Input</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="net.tixxit.delimited.parser.Input"><span>Input</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -96,27 +97,7 @@ onto the input.
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="net.tixxit.delimited.parser.Input#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(offset:Long,data:String,isLast:Boolean,mark:Long):net.tixxit.delimited.parser.Input"></a>
-      <a id="&lt;init&gt;:Input"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Input</span><span class="params">(<span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="mark">mark: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#net.tixxit.delimited.parser.Input@&lt;init&gt;(offset:Long,data:String,isLast:Boolean,mark:Long):net.tixxit.delimited.parser.Input" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">offset</dt><dd class="cmt"><p>the offset, in chars, of the start of <code>data</code> in the stream</p></dd><dt class="param">data</dt><dd class="cmt"><p>the currently readable window into the stream</p></dd><dt class="param">isLast</dt><dd class="cmt"><p>true if this window covers the end of the stream</p></dd><dt class="param">mark</dt><dd class="cmt"><p>the position in the stream we are able to truncate data to</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         
 
@@ -194,7 +175,9 @@ onto the input.
       <p class="shortcomment cmt">Returns an <code>Input</code> with the chunk of data appended to the currently
 readable window.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an <code>Input</code> with the chunk of data appended to the currently
 readable window. If <code>last</code> is true, then the returned <code>Input</code>'s <code>isLast</code>
-method returns <code>true</code>.
+method returns <code>true</code>. Any data available in the current <code>Input</code>, but
+prior to this <code>Input</code>'s <code>mark</code> will not be available in the returned
+<code>Input</code>.
 </p></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
@@ -289,6 +272,23 @@ aggressive bounds checking.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.Input@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -342,6 +342,23 @@ aggressive bounds checking.
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.Input@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.Input@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -537,6 +554,23 @@ It is expected that <code>mark &lt;= from &lt;= until &lt;= limit</code>.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.Input@toString():String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -606,6 +640,25 @@ It is expected that <code>mark &lt;= from &lt;= until &lt;= limit</code>.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="net.tixxit.delimited.parser.Input#window" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="window:String"></a>
+      <a id="window:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">window</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.Input@window:String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the character data between <code>mark</code> and <code>limit</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the character data between <code>mark</code> and <code>limit</code>. This is equivalent
+to calling <code>input.substring(input.mark, input.limit)</code>.
+</p></div></div>
     </li></ol>
             </div>
 
@@ -615,15 +668,7 @@ It is expected that <code>mark &lt;= from &lt;= until &lt;= limit</code>.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Product">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

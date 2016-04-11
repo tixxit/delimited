@@ -84,18 +84,18 @@
     </span>
       
     </li><li name="net.tixxit.delimited.parser.Input" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="InputextendsProductwithSerializable"></a>
+      <a id="InputextendsAnyRef"></a>
       <a id="Input:Input"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Input.html"><span class="name">Input</span></a><span class="params">(<span name="offset">offset: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="data">data: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="isLast">isLast: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="mark">mark: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Input.html"><span class="name">Input</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#net.tixxit.delimited.parser.package@InputextendsProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#net.tixxit.delimited.parser.package@InputextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -106,8 +106,9 @@ always relative to the entire stream, though only positions within the
 current window are valid at any given point in time.</p><p>The method <code>marked</code> returns a new <code>Input</code> which may drop all data before the
 marked position. Accessing data before the marked position in the returned
 <code>Input</code> is undefined and should be expected to fail in hilarious ways.</p><p>The method <code>append</code> is used to append new chunks of data from the stream
-onto the input.
-</p></div><dl class="paramcmts block"><dt class="param">offset</dt><dd class="cmt"><p>the offset, in chars, of the start of <code>data</code> in the stream</p></dd><dt class="param">data</dt><dd class="cmt"><p>the currently readable window into the stream</p></dd><dt class="param">isLast</dt><dd class="cmt"><p>true if this window covers the end of the stream</p></dd><dt class="param">mark</dt><dd class="cmt"><p>the position in the stream we are able to truncate data to</p></dd></dl></div>
+onto the input. The <code>Input</code> returned by <code>append</code> will have all its data
+up-to <code>mark</code> removed.
+</p></div></div>
     </li><li name="net.tixxit.delimited.parser.InputBuffer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="InputBufferextendsAnyRef"></a>
       <a id="InputBuffer:InputBuffer"></a>
@@ -209,7 +210,7 @@ onto the input.
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Input$.html"><span class="name">Input</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="Input$.html"><span class="name">Input</span></a>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#net.tixxit.delimited.parser.package@Input" title="Permalink" target="_top">
