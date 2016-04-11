@@ -23,6 +23,11 @@ final case class DelimitedParserImpl(
     case _ => None
   }
 
+  def reset: (String, DelimitedParserImpl) = {
+    val in = parserState.input
+    (in.substring(in.mark, in.limit), DelimitedParserImpl(strategy))
+  }
+
   def parseChunk(chunk: Option[String]): (DelimitedParserImpl, Vector[Either[DelimitedError, Row]]) = {
     val initState = chunk match {
       case Some(str) => parserState.mapInput(_.append(str))

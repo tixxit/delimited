@@ -22,6 +22,8 @@ object Publish {
     },
     homepage := Some(url("http://github.com/tixxit/delimited")),
     licenses += ("ISC License", url("https://opensource.org/licenses/ISC")),
+    apiURL := Some(url("https://tixxit.github.io/delimited/latest/api/")),
+    autoAPIMappings := true,
     pomExtra := (
       <scm>
         <url>git@github.com:tixxit/delimited.git</url>

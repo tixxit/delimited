@@ -57,6 +57,12 @@ trait DelimitedParser {
   def parseChunk(chunk: Option[String]): (DelimitedParser, Vector[Either[DelimitedError, Row]])
 
   /**
+   * Returns all unparsed data and a DelimitedParser whose state is completely
+   * reset.
+   */
+  def reset: (String, DelimitedParser)
+
+  /**
    * Parse all chunks in the given iterator, consecutively, treating the last
    * chunk in `chunks` as the final input. This will return all rows from the
    * input.
