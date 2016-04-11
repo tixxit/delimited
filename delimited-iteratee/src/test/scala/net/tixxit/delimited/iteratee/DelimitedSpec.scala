@@ -150,7 +150,9 @@ class DelimitedSpec extends WordSpec with Matchers with Checkers {
         .map { cells => Row(cells: _*) }
         .toVector
       val file = expected.map(_.render(DelimitedFormat.CSV)).mkString("\n")
-      val actual = enumList(split(file)).run(consumeGroups).value.flatten
+      val actual = Enumerator
+        .enumStream[Eval, String](split(file).toStream, chunkSize = 1)
+        .run(consumeGroups).value.flatten
       actual shouldBe expected
     }
   }
