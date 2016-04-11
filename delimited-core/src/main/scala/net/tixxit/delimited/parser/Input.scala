@@ -13,24 +13,36 @@ package parser
  * `Input` is undefined and should be expected to fail in hilarious ways.
  *
  * The method `append` is used to append new chunks of data from the stream
- * onto the input.
+ * onto the input. The `Input` returned by `append` will have all its data
+ * up-to `mark` removed.
  *
  * @param offset the offset, in chars, of the start of `data` in the stream
  * @param data   the currently readable window into the stream
  * @param isLast true if this window covers the end of the stream
  * @param mark   the position in the stream we are able to truncate data to
  */
-case class Input(offset: Long, data: String, isLast: Boolean, mark: Long) {
+final class Input private (
+  val offset: Long,
+  val data: String,
+  val isLast: Boolean,
+  val mark: Long
+) {
   private def check(i: Long): Int = if ((i < offset) || (i > (offset + data.length))) {
-    throw new IndexOutOfBoundsException()
+    throw new IndexOutOfBoundsException(i.toString)
   } else {
     val j = i - offset
     if (j <= Int.MaxValue) {
       j.toInt
     } else {
-      throw new IndexOutOfBoundsException()
+      throw new IndexOutOfBoundsException(i.toString)
     }
   }
+
+  /**
+   * Returns the character data between `mark` and `limit`. This is equivalent
+   * to calling `input.substring(input.mark, input.limit)`.
+   */
+  def window: String = substring(math.min(limit, mark), limit)
 
   /**
    * Returns the character at the given position. This method will do some
@@ -54,33 +66,39 @@ case class Input(offset: Long, data: String, isLast: Boolean, mark: Long) {
   /**
    * Returns an `Input` whose `mark` is at the given position.
    */
-  def marked(pos: Long): Input =
-    Input(offset, data, isLast, pos)
+  def marked(pos: Long): Input = {
+    if (pos < mark) {
+      throw new IllegalArgumentException("mark cannot be smaller than current mark")
+    }
+    new Input(offset, data, isLast, pos)
+  }
 
   private def trim: Input = {
     val next = math.min(mark - offset, data.length.toLong).toInt
     val tail = data.substring(next)
     val offset0 = offset + next
-    Input(offset0, tail, isLast, offset0)
+    new Input(offset0, tail, isLast, mark)
   }
 
   /**
    * Returns an `Input` with the chunk of data appended to the currently
    * readable window. If `last` is true, then the returned `Input`'s `isLast`
-   * method returns `true`.
+   * method returns `true`. Any data available in the current `Input`, but
+   * prior to this `Input`'s `mark` will not be available in the returned
+   * `Input`.
    */
   def append(chunk: String, last: Boolean = false): Input =
-    if (mark > offset) trim.append(chunk, last)
-    else if (chunk.isEmpty) Input(offset, data, last, mark)
-    else Input(offset, data + chunk, last, mark)
+    if (mark > offset && data.length > 0) trim.append(chunk, last)
+    else if (chunk.isEmpty) new Input(offset, data, last, mark)
+    else new Input(offset, data + chunk, last, mark)
 
   /**
    * Returns a copy of this `Input` where `isLast` is true.
    */
-  def finished: Input = Input(offset, data, true, mark)
+  def finished: Input = new Input(offset, data, true, mark)
 }
 
 object Input {
   def init(str: String): Input =
-    Input(0, str, false, 0)
+    new Input(0, str, false, 0)
 }
