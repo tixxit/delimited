@@ -66,11 +66,12 @@ object Delimited {
    * @param format the strategy to use while parsing the delimited file
    */
   final def parseString[F[_]](
-    format: DelimitedFormatStrategy
+    format: DelimitedFormatStrategy,
+    bufferSize: Int = DelimitedParser.BufferSize
   )(implicit F: Applicative[F]): Enumeratee[F, String, Row] = {
     new Enumeratee[F, String, Row] {
       def apply[A](step: Step[F, Row, A]): F[Step[F, String, Step[F, Row, A]]] =
-        F.pure(doneOrLoop(DelimitedParser(format))(step))
+        F.pure(doneOrLoop(DelimitedParser(format, bufferSize))(step))
 
       private[this] def doneOrLoop[A](parser: DelimitedParser)(step: Step[F, Row, A]): Step[F, String, Step[F, Row, A]] = {
         if (step.isDone) {
