@@ -10,7 +10,14 @@ package net.tixxit.delimited
  * @param row      the row (1-based) where the error occured
  * @param col      the column (1-based) where the error occured
  */
-case class DelimitedError(message: String, rowStart: Long, pos: Long, context: String, row: Long, col: Long) {
+case class DelimitedError(
+  message: String,
+  rowStart: Long,
+  pos: Long,
+  context: String,
+  row: Long,
+  col: Long
+) extends Exception(message) {
 
   /**
    * A helpful, nicely rendered, multiline message that is suitable for human

@@ -134,6 +134,10 @@ object DelimitedParser {
    * Returns a `DelimitedParser` that can parse delimited files using the
    * strategy or format provided.
    */
-  def apply(format: DelimitedFormatStrategy): DelimitedParser =
-    parser.DelimitedParserImpl(format)
+  def apply(
+    format: DelimitedFormatStrategy,
+    bufferSize: Int = BufferSize
+  ): DelimitedParser = {
+    parser.DelimitedParserImpl(format, bufferSize)
+  }
 }
