@@ -16,7 +16,8 @@ final case class DelimitedParserImpl(
   strategy: DelimitedFormatStrategy,
   parserState: ParserState,
   fail: Option[Fail],
-  row: Long
+  row: Long,
+  bufferSize: Int
 ) extends DelimitedParser {
   def format: Option[DelimitedFormat] = strategy match {
     case (fmt: DelimitedFormat) => Some(fmt)
@@ -25,7 +26,7 @@ final case class DelimitedParserImpl(
 
   def reset: (String, DelimitedParserImpl) = {
     val in = parserState.input
-    (in.substring(in.mark, in.limit), DelimitedParserImpl(strategy))
+    (in.substring(in.mark, in.limit), DelimitedParserImpl(strategy, bufferSize))
   }
 
   def parseChunk(chunk: Option[String]): (DelimitedParserImpl, Vector[Either[DelimitedError, Row]]) = {
@@ -35,12 +36,12 @@ final case class DelimitedParserImpl(
     }
     val format = strategy match {
       case (guess: GuessDelimitedFormat) =>
-        if (initState.input.isLast || initState.input.data.length > DelimitedParser.BufferSize / 2) {
-          // We want <hand-waving>enough</hand-waving> data here, so say 1/2 the buffer size?
+        if (initState.input.isLast || initState.input.data.length >= bufferSize) {
+          // We want <hand-waving>enough</hand-waving> data here.
           guess(initState.input.data)
         } else {
           // TODO: We could get rid of this return.
-          return (DelimitedParserImpl(strategy, initState, fail, row), Vector.empty)
+          return (DelimitedParserImpl(strategy, initState, fail, row, bufferSize), Vector.empty)
         }
       case (fmt: DelimitedFormat) =>
         fmt
@@ -69,10 +70,10 @@ final case class DelimitedParserImpl(
           }
 
         case NeedInput =>
-          DelimitedParserImpl(format, s1, fail, row) -> acc
+          DelimitedParserImpl(format, s1, fail, row, bufferSize) -> acc
 
         case Done =>
-          DelimitedParserImpl(format, s1, None, row) -> acc
+          DelimitedParserImpl(format, s1, None, row, bufferSize) -> acc
       }
     }
 
@@ -81,8 +82,12 @@ final case class DelimitedParserImpl(
 }
 
 object DelimitedParserImpl {
-  def apply(format: DelimitedFormatStrategy): DelimitedParserImpl =
-    DelimitedParserImpl(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L)
+  def apply(
+    format: DelimitedFormatStrategy,
+    bufferSize: Int
+  ): DelimitedParserImpl = {
+    DelimitedParserImpl(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L, bufferSize)
+  }
 
   def parse(format: DelimitedFormat)(state: ParserState): (ParserState, Instr) = {
     import format._
