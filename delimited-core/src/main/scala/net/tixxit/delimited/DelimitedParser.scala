@@ -133,11 +133,17 @@ object DelimitedParser {
   /**
    * Returns a `DelimitedParser` that can parse delimited files using the
    * strategy or format provided.
+   *
+   * @param format         strategy used to determine the format
+   * @param bufferSize     minimum size of buffer used for format inference
+   * @param maxCharsPerRow hard limit on the # of chars in a row, or 0 if there
+   *                       is no limit
    */
   def apply(
     format: DelimitedFormatStrategy,
-    bufferSize: Int = BufferSize
+    bufferSize: Int = BufferSize,
+    maxCharsPerRow: Int = 0
   ): DelimitedParser = {
-    parser.DelimitedParserImpl(format, bufferSize)
+    parser.DelimitedParserImpl(format, bufferSize, maxCharsPerRow)
   }
 }

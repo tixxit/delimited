@@ -23,6 +23,8 @@ sealed trait ParserState {
   }
 
   def mapInput(f: Input => Input): ParserState = withInput(f(input))
+
+  def skipRow: ParserState = SkipRow(rowStart, readFrom, input, sizeHint)
 }
 
 object ParserState {
