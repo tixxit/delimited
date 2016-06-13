@@ -45,7 +45,7 @@ val rows: Vector[Either[DelimitedError, Row]] =
 
 // Parse a File into a Vector
 val rows: Vector[Either[DelimitedError, Row]] =
-  parser.parseReader(new File("some-data.csv"))
+  parser.parseFile(new File("some-data.csv"))
 
 // Parse a Reader into an Iterator
 val reader: Reader = new BufferedReader(new FileReader("some-data.csv", "utf-8"))
