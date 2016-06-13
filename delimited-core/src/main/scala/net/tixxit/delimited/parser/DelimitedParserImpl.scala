@@ -17,8 +17,11 @@ final case class DelimitedParserImpl(
   parserState: ParserState,
   fail: Option[Fail],
   row: Long,
-  bufferSize: Int
+  bufferSize: Int,
+  maxCharsPerRow: Int
 ) extends DelimitedParser {
+  require(maxCharsPerRow >= 0, "max row characters parameter must be non-negative")
+
   def format: Option[DelimitedFormat] = strategy match {
     case (fmt: DelimitedFormat) => Some(fmt)
     case _ => None
@@ -26,7 +29,7 @@ final case class DelimitedParserImpl(
 
   def reset: (String, DelimitedParserImpl) = {
     val in = parserState.input
-    (in.substring(in.mark, in.limit), DelimitedParserImpl(strategy, bufferSize))
+    (in.substring(in.mark, in.limit), DelimitedParserImpl(strategy, bufferSize, maxCharsPerRow))
   }
 
   def parseChunk(chunk: Option[String]): (DelimitedParserImpl, Vector[Either[DelimitedError, Row]]) = {
@@ -41,10 +44,15 @@ final case class DelimitedParserImpl(
           guess(initState.input.data)
         } else {
           // TODO: We could get rid of this return.
-          return (DelimitedParserImpl(strategy, initState, fail, row, bufferSize), Vector.empty)
+          return (DelimitedParserImpl(strategy, initState, fail, row, bufferSize, maxCharsPerRow), Vector.empty)
         }
       case (fmt: DelimitedFormat) =>
         fmt
+    }
+
+    val maxRowDelimLength: Int = format.rowDelim match {
+      case RowDelim(value, None) => value.length
+      case RowDelim(value, Some(alt)) => scala.math.max(value.length, alt.length)
     }
 
     @tailrec
@@ -53,7 +61,15 @@ final case class DelimitedParserImpl(
 
       instr match {
         case EmitRow(cells) =>
-          loop(s1, fail, row + 1, acc :+ Right(cells))
+          if (maxCharsPerRow > 0 && (s1.rowStart - s0.rowStart - maxRowDelimLength) > maxCharsPerRow) {
+              val context = DelimitedParserImpl.removeRowDelim(format,
+                s1.input.substring(s0.rowStart, s1.rowStart))
+            val error = DelimitedError(s"row exceeded maximum length of $maxCharsPerRow",
+              s0.rowStart, s0.rowStart, context, row, 1)
+            loop(s1, fail, row + 1, acc :+ Left(error))
+          } else {
+            loop(s1, fail, row + 1, acc :+ Right(cells))
+          }
 
         case f @ Fail(_, _) =>
           loop(s1, Some(f), row, acc)
@@ -70,10 +86,16 @@ final case class DelimitedParserImpl(
           }
 
         case NeedInput =>
-          DelimitedParserImpl(format, s1, fail, row, bufferSize) -> acc
+          if (maxCharsPerRow > 0 && fail.isEmpty &&
+              (s1.input.limit - s1.rowStart - maxRowDelimLength) > maxCharsPerRow) {
+            val f = Some(Fail(s"row exceeded maximum length of $maxCharsPerRow", s1.rowStart))
+            DelimitedParserImpl(format, s1.skipRow, f, row, bufferSize, maxCharsPerRow) -> acc
+          } else {
+            DelimitedParserImpl(format, s1, fail, row, bufferSize, maxCharsPerRow) -> acc
+          }
 
         case Done =>
-          DelimitedParserImpl(format, s1, None, row, bufferSize) -> acc
+          DelimitedParserImpl(format, s1, None, row, bufferSize, maxCharsPerRow) -> acc
       }
     }
 
@@ -82,11 +104,22 @@ final case class DelimitedParserImpl(
 }
 
 object DelimitedParserImpl {
+
+  /**
+   * Returns a new DelimitedParserImpl whose state is initially empty.
+   *
+   * @note If `maxRowsChars` is 0, then there is no limit on row size.
+   *
+   * @param format the format strategy to use for parsing
+   * @param bufferSize the minimum size of the buffer to use for format inference
+   * @param maxRowsChars a hard limit on the allowable size of a row
+   */
   def apply(
     format: DelimitedFormatStrategy,
-    bufferSize: Int
+    bufferSize: Int,
+    maxCharsPerRow: Int
   ): DelimitedParserImpl = {
-    DelimitedParserImpl(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L, bufferSize)
+    DelimitedParserImpl(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L, bufferSize, maxCharsPerRow)
   }
 
   def parse(format: DelimitedFormat)(state: ParserState): (ParserState, Instr) = {

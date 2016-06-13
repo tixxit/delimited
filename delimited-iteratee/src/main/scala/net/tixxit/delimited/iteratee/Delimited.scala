@@ -63,15 +63,19 @@ object Delimited {
    * An [[Enumeratee]] that parses chunks of character data from a delimited
    * file into [[Row]]s.
    *
-   * @param format the strategy to use while parsing the delimited file
+   * @param format         strategy used to determine the format
+   * @param bufferSize     minimum size of buffer used for format inference
+   * @param maxCharsPerRow hard limit on the # of chars in a row, or 0 if there
+   *                       is no limit
    */
   final def parseString[F[_]](
     format: DelimitedFormatStrategy,
-    bufferSize: Int = DelimitedParser.BufferSize
+    bufferSize: Int = DelimitedParser.BufferSize,
+    maxCharsPerRow: Int = 0
   )(implicit F: Applicative[F]): Enumeratee[F, String, Row] = {
     new Enumeratee[F, String, Row] {
       def apply[A](step: Step[F, Row, A]): F[Step[F, String, Step[F, Row, A]]] =
-        F.pure(doneOrLoop(DelimitedParser(format, bufferSize))(step))
+        F.pure(doneOrLoop(DelimitedParser(format, bufferSize, maxCharsPerRow))(step))
 
       private[this] def doneOrLoop[A](parser: DelimitedParser)(step: Step[F, Row, A]): Step[F, String, Step[F, Row, A]] = {
         if (step.isDone) {

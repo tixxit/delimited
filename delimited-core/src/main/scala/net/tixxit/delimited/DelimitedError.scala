@@ -30,4 +30,7 @@ case class DelimitedError(
 
     s"$msg\n\n$context\n$pointer"
   }
+
+  override def toString: String =
+    s"DelimitedError($message, rowStart = $rowStart, pos = $pos, context = $context, row = $row, col = $col)"
 }

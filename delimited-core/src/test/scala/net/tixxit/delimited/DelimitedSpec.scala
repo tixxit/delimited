@@ -167,6 +167,32 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
       rows1 shouldBe Vector()
       rows2 shouldBe Vector(Left(DelimitedError("Expected separator, row delimiter, or end of file", 0, 3, "'a'x", 1, 4)))
     }
+
+    "respect maxCharsPerRow for otherwise valid rows" in {
+      val parser = DelimitedParser(TestFormat, maxCharsPerRow = 5)
+      val actual = parser.parseAll(Iterator("a,b,c|d,e,f|gh,i,j|kk,ll,mm|n,o,p")).toList
+      actual shouldBe Vector(
+        Right(Row("a", "b", "c")),
+        Right(Row("d", "e", "f")),
+        Left(DelimitedError("row exceeded maximum length of 5", 12, 12, "gh,i,j", 3, 1)),
+        Left(DelimitedError("row exceeded maximum length of 5", 19, 19, "kk,ll,mm", 4, 1)),
+        Right(Row("n", "o", "p"))
+      )
+    }
+
+    "respect maxCharsPerRow across chunks" in {
+      val parser = DelimitedParser(TestFormat, maxCharsPerRow = 5)
+      val actual = parser.parseAll(Iterator(
+        "a,b,c", "|d,e,f|", "gh,i", ",j|", "kk,ll", ",mm", "|n,o,p"
+      )).toList
+      actual shouldBe Vector(
+        Right(Row("a", "b", "c")),
+        Right(Row("d", "e", "f")),
+        Left(DelimitedError("row exceeded maximum length of 5", 12, 12, "gh,i,j", 3, 1)),
+        Left(DelimitedError("row exceeded maximum length of 5", 19, 19, "kk,ll,mm", 4, 1)),
+        Right(Row("n", "o", "p"))
+      )
+    }
   }
 
   "format" should {
