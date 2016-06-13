@@ -61,7 +61,7 @@ final case class DelimitedParserImpl(
 
       instr match {
         case EmitRow(cells) =>
-          if (maxCharsPerRow > 0 && (s1.rowStart - s0.rowStart) > maxCharsPerRow) {
+          if (maxCharsPerRow > 0 && (s1.rowStart - s0.rowStart - maxRowDelimLength) > maxCharsPerRow) {
               val context = DelimitedParserImpl.removeRowDelim(format,
                 s1.input.substring(s0.rowStart, s1.rowStart))
             val error = DelimitedError(s"row exceeded maximum length of $maxCharsPerRow",
