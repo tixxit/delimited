@@ -388,25 +388,26 @@ will use whatever has been seen so far, even if that is 0.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="net.tixxit.delimited.iteratee.Delimited#parseString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parseString[F[_]](format:net.tixxit.delimited.DelimitedFormatStrategy)(implicitF:cats.Applicative[F]):io.iteratee.Enumeratee[F,String,net.tixxit.delimited.Row]"></a>
-      <a id="parseString[F[_]](DelimitedFormatStrategy)(Applicative[F]):Enumeratee[F,String,Row]"></a>
+      <a id="parseString[F[_]](format:net.tixxit.delimited.DelimitedFormatStrategy,bufferSize:Int,maxCharsPerRow:Int)(implicitF:cats.Applicative[F]):io.iteratee.Enumeratee[F,String,net.tixxit.delimited.Row]"></a>
+      <a id="parseString[F[_]](DelimitedFormatStrategy,Int,Int)(Applicative[F]):Enumeratee[F,String,Row]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parseString</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="format">format: <a href="../DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="http://typelevel.org/cats/api/index.html#cats.Applicative" class="extype" target="_top">Applicative</a>[<span class="extype" name="net.tixxit.delimited.iteratee.Delimited.parseString.F">F</span>]</span>)</span><span class="result">: <a href="https://travisbrown.github.io/iteratee/api/index.html#io.iteratee.Enumeratee" class="extype" target="_top">Enumeratee</a>[<span class="extype" name="net.tixxit.delimited.iteratee.Delimited.parseString.F">F</span>, <span class="extype" name="scala.Predef.String">String</span>, <a href="../Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>]</span>
+        <span class="name">parseString</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="params">(<span name="format">format: <a href="../DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>, <span name="bufferSize">bufferSize: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol"><span class="name"><a href="../DelimitedParser$.html">DelimitedParser.BufferSize</a></span></span></span>, <span name="maxCharsPerRow">maxCharsPerRow: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">0</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="F">F: <a href="http://typelevel.org/cats/api/index.html#cats.Applicative" class="extype" target="_top">Applicative</a>[<span class="extype" name="net.tixxit.delimited.iteratee.Delimited.parseString.F">F</span>]</span>)</span><span class="result">: <a href="https://travisbrown.github.io/iteratee/api/index.html#io.iteratee.Enumeratee" class="extype" target="_top">Enumeratee</a>[<span class="extype" name="net.tixxit.delimited.iteratee.Delimited.parseString.F">F</span>, <span class="extype" name="scala.Predef.String">String</span>, <a href="../Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#net.tixxit.delimited.iteratee.Delimited$@parseString[F[_]](format:net.tixxit.delimited.DelimitedFormatStrategy)(implicitF:cats.Applicative[F]):io.iteratee.Enumeratee[F,String,net.tixxit.delimited.Row]" title="Permalink" target="_top">
+      <a href="../../../../index.html#net.tixxit.delimited.iteratee.Delimited$@parseString[F[_]](format:net.tixxit.delimited.DelimitedFormatStrategy,bufferSize:Int,maxCharsPerRow:Int)(implicitF:cats.Applicative[F]):io.iteratee.Enumeratee[F,String,net.tixxit.delimited.Row]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">An <span class="extype" name="Enumeratee">Enumeratee</span> that parses chunks of character data from a delimited
 file into <a href="../Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>s.</p><div class="fullcomment"><div class="comment cmt"><p>An <span class="extype" name="Enumeratee">Enumeratee</span> that parses chunks of character data from a delimited
 file into <a href="../Row.html" class="extype" name="net.tixxit.delimited.Row">Row</a>s.
-</p></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>the strategy to use while parsing the delimited file</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>strategy used to determine the format</p></dd><dt class="param">bufferSize</dt><dd class="cmt"><p>minimum size of buffer used for format inference</p></dd><dt class="param">maxCharsPerRow</dt><dd class="cmt"><p>hard limit on the # of chars in a row, or 0 if there
+                      is no limit</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

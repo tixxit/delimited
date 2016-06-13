@@ -164,24 +164,27 @@
       </a>
     </span>
       
-    </li><li name="net.tixxit.delimited.DelimitedParser#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(format:net.tixxit.delimited.DelimitedFormatStrategy):net.tixxit.delimited.DelimitedParser"></a>
-      <a id="apply(DelimitedFormatStrategy):DelimitedParser"></a>
+    </li><li name="net.tixxit.delimited.DelimitedParser#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(format:net.tixxit.delimited.DelimitedFormatStrategy,bufferSize:Int,maxCharsPerRow:Int):net.tixxit.delimited.DelimitedParser"></a>
+      <a id="apply(DelimitedFormatStrategy,Int,Int):DelimitedParser"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="format">format: <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>)</span><span class="result">: <a href="DelimitedParser.html" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a></span>
+        <span class="name">apply</span><span class="params">(<span name="format">format: <a href="DelimitedFormatStrategy.html" class="extype" name="net.tixxit.delimited.DelimitedFormatStrategy">DelimitedFormatStrategy</a></span>, <span name="bufferSize">bufferSize: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol"><span class="name"><a href="#BufferSize:Int">BufferSize</a></span></span></span>, <span name="maxCharsPerRow">maxCharsPerRow: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="DelimitedParser.html" class="extype" name="net.tixxit.delimited.DelimitedParser">DelimitedParser</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#net.tixxit.delimited.DelimitedParser$@apply(format:net.tixxit.delimited.DelimitedFormatStrategy):net.tixxit.delimited.DelimitedParser" title="Permalink" target="_top">
+      <a href="../../../index.html#net.tixxit.delimited.DelimitedParser$@apply(format:net.tixxit.delimited.DelimitedFormatStrategy,bufferSize:Int,maxCharsPerRow:Int):net.tixxit.delimited.DelimitedParser" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Returns a <code>DelimitedParser</code> that can parse delimited files using the
-strategy or format provided.</p>
+strategy or format provided.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <code>DelimitedParser</code> that can parse delimited files using the
+strategy or format provided.
+</p></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>strategy used to determine the format</p></dd><dt class="param">bufferSize</dt><dd class="cmt"><p>minimum size of buffer used for format inference</p></dd><dt class="param">maxCharsPerRow</dt><dd class="cmt"><p>hard limit on the # of chars in a row, or 0 if there
+                      is no limit</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
