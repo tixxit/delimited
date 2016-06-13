@@ -16,4 +16,11 @@ class DelimitedErrorSpec extends WordSpec with Matchers with Checkers {
           |  ^""".stripMargin
     }
   }
+
+  "toString" should {
+    "include location info" in {
+      val error = DelimitedError("blah", 4, 32, "qwerty", 99, 88)
+      error.toString shouldBe "DelimitedError(blah, rowStart = 4, pos = 32, context = qwerty, row = 99, col = 88)"
+    }
+  }
 }
