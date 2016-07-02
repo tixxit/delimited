@@ -180,6 +180,21 @@ object DelimitedFormat {
    *   separator = ","
    *   quote = "\""
    *   quoteEscape = "\""
+   *   rowDelim = RowDelim("\r\n", Some("\n")),
+   *   allowRowDelimInQuotes = true
+   * )
+   * }}}
+   */
+  val Excel = DelimitedFormat(",", rowDelim = RowDelim("\r\n", Some("\n")))
+
+  /**
+   * A [[DelimitedFormat]] using the following parameters:
+   *
+   * {{{
+   * val CSV = RowDelim(
+   *   separator = ","
+   *   quote = "\""
+   *   quoteEscape = "\""
    *   rowDelim = RowDelim.Both, // \n, but also accept \r\n during parsing
    *   allowRowDelimInQuotes = true
    * )

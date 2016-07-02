@@ -81,7 +81,7 @@ class DelimitedSpec extends WordSpec with Matchers with Checkers {
       val parser: Iteratee[Id, String, Vector[Row]] =
         Iteratee.consume.through(Delimited.parseString(DelimitedFormat.Guess))
 
-      List(10, 100).foreach { bufferSize =>
+      List(20, 100).foreach { bufferSize =>
         val iteratee: Iteratee[Id, String, (DelimitedFormat, Vector[Row])] =
           Delimited.inferDelimitedFormat(bufferSize = bufferSize).zip(parser)
         val chunks = Enumerator.enumStream[Id, String](

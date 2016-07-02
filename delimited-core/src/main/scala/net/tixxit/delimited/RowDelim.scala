@@ -24,6 +24,8 @@ case class RowDelim(value: String, alternate: Option[String] = None) {
 }
 
 object RowDelim {
+  implicit val RowDelimOrdering: Ordering[RowDelim] =
+    Ordering.by { case RowDelim(value, alt) => (value, alt) }
 
   /** Use \n as a row delimiter. */
   val Unix: RowDelim = RowDelim("\n")
