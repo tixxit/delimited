@@ -71,6 +71,14 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
         Right(Row(" a ", " ", " 'a'", "b")),
         Right(Row("  b  ", "c  ", "   ")))
     }
+
+    "ignore newline at EOF" in {
+      val data = "a,b,c\r\nd,e,f\r\n"
+      val csv = DelimitedParser(DelimitedFormat.Guess).parseString(data)
+      csv shouldBe Vector(
+        Right(Row("a", "b", "c")),
+        Right(Row("d", "e", "f")))
+    }
   }
 
   "parseChunk" should {
