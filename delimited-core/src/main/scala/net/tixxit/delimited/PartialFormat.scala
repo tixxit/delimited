@@ -210,8 +210,6 @@ object PartialFormat {
   }
 
   case class Weighted[A](weight: Double, value: A) {
-    def *(k: Double): Weighted[A] = Weighted(k * weight, value)
-
     def zip[B](that: Weighted[B]): Weighted[(A, B)] =
       Weighted(weight * that.weight, (value, that.value))
   }
