@@ -19,11 +19,11 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
 
   "parseString" should {
     "parse CSV with separator in quote" in {
-      val data = """a,"b","c,d"|"e,f,g""""
+      val data = """a,"b","c,d"|"e,f,g",h,i"""
       val csv = DelimitedParser(DelimitedFormat.Guess.withRowDelim("|")).parseString(data)
       csv shouldBe Vector(
         Right(Row("a", "b", "c,d")),
-        Right(Row("e,f,g"))
+        Right(Row("e,f,g", "h", "i"))
       )
     }
 
@@ -64,7 +64,7 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
         Right(Row("d|e", "f")))
     }
 
-    "parser respects whitespace" in {
+    "respect whitespace" in {
       val data = " a , , 'a','b'|  b  ,c  ,   "
       val csv = DelimitedParser(DelimitedFormat.Guess.withRowDelim("|")).parseString(data)
       csv shouldBe Vector(
@@ -211,7 +211,7 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
       val (parser3, rows3) = parser2.parseChunk(Some("a,b,c\n"))
       val (parser4, rows4) = parser3.parseChunk(Some("a,b,c"))
       val (parser5, rows5) = parser4.parseChunk(None)
-      parser5.format shouldBe Some(DelimitedFormat.CSV)
+      parser5.format shouldBe Some(DelimitedFormat.CSV.withRowDelimInQuotes(false))
     }
 
     "not be available if not much data has been parsed" in {
