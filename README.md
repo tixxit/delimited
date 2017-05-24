@@ -22,6 +22,12 @@ then you will also want to include:
 libraryDependencies += "net.tixxit" %% "delimited-iteratee" % "0.8.0"
 ```
 
+If you're using gradle add this to your `build.gradle` file (and similarly for `delimited-iteratee`):
+
+```gradle
+compile 'net.tixxit:delimited-core_2.11:0.8.0'
+```
+
 ## [API Docs (Scaladoc)](http://tixxit.github.io/delimited/latest/api/)
 
 The latest version of the API docs are available here: [http://tixxit.github.io/delimited/latest/api/](http://tixxit.github.io/delimited/latest/api/)
