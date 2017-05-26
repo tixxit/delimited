@@ -3,8 +3,8 @@ import sbt._
 object Deps {
   object V {
     val iteratee   = "0.5.0"
-    val scalaTest  = "2.2.6"
-    val scalaCheck = "1.12.5"
+    val scalaTest  = "3.0.3"
+    val scalaCheck = "1.13.5"
   }
 
   val iteratee   = "io.iteratee"    %% "iteratee-core" % V.iteratee
