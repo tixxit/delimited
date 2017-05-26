@@ -3,10 +3,15 @@ package iteratee
 
 import java.nio.charset.{ Charset, StandardCharsets }
 
-import cats.{ Applicative, Monad }
+import cats.{ Applicative, Monad, MonadError }
+import cats.data.NonEmptyList
+import cats.instances.either._
+import cats.instances.vector._
+import cats.syntax.flatMap._
+import cats.syntax.traverse._
 
 import io.iteratee._
-import io.iteratee.internal.{ Step, Input }
+import io.iteratee.internal.Step
 
 /**
  * A collection of [[Iteratee]]s and [[Enumeratee]]s for working with delimited
@@ -33,31 +38,13 @@ object Delimited {
    */
   final def inferDelimitedFormat[F[_]](
     bufferSize: Int = DelimitedParser.BufferSize
-  )(implicit F: Applicative[F]): Iteratee[F, String, DelimitedFormat] = {
-    def stepWith(acc: Vector[String], length: Int): Step[F, String, DelimitedFormat] =
-      if (length >= bufferSize) {
-        val chunk = acc.mkString
-        val format = DelimitedFormat.Guess(chunk)
-        Step.done(format)
-      } else {
-        new Step.PureCont[F, String, DelimitedFormat] {
-          final def onEl(e: String): Step[F, String, DelimitedFormat] =
-            stepWith(acc :+ e, length + e.length)
-
-          final def onChunk(h1: String, h2: String, t: Vector[String]): Step[F, String, DelimitedFormat] = {
-            val tLength = t.foldLeft(0) { (n, e) => n + e.length }
-            val newLength = length + h1.length + h2.length + tLength
-            stepWith((acc :+ h1 :+ h2) ++ t, newLength)
-          }
-
-          final def run: F[DelimitedFormat] = {
-            F.pure(DelimitedFormat.Guess(acc.mkString))
-          }
-        }
-      }
-
-    Iteratee.fromStep(stepWith(Vector.empty, 0))
-  }
+  )(implicit F: Monad[F]): Iteratee[F, String, DelimitedFormat] =
+    Enumeratee.scan[F, String, (Vector[String], Int)]((Vector.empty[String], 0)) {
+      case ((acc, length), input) => (acc :+ input, length + input.length)
+    }.andThen(Enumeratee.takeWhile(_._2 <= bufferSize)).into(Iteratee.last).map {
+      case Some((acc, _)) => DelimitedFormat.Guess(acc.mkString)
+      case None           => DelimitedFormat.Guess("")
+    }
 
   /**
    * An [[Enumeratee]] that parses chunks of character data from a delimited
@@ -68,11 +55,11 @@ object Delimited {
    * @param maxCharsPerRow hard limit on the # of chars in a row, or 0 if there
    *                       is no limit
    */
-  final def parseString[F[_]](
+  final def parseString[F[_], E >: DelimitedError](
     format: DelimitedFormatStrategy,
     bufferSize: Int = DelimitedParser.BufferSize,
     maxCharsPerRow: Int = 0
-  )(implicit F: Applicative[F]): Enumeratee[F, String, Row] = {
+  )(implicit F: MonadError[F, E]): Enumeratee[F, String, Row] = {
     new Enumeratee[F, String, Row] {
       def apply[A](step: Step[F, Row, A]): F[Step[F, String, Step[F, Row, A]]] =
         F.pure(doneOrLoop(DelimitedParser(format, bufferSize, maxCharsPerRow))(step))
@@ -80,45 +67,34 @@ object Delimited {
       private[this] def doneOrLoop[A](parser: DelimitedParser)(step: Step[F, Row, A]): Step[F, String, Step[F, Row, A]] = {
         if (step.isDone) {
           val (leftOver, _) = parser.reset
-          Step.doneWithLeftoverInput[F, String, Step[F, Row, A]](step, Input.el(leftOver))
+          Step.doneWithLeftovers[F, String, Step[F, Row, A]](step, Seq(leftOver))
         } else {
           stepWith(parser, step)
         }
       }
 
-      private[this] def stepWith[A](
-        parser: DelimitedParser,
-        step: Step[F, Row, A]
-      ): Step[F, String, Step[F, Row, A]] = {
+      private[this] def stepWith[A](parser: DelimitedParser, step: Step[F, Row, A]): Step[F, String, Step[F, Row, A]] =
         new Step.Cont[F, String, Step[F, Row, A]] {
           final def run: F[Step[F, Row, A]] = parseChunk(None)._2
 
-          final def onEl(chunk: String): F[Step[F, String, Step[F, Row, A]]] = {
+          final def feedEl(chunk: String): F[Step[F, String, Step[F, Row, A]]] = {
             val (nextParser, nextStep) = parseChunk(Some(chunk))
             F.map(nextStep)(doneOrLoop(nextParser))
           }
 
-          final def onChunk(h1: String, h2: String, t: Vector[String]): F[Step[F, String, Step[F, Row, A]]] = {
+          final protected def feedNonEmpty(chunk: Seq[String]): F[Step[F, String, Step[F, Row, A]]] = {
             val bldr = new StringBuilder
-            bldr.append(h1)
-            bldr.append(h2)
-            t.foreach(bldr.append)
-            val chunk = bldr.toString
-            onEl(chunk)
+            chunk.foreach(bldr.append)
+            feedEl(bldr.toString)
           }
 
           private[this] def parseChunk(chunk: Option[String]): (DelimitedParser, F[Step[F, Row, A]]) = {
             val (nextParser, results) = parser.parseChunk(chunk)
-            val rows = results.map(_.right.get)
-            val nextStep = rows match {
-              case Vector() => F.pure(step)
-              case Vector(e) => step.feedEl(e)
-              case _ => step.feedChunk(rows(0), rows(1), rows.drop(2))
-            }
+            val rows = results.sequenceU.fold(F.raiseError, F.pure)
+            val nextStep = rows.flatMap(step.feed)
             (nextParser, nextStep)
           }
         }
-      }
     }
   }
 }
