@@ -2,9 +2,9 @@ organization in ThisBuild := "net.tixxit"
 
 licenses in ThisBuild += ("BSD-style" -> url("http://opensource.org/licenses/MIT"))
 
-scalaVersion in ThisBuild := "2.11.8"
+scalaVersion in ThisBuild := "2.11.11"
 
-crossScalaVersions in ThisBuild := Seq("2.10.5", "2.11.8")
+crossScalaVersions in ThisBuild := Seq("2.10.6", "2.11.11", "2.12.2")
 
 scalacOptions in ThisBuild ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds", "-optimize")
 
@@ -17,10 +17,8 @@ import com.typesafe.sbt.site.SitePlugin.autoImport._
 lazy val root = project.
   in(file(".")).
   aggregate(delimitedCore, delimitedIteratee).
-  enablePlugins(SiteScaladocPlugin).
+  enablePlugins(GhpagesPlugin, ScalaUnidocPlugin, SiteScaladocPlugin).
   settings(Publish.skip: _*).
-  settings(unidocSettings: _*).
-  settings(ghpages.settings: _*).
   settings(
     name := "delimited",
     addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), siteSubdirName in SiteScaladoc),
