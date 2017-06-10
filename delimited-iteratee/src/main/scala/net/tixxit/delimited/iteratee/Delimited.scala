@@ -3,7 +3,7 @@ package iteratee
 
 import java.nio.charset.{ Charset, StandardCharsets }
 
-import cats.{ Applicative, Monad, MonadError }
+import cats.{ ApplicativeError, Monad }
 import cats.data.NonEmptyList
 import cats.instances.either._
 import cats.instances.vector._
@@ -59,7 +59,7 @@ object Delimited {
     format: DelimitedFormatStrategy,
     bufferSize: Int = DelimitedParser.BufferSize,
     maxCharsPerRow: Int = 0
-  )(implicit F: MonadError[F, E]): Enumeratee[F, String, Row] = {
+  )(implicit F: ApplicativeError[F, E]): Enumeratee[F, String, Row] = {
     new Enumeratee[F, String, Row] {
       def apply[A](step: Step[F, Row, A]): F[Step[F, String, Step[F, Row, A]]] =
         F.pure(doneOrLoop(DelimitedParser(format, bufferSize, maxCharsPerRow))(step))
@@ -75,11 +75,12 @@ object Delimited {
 
       private[this] def stepWith[A](parser: DelimitedParser, step: Step[F, Row, A]): Step[F, String, Step[F, Row, A]] =
         new Step.Cont[F, String, Step[F, Row, A]] {
-          final def run: F[Step[F, Row, A]] = parseChunk(None)._2
+          final def run: F[Step[F, Row, A]] = F.map(parseChunk(None))(_._2)
 
           final def feedEl(chunk: String): F[Step[F, String, Step[F, Row, A]]] = {
-            val (nextParser, nextStep) = parseChunk(Some(chunk))
-            F.map(nextStep)(doneOrLoop(nextParser))
+            F.map(parseChunk(Some(chunk))) {
+              case (nextParser, nextStep) => doneOrLoop(nextParser)(nextStep)
+            }
           }
 
           final protected def feedNonEmpty(chunk: Seq[String]): F[Step[F, String, Step[F, Row, A]]] = {
@@ -88,11 +89,13 @@ object Delimited {
             feedEl(bldr.toString)
           }
 
-          private[this] def parseChunk(chunk: Option[String]): (DelimitedParser, F[Step[F, Row, A]]) = {
+          private[this] def parseChunk(chunk: Option[String]): F[(DelimitedParser, Step[F, Row, A])] = {
             val (nextParser, results) = parser.parseChunk(chunk)
-            val rows = results.sequenceU.fold(F.raiseError, F.pure)
-            val nextStep = rows.flatMap(step.feed)
-            (nextParser, nextStep)
+
+            results.sequenceU match {
+              case Right(rows) => F.map(step.feed(rows))((nextParser, _))
+              case Left(error) => F.raiseError(error)
+            }
           }
         }
     }
