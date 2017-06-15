@@ -39,10 +39,10 @@ object Delimited {
   final def inferDelimitedFormat[F[_]](
     bufferSize: Int = DelimitedParser.BufferSize
   )(implicit F: Monad[F]): Iteratee[F, String, DelimitedFormat] =
-    Enumeratee.scan[F, String, (Vector[String], Int)]((Vector.empty[String], 0)) {
-      case ((acc, length), input) => (acc :+ input, length + input.length)
+    Enumeratee.scan[F, String, (List[String], Int)]((Nil, 0)) {
+      case ((acc, length), input) => (input :: acc, length + input.length)
     }.andThen(Enumeratee.takeWhile(_._2 <= bufferSize)).into(Iteratee.last).map {
-      case Some((acc, _)) => DelimitedFormat.Guess(acc.mkString)
+      case Some((acc, _)) => DelimitedFormat.Guess(acc.reverse.mkString)
       case None           => DelimitedFormat.Guess("")
     }
 
@@ -67,7 +67,7 @@ object Delimited {
       private[this] def doneOrLoop[A](parser: DelimitedParser)(step: Step[F, Row, A]): Step[F, String, Step[F, Row, A]] = {
         if (step.isDone) {
           val (leftOver, _) = parser.reset
-          Step.doneWithLeftovers[F, String, Step[F, Row, A]](step, Seq(leftOver))
+          Step.doneWithLeftovers[F, String, Step[F, Row, A]](step, leftOver :: Nil)
         } else {
           stepWith(parser, step)
         }
