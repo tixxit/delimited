@@ -2,11 +2,11 @@ organization in ThisBuild := "net.tixxit"
 
 licenses in ThisBuild += ("BSD-style" -> url("http://opensource.org/licenses/MIT"))
 
-scalaVersion in ThisBuild := "2.11.11"
+scalaVersion in ThisBuild := "2.11.12"
 
-crossScalaVersions in ThisBuild := Seq("2.10.6", "2.11.11", "2.12.2")
+crossScalaVersions in ThisBuild := Seq("2.10.6", "2.11.12", "2.12.6")
 
-scalacOptions in ThisBuild ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds", "-optimize")
+scalacOptions in ThisBuild ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds")
 
 maxErrors in ThisBuild := 5
 
