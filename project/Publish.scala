@@ -13,7 +13,8 @@ object Publish {
     publishMavenStyle := true,
     publishArtifact in Test := false,
     pomIncludeRepository := Function.const(false),
-    publishTo <<= (version).apply { v =>
+    publishTo := {
+      val v = version.value
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT"))
         Some("Snapshots" at nexus + "content/repositories/snapshots")
@@ -41,14 +42,14 @@ object Publish {
       checkSnapshotDependencies,
       inquireVersions,
       runClean,
-      ReleaseStep(action = Command.process("package", _)),
+      releaseStepCommand("package"),
       setReleaseVersion,
       commitReleaseVersion,
       tagRelease,
-      ReleaseStep(action = Command.process("publishSigned", _)),
+      releaseStepCommand("publishSigned"),
       setNextVersion,
       commitNextVersion,
-      ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+      releaseStepCommand("sonatypeReleaseAll"),
       pushChanges)
   )
 
