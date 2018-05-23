@@ -5,8 +5,7 @@ import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease.ReleaseStateTransformations._
 
 object Publish {
-
-  val settings = Seq(
+  val baseSettings = Seq(
     // release stuff
     releaseCrossBuild := true,
     releasePublishArtifactsAction := PgpKeys.publishSigned.value,
@@ -38,6 +37,9 @@ object Publish {
         </developer>
       </developers>
     ),
+  )
+
+  val settings = baseSettings ++ Seq(
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
@@ -53,5 +55,9 @@ object Publish {
       pushChanges)
   )
 
-  val skip = Seq(publish := {}, publishLocal := {}, publishArtifact := false)
+  val skip = baseSettings ++ Seq(
+    publish := {},
+    publishLocal := {},
+    publishArtifact := false
+  )
 }
