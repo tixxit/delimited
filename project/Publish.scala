@@ -23,7 +23,10 @@ object Publish {
     homepage := Some(url("http://github.com/tixxit/delimited")),
     licenses += ("ISC License", url("https://opensource.org/licenses/ISC")),
     apiURL := Some(url("https://tixxit.github.io/delimited/latest/api/")),
-    autoAPIMappings := true,
+    autoAPIMappings := true
+  )
+
+  val settings = baseSettings ++ Seq(
     pomExtra := (
       <scm>
         <url>git@github.com:tixxit/delimited.git</url>
@@ -33,13 +36,10 @@ object Publish {
         <developer>
           <id>tixxit</id>
           <name>Tom Switzer</name>
-          <url>http://tomswitzer.net//</url>
+          <url>http://tomswitzer.net/</url>
         </developer>
       </developers>
     ),
-  )
-
-  val settings = baseSettings ++ Seq(
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
