@@ -28,10 +28,6 @@ object Publish {
 
   val settings = baseSettings ++ Seq(
     pomExtra := (
-      <scm>
-        <url>git@github.com:tixxit/delimited.git</url>
-        <connection>scm:git:git@github.com:tixxit/delimited.git</connection>
-      </scm>
       <developers>
         <developer>
           <id>tixxit</id>
