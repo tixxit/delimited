@@ -133,7 +133,7 @@ object DelimitedParserImpl {
       case (_, Instr.Fail(message, pos)) =>
         Left(DelimitedError(message, 0, pos, row, 1, pos + 1))
       case (_, Instr.NeedInput | Instr.Resume | Instr.Done) =>
-        Left(DelimitedError("malformed row", 0, 0, row, 1, 1))
+        Left(DelimitedError("empty row", 0, 0, row, 1, 1))
     }
   }
 

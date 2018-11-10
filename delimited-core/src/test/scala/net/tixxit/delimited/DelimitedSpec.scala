@@ -294,5 +294,13 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
         }
       }
     }
+
+    "fails to parse empty row" in {
+      DelimitedParser.parseRow(DelimitedFormat.CSV, "") match {
+        case Right(_) => fail("expected failure")
+        case Left(error) =>
+          assert(error.message.contains("empty"))
+      }
+    }
   }
 }
