@@ -122,6 +122,21 @@ object DelimitedParserImpl {
     DelimitedParserImpl(format, ParserState.ParseRow(0L, 0L, Input.init("")), None, 1L, bufferSize, maxCharsPerRow)
   }
 
+  def parseRow(format: DelimitedFormat, row: String): Either[DelimitedError, Row] = {
+    val s0 = ParserState.ParseRow(0L, 0L, Input.last(row))
+    DelimitedParserImpl.parse(format)(s0) match {
+      case (s, Instr.EmitRow(row)) if s.rowStart == s.input.data.length =>
+        Right(row)
+      case (s, Instr.EmitRow(_)) =>
+        Left(DelimitedError("unexpected start of new row",
+                            0, s.rowStart, row, 1, s.rowStart + 1))
+      case (_, Instr.Fail(message, pos)) =>
+        Left(DelimitedError(message, 0, pos, row, 1, pos + 1))
+      case (_, Instr.NeedInput | Instr.Resume | Instr.Done) =>
+        Left(DelimitedError("empty row", 0, 0, row, 1, 1))
+    }
+  }
+
   def parse(format: DelimitedFormat)(state: ParserState): (ParserState, Instr) = {
     import format._
 

@@ -146,4 +146,25 @@ object DelimitedParser {
   ): DelimitedParser = {
     parser.DelimitedParserImpl(format, bufferSize, maxCharsPerRow)
   }
+
+  /**
+   * Parses a single row of a delimited file. This usually shouldn't be used to
+   * parse a file, but it is useful in constrained environments where the rows
+   * are pre-parsed already and all the state management of a `DelimitedParser`
+   * instance isn't needed.
+   *
+   * This method expects exactly 1 row. This row may have the row delimiter at
+   * the end. If a row is successfully parsed, but more text input remains,
+   * then this will return an error.
+   *
+   * For example, many big data systems (eg Cascading, Scalding) has text-line
+   * based input formats, upon which TSV/CSV parsing can be built. In these
+   * cases, the rows are supplied to the mapper, so we don't need any state
+   * management.
+   *
+   * @param format the format used to parse the row
+   * @param row    the text row, without any row-delimiters
+   */
+  def parseRow(format: DelimitedFormat, row: String): Either[DelimitedError, Row] =
+    parser.DelimitedParserImpl.parseRow(format, row)
 }

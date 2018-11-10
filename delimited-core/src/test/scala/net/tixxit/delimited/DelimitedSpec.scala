@@ -251,4 +251,56 @@ class DelimitedParserSpec extends WordSpec with Matchers with Checkers {
       }
     }
   }
+
+  "parseRow" should {
+    "parse single row" in {
+      val rowsAndResults = List(
+        "a,b,c" -> Row("a", "b", "c"),
+        "a b, c d ,e " -> Row("a b", " c d ", "e "),
+        "a,\"b,\"\"d\"\",e\",f" -> Row("a", "b,\"d\",e", "f"),
+        "a,\"b\",\"c\nd\"" -> Row("a", "b", "c\nd"),
+        "a,b,c\n" -> Row("a", "b", "c"),
+        "a b, c d ,e \r\n" -> Row("a b", " c d ", "e "),
+        "a,\"b,\"\"d\"\",e\",f\n" -> Row("a", "b,\"d\",e", "f"),
+        "a,\"b\",\"c\nd\"\r\n" -> Row("a", "b", "c\nd"))
+      rowsAndResults.foreach { case (row, expected) =>
+        assert(DelimitedParser.parseRow(DelimitedFormat.CSV, row) == Right(expected))
+      }
+    }
+
+    "fail on un-terminated quote" in {
+      val badRows = List(
+        "a,b,\"c",
+        "a,\"b\"\",c\n")
+      badRows.foreach { row =>
+        DelimitedParser.parseRow(DelimitedFormat.CSV, row) match {
+          case Right(_) => fail("expected failure")
+          case Left(error) =>
+            assert(error.message.contains("quote"))
+        }
+      }
+    }
+
+    "fail on extra rows" in {
+      val badRows = List(
+        "a,b,c\nd,e",
+        "a,b,c\nd,e,f\n",
+        "a,\"b,\"\"d\"\",e\",f\nand more")
+      badRows.foreach { row =>
+        DelimitedParser.parseRow(DelimitedFormat.CSV, row) match {
+          case Right(_) => fail("expected failure")
+          case Left(error) =>
+            assert(error.message.contains("unexpected start of new row"))
+        }
+      }
+    }
+
+    "fails to parse empty row" in {
+      DelimitedParser.parseRow(DelimitedFormat.CSV, "") match {
+        case Right(_) => fail("expected failure")
+        case Left(error) =>
+          assert(error.message.contains("empty"))
+      }
+    }
+  }
 }

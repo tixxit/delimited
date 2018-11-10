@@ -96,4 +96,7 @@ final class Input private (
 object Input {
   def init(str: String): Input =
     new Input(0, str, false, 0)
+
+  def last(str: String): Input =
+    new Input(0, str, true, 0)
 }
