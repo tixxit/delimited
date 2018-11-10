@@ -4,28 +4,32 @@
 [![Coverage status](https://img.shields.io/codecov/c/github/tixxit/delimited/master.svg)](https://codecov.io/github/tixxit/delimited)
 [![Maven Central](https://img.shields.io/maven-central/v/net.tixxit/delimited-core_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/net.tixxit/delimited-core_2.11)
 
-A fast, easy-to-use CSV parser for Scala.
+A fast, easy-to-use CSV parser for Scala. Supports
+
+ * streaming CSV parsing,
+ * delimited format inference, and
+ * easy integration with functional libraries.
 
 # Set Up
 
-Delimited is published for both Scala 2.10 and 2.11. To get started with SBT,
+Delimited is published for both Scala 2.11 and 2.12. To get started with SBT,
 use the following in your SBT build file:
 
 ```scala
-libraryDependencies += "net.tixxit" %% "delimited-core" % "0.8.0"
+libraryDependencies += "net.tixxit" %% "delimited-core" % "0.9.3"
 ```
 
 If you are using [Delimited's iteratee library](http://tixxit.github.io/delimited/latest/api/#net.tixxit.delimited.iteratee.Delimited$)
 then you will also want to include:
 
 ```scala
-libraryDependencies += "net.tixxit" %% "delimited-iteratee" % "0.8.0"
+libraryDependencies += "net.tixxit" %% "delimited-iteratee" % "0.9.3"
 ```
 
 If you're using gradle add this to your `build.gradle` file (and similarly for `delimited-iteratee`):
 
 ```gradle
-compile 'net.tixxit:delimited-core_2.11:0.8.0'
+compile 'net.tixxit:delimited-core_2.12:0.9.3'
 ```
 
 ## [API Docs (Scaladoc)](http://tixxit.github.io/delimited/latest/api/)
