@@ -39,4 +39,13 @@ class RowSpec extends WordSpec with Matchers with Checkers {
       row.render(DelimitedFormat.TSV) shouldBe ",\tabc\t\"\t\"\t\"\"\"\"\t\"\n\""
     }
   }
+
+  "toString" should {
+    "be entirely unsurprising" in {
+      // Entirely shameless juicing of code coverage...
+      val row = Row("a", "b", "c")
+      assert(row.toString == "Row(a, b, c)")
+      assert(row.take(2).toString == "Row(a, b)")
+    }
+  }
 }
