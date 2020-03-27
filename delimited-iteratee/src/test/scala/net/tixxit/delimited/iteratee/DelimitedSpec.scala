@@ -12,7 +12,7 @@ import cats.instances.try_._
 import io.iteratee.{ Enumeratee, Enumerator, Iteratee }
 
 import org.scalatest.{ WordSpec, Matchers }
-import org.scalatest.prop.Checkers
+import org.scalatestplus.scalacheck.Checkers
 import org.scalacheck._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Prop._
