@@ -12,7 +12,7 @@ import scala.util.hashing.MurmurHash3
  * random access to the underlying cells in the row and convenience methods for
  * rendering the row given a [[DelimitedFormat]].
  */
-final class Row private[delimited] (private val cells: Array[String]) {
+final class Row private[delimited] (private val cells: Array[String]) extends (Int => String) {
   def apply(idx: Int): String = cells(idx)
 
   def length: Int = cells.length
