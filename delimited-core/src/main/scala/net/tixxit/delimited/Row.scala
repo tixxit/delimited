@@ -17,6 +17,8 @@ final class Row private[delimited] (private val cells: Array[String]) {
 
   def length: Int = cells.length
 
+  def foreach(f: String => Unit): Unit = iterator.foreach(f)
+
   def size: Int = length
 
   def iterator: Iterator[String] = cells.iterator
@@ -24,6 +26,8 @@ final class Row private[delimited] (private val cells: Array[String]) {
   def toVector: Vector[String] = iterator.toVector
 
   def toList: List[String] = iterator.toList
+
+  def toIndexedSeq: IndexedSeq[String] = cells.toIndexedSeq
 
   /**
    * Returns a Vector of the *rendered* cells of this row.
