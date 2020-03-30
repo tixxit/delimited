@@ -1,6 +1,6 @@
 package net.tixxit.delimited
 
-import scala.collection.{ AbstractSeq, IndexedSeq, IndexedSeqLike }
+import scala.collection.{ AbstractSeq, IndexedSeq }
 import scala.collection.mutable.{ ArrayBuilder, Builder }
 
 /**
@@ -9,15 +9,14 @@ import scala.collection.mutable.{ ArrayBuilder, Builder }
  * random access to the underlying cells in the row and convenience methods for
  * rendering the row given a [[DelimitedFormat]].
  */
-final class Row private[delimited] (private val cells: Array[String]) extends Seq[String]
-with IndexedSeq[String] with IndexedSeqLike[String, Row] {
+final class Row private[delimited] (private val cells: Array[String]) extends Iterable[String] {
   def apply(idx: Int): String = cells(idx)
 
   def length: Int = cells.length
 
-  override def seq: Row = this
+  override def size: Int = cells.length
 
-  override def newBuilder: Builder[String, Row] = Row.newBuilder
+  def iterator: Iterator[String] = cells.iterator
 
   /**
    * Returns a Vector of the *rendered* cells of this row.
@@ -25,7 +24,7 @@ with IndexedSeq[String] with IndexedSeqLike[String, Row] {
    * @param format the format to use when rendering the cells
    */
   def text(format: DelimitedFormat): Vector[String] =
-    cells.map(format.render)(collection.breakOut)
+    cells.iterator.map(format.render).toVector
 
   /**
    * Returns this row rendered to a String using the given format. This will
@@ -58,5 +57,5 @@ object Row {
   def unapplySeq(row: Row): Option[Seq[String]] = Some(row.cells)
 
   def newBuilder: Builder[String, Row] =
-    ArrayBuilder.make[String]().mapResult(new Row(_))
+    ArrayBuilder.make[String].mapResult(new Row(_))
 }

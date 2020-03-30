@@ -91,8 +91,11 @@ object Delimited {
 
           private[this] def parseChunk(chunk: Option[String]): F[(DelimitedParser, Step[F, Row, A])] = {
             val (nextParser, results) = parser.parseChunk(chunk)
-
-            results.sequenceU match {
+            // TODO: Since we're still supporting scala 2.11, we have to give
+            // the compiler a bit more help to find the right instance for
+            // `Result`. This can be removed when we no longer support 2.11.
+            type Result[A] = Either[DelimitedError, A]
+            (results: Vector[Result[Row]]).sequence match {
               case Right(rows) => F.map(step.feed(rows))((nextParser, _))
               case Left(error) => F.raiseError(error)
             }
