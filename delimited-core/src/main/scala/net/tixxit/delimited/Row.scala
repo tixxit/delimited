@@ -1,7 +1,10 @@
 package net.tixxit.delimited
 
+import java.util.Arrays
+
 import scala.collection.{ AbstractSeq, IndexedSeq }
 import scala.collection.mutable.{ ArrayBuilder, Builder }
+import scala.util.hashing.MurmurHash3
 
 /**
  * A row in a delimited file, as a sequence of *unescaped* strings. The values
@@ -9,14 +12,18 @@ import scala.collection.mutable.{ ArrayBuilder, Builder }
  * random access to the underlying cells in the row and convenience methods for
  * rendering the row given a [[DelimitedFormat]].
  */
-final class Row private[delimited] (private val cells: Array[String]) extends Iterable[String] {
+final class Row private[delimited] (private val cells: Array[String]) {
   def apply(idx: Int): String = cells(idx)
 
   def length: Int = cells.length
 
-  override def size: Int = cells.length
+  def size: Int = length
 
   def iterator: Iterator[String] = cells.iterator
+
+  def toVector: Vector[String] = iterator.toVector
+
+  def toList: List[String] = iterator.toList
 
   /**
    * Returns a Vector of the *rendered* cells of this row.
@@ -36,6 +43,14 @@ final class Row private[delimited] (private val cells: Array[String]) extends It
 
   override def toString: String =
     cells.mkString("Row(", ", ", ")")
+
+  override def hashCode: Int = MurmurHash3.arrayHash(cells, 5347)
+
+  override def equals(that: Any): Boolean = that match {
+    case (that: Row) =>
+      Arrays.equals(cells.asInstanceOf[Array[AnyRef]], that.cells.asInstanceOf[Array[AnyRef]])
+    case _ => false
+  }
 }
 
 object Row {
@@ -54,7 +69,7 @@ object Row {
    */
   def fromArray(cells: Array[String]): Row = new Row(cells)
 
-  def unapplySeq(row: Row): Option[Seq[String]] = Some(row.cells)
+  def unapplySeq(row: Row): Option[Seq[String]] = Some(row.cells.toIndexedSeq)
 
   def newBuilder: Builder[String, Row] =
     ArrayBuilder.make[String].mapResult(new Row(_))

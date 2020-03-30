@@ -283,7 +283,7 @@ object DelimitedParserImpl {
 
     state match {
       case ContinueRow(rowStart, readFrom, partial, _, _) =>
-        row(rowStart, state.newRowBuilder ++= partial)
+        row(rowStart, state.newRowBuilder ++= partial.iterator)
 
       case instr @ ParseRow(rowStart, readFrom, _, sizeHint) =>
         if (buf.endOfFile()) {

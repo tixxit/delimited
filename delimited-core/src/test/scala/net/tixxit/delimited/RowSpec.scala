@@ -45,7 +45,8 @@ class RowSpec extends WordSpec with Matchers with Checkers {
       // Entirely shameless juicing of code coverage...
       val row = Row("a", "b", "c")
       assert(row.toString == "Row(a, b, c)")
-      assert(row.take(2).toString == "Row(a, b)")
+      val row2 = Row(row.toList.take(2): _*)
+      assert(row2.toString == "Row(a, b)")
     }
   }
 }
