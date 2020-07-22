@@ -29,6 +29,11 @@ final class Row private[delimited] (private val cells: Array[String]) extends (I
 
   def toIndexedSeq: IndexedSeq[String] = cells.toIndexedSeq
 
+  def appendAllTo(bldr: Builder[String, Row]): bldr.type = {
+    bldr ++= cells
+    bldr
+  }
+
   /**
    * Returns a Vector of the *rendered* cells of this row.
    *
