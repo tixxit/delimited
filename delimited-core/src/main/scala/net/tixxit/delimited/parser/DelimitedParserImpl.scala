@@ -57,7 +57,7 @@ final case class DelimitedParserImpl(
 
 
     def setSizeHint(ps: ParserState, sizeHint: Int): ParserState =
-      if (ps.sizeHint == sizeHint) ps
+      if (ps.sizeHint >= sizeHint) ps
       else
         ps match {
           case c@ContinueRow(_, _, _, _, _) => c.copy(sizeHint = sizeHint)
