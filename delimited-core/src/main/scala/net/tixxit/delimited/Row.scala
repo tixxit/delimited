@@ -29,7 +29,7 @@ final class Row private[delimited] (private val cells: Array[String]) extends (I
 
   def toIndexedSeq: IndexedSeq[String] = cells.toIndexedSeq
 
-  def appendAllTo(bldr: Builder[String, Row]): bldr.type = {
+  def appendAllTo[A](bldr: Builder[String, A]): bldr.type = {
     bldr ++= cells
     bldr
   }
