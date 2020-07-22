@@ -17,13 +17,24 @@ final class Row private[delimited] (private val cells: Array[String]) extends (I
 
   def length: Int = cells.length
 
-  def foreach(f: String => Unit): Unit = iterator.foreach(f)
+  def foreach(f: String => Unit): Unit = {
+    var idx = 0
+    while (idx < cells.length) {
+      f(cells(idx))
+      idx += 1
+    }
+  }
 
   def size: Int = length
 
   def iterator: Iterator[String] = cells.iterator
 
-  def toVector: Vector[String] = iterator.toVector
+  def toVector: Vector[String] = {
+    val bldr = Vector.newBuilder[String]
+    bldr.sizeHint(length)
+    bldr ++= cells
+    bldr.result()
+  }
 
   def toList: List[String] = iterator.toList
 
@@ -34,16 +45,32 @@ final class Row private[delimited] (private val cells: Array[String]) extends (I
    *
    * @param format the format to use when rendering the cells
    */
-  def text(format: DelimitedFormat): Vector[String] =
-    cells.iterator.map(format.render).toVector
+  def text(format: DelimitedFormat): Vector[String] = {
+    val bldr = Vector.newBuilder[String]
+    bldr.sizeHint(length)
+    var idx = 0
+    while (idx < cells.length) {
+      bldr += format.render(cells(idx))
+      idx += 1
+    }
+    bldr.result()
+  }
 
   /**
    * Returns this row rendered to a String using the given format. This will
    * not add any row delimiters; it renders the cells then joins them together
    * using `format.separator`.
    */
-  def render(format: DelimitedFormat): String =
-    cells.iterator.map(format.render).mkString(format.separator)
+  def render(format: DelimitedFormat): String = {
+    val strbuilder = new java.lang.StringBuilder()
+    var idx = 0
+    while (idx < cells.length) {
+      if (idx > 0) strbuilder.append(format.separator)
+      strbuilder.append(format.render(cells(idx)))
+      idx += 1
+    }
+    strbuilder.toString()
+  }
 
   override def toString: String =
     cells.mkString("Row(", ", ", ")")
