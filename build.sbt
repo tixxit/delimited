@@ -26,16 +26,27 @@ lazy val root = project.
     git.remoteRepo := "git@github.com:tixxit/delimited.git"
   )
 
+lazy val mimaVersions = Set("0.10.0", "0.10.1")
+
 lazy val delimitedCore = project.
   in(file("delimited-core")).
-  settings(Publish.settings: _*)
+  settings(Publish.settings: _*).
+  settings(
+    mimaPreviousArtifacts := mimaVersions.map("net.tixxit" %% "delimited-core" % _)
+  )
 
 lazy val delimitedIteratee = project.
   in(file("delimited-iteratee")).
   dependsOn(delimitedCore).
-  settings(Publish.settings: _*)
+  settings(Publish.settings: _*).
+  settings(
+    mimaPreviousArtifacts := mimaVersions.map("net.tixxit" %% "delimited-iteratee" % _)
+  )
 
 lazy val delimitedBenchmark = project.
   in(file("delimited-benchmark")).
   dependsOn(delimitedCore).
-  settings(Publish.skip: _*)
+  settings(Publish.skip: _*).
+  settings(
+    mimaPreviousArtifacts := Set.empty
+  )
