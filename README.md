@@ -1,6 +1,6 @@
 # Delimited
 
-[![Build status](https://img.shields.io/travis/tixxit/delimited/master.svg)](https://travis-ci.org/tixxit/delimited)
+[![Build status](https://github.com/tixxit/delimited/workflows/ci/badge.svg)](https://github.com/tixxit/delimited)
 [![Coverage status](https://img.shields.io/codecov/c/github/tixxit/delimited/master.svg)](https://codecov.io/github/tixxit/delimited)
 [![Maven Central](https://img.shields.io/maven-central/v/net.tixxit/delimited-core_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/net.tixxit/delimited-core_2.11)
 
