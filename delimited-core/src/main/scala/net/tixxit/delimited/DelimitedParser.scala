@@ -68,7 +68,7 @@ trait DelimitedParser {
    * input.
    */
   def parseAll(chunks: Iterator[String]): Iterator[Either[DelimitedError, Row]] = {
-    val input = chunks.map(Option(_)).takeWhile(_.isDefined) ++ Iterator(None)
+    val input = chunks.takeWhile(_ ne null).map(Some(_)) ++ Iterator.single(None)
 
     input
       .scanLeft((this, Vector.empty[Either[DelimitedError, Row]])) {
@@ -124,7 +124,7 @@ trait DelimitedParser {
    * Parses an entire delimited file as a string.
    */
   def parseString(input: String): Vector[Either[DelimitedError, Row]] =
-    parseAll(Iterator(input)).toVector
+    parseAll(Iterator.single(input)).toVector
 }
 
 object DelimitedParser {

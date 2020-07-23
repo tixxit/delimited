@@ -28,7 +28,7 @@ object DelimitedParserBenchmark {
     val narrowTsv: String =
       List.fill(1000)(narrowRow.render(format)).mkString(format.rowDelim.value)
 
-    val wideRow: Row = Row(List.fill(30)(narrowRow).flatten: _*)
+    val wideRow: Row = Row(List.fill(30)(narrowRow).flatMap(_.toList): _*)
     val wideTsv: String =
       List.fill(1000)(wideRow.render(format)).mkString(format.rowDelim.value)
   }

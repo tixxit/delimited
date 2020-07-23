@@ -55,8 +55,20 @@ final case class DelimitedParserImpl(
       case RowDelim(value, Some(alt)) => scala.math.max(value.length, alt.length)
     }
 
+
+    def setSizeHint(ps: ParserState, sizeHint: Int): ParserState =
+      if (ps.sizeHint >= sizeHint) ps
+      else
+        ps match {
+          case c@ContinueRow(_, _, _, _, _) => c.copy(sizeHint = sizeHint)
+          case s@SkipRow(_, _, _, _) => s.copy(sizeHint = sizeHint)
+          case p@ParseRow(_, _, _, _) => p.copy(sizeHint = sizeHint)
+        }
+
+    val bldr = Vector.newBuilder[Either[DelimitedError, Row]]
+
     @tailrec
-    def loop(s0: ParserState, fail: Option[Fail], row: Long, acc: Vector[Either[DelimitedError, Row]]): (DelimitedParserImpl, Vector[Either[DelimitedError, Row]]) = {
+    def loop(s0: ParserState, fail: Option[Fail], row: Long): DelimitedParserImpl = {
       val (s1, instr) = DelimitedParserImpl.parse(format)(s0)
 
       instr match {
@@ -66,40 +78,46 @@ final case class DelimitedParserImpl(
                 s1.input.substring(s0.rowStart, s1.rowStart))
             val error = DelimitedError(s"row exceeded maximum length of $maxCharsPerRow",
               s0.rowStart, s0.rowStart, context, row, 1)
-            loop(s1, fail, row + 1, acc :+ Left(error))
+            bldr += Left(error)
           } else {
-            loop(s1, fail, row + 1, acc :+ Right(cells))
+            bldr += Right(cells)
           }
+          val s2 = setSizeHint(s1, cells.length)
+          loop(s2, fail, row + 1)
 
         case f @ Fail(_, _) =>
-          loop(s1, Some(f), row, acc)
+          loop(s1, Some(f), row)
 
         case Resume =>
-          fail match {
-            case Some(Fail(msg, pos)) =>
+          val nextRow =
+            if (fail.isDefined) {
+              val f = fail.get
+              val pos = f.pos
               val context = DelimitedParserImpl.removeRowDelim(format, s1.input.substring(s0.rowStart, s1.rowStart))
-              val error = DelimitedError(msg, s0.rowStart, pos, context, row, pos - s0.rowStart + 1)
-              loop(s1, None, row + 1, acc :+ Left(error))
+              val error = DelimitedError(f.message, s0.rowStart, pos, context, row, pos - s0.rowStart + 1)
+              bldr += Left(error)
+              row + 1L
+            }
+            else row
 
-            case None =>
-              loop(s1, None, row, acc)
-          }
+          loop(s1, None, nextRow)
 
         case NeedInput =>
           if (maxCharsPerRow > 0 && fail.isEmpty &&
               (s1.input.limit - s1.rowStart - maxRowDelimLength) > maxCharsPerRow) {
             val f = Some(Fail(s"row exceeded maximum length of $maxCharsPerRow", s1.rowStart))
-            DelimitedParserImpl(format, s1.skipRow, f, row, bufferSize, maxCharsPerRow) -> acc
+            DelimitedParserImpl(format, s1.skipRow, f, row, bufferSize, maxCharsPerRow)
           } else {
-            DelimitedParserImpl(format, s1, fail, row, bufferSize, maxCharsPerRow) -> acc
+            DelimitedParserImpl(format, s1, fail, row, bufferSize, maxCharsPerRow)
           }
 
         case Done =>
-          DelimitedParserImpl(format, s1, None, row, bufferSize, maxCharsPerRow) -> acc
+          DelimitedParserImpl(format, s1, None, row, bufferSize, maxCharsPerRow)
       }
     }
 
-    loop(initState, fail, row, Vector.empty)
+    val nextImpl = loop(initState, fail, row)
+    (nextImpl, bldr.result())
   }
 }
 
@@ -145,11 +163,11 @@ object DelimitedParserImpl {
 
     def isQuote(): Int = buf.isFlag(quote)
     def isQuoteEscape(): Int = buf.isFlag(quoteEscape)
-    def isSeparator(): Int = buf.isFlag(separator)
+    @inline def isSeparator(): Int = buf.isFlag(separator)
 
     val primaryRowDelim: String = rowDelim.value
     val secondaryRowDelim: String = rowDelim.alternate.orNull
-    def isRowDelim(): Int = buf.eitherFlag(primaryRowDelim, secondaryRowDelim)
+    @inline def isRowDelim(): Int = buf.eitherFlag(primaryRowDelim, secondaryRowDelim)
     def isEndOfCell(): Int = {
       val i = isSeparator()
       if (i == 0) isRowDelim() else i
@@ -170,6 +188,7 @@ object DelimitedParserImpl {
 
     def unquotedCell(bldr: Builder[String, Row]): ParseResult = {
       val start = buf.getPos()
+      @tailrec
       def loop(): ParseResult = {
         val flag = isEndOfCell()
         if (flag > 0 || buf.endOfFile()) {
@@ -189,6 +208,7 @@ object DelimitedParserImpl {
 
     def quotedCell(bldr: Builder[String, Row]): ParseResult = {
       val start = buf.getPos()
+      @tailrec
       def loop(): ParseResult = {
         if (buf.endOfInput()) {
           if (buf.endOfFile()) {
@@ -223,6 +243,7 @@ object DelimitedParserImpl {
       loop()
     }
 
+    @inline
     def cell(bldr: Builder[String, Row]): ParseResult = {
       val q = isQuote()
       if (q == 0) {
@@ -252,7 +273,7 @@ object DelimitedParserImpl {
 
     def row(rowStart: Long, cells: Builder[String, Row]): (ParserState, Instr) = {
       val start = buf.getPos()
-      def needInput() = (ContinueRow(rowStart, start, cells.result(), input), NeedInput)
+      @inline def needInput() = (ContinueRow(rowStart, start, cells.result(), input), NeedInput)
 
       val s = isSeparator()
       if (s == 0) {
@@ -282,40 +303,49 @@ object DelimitedParserImpl {
     }
 
     state match {
-      case ContinueRow(rowStart, readFrom, partial, _, _) =>
-        row(rowStart, state.newRowBuilder ++= partial.iterator)
+      case cr: ContinueRow =>
+        row(cr.rowStart, cr.partial.appendAllTo(cr.newRowBuilder))
 
-      case instr @ ParseRow(rowStart, readFrom, _, sizeHint) =>
+      case instr: ParseRow =>
         if (buf.endOfFile()) {
           (instr, Done)
         } else {
-          val cells = state.newRowBuilder
+          val cells = instr.newRowBuilder
           cell(cells) match {
             case Success =>
-              row(rowStart, cells)
+              row(instr.rowStart, cells)
             case f @ Fail(_, _) =>
-              (SkipRow(rowStart, buf.getPos(), input, sizeHint), f)
+              (SkipRow(instr.rowStart, buf.getPos(), input, instr.sizeHint), f)
             case NeedInput =>
               (instr, NeedInput)
           }
         }
 
-      case SkipRow(rowStart, readFrom, _, sizeHint) =>
+      case sr: SkipRow =>
         if (skipToNextRow()) {
-          (ParseRow(buf.getPos(), buf.getPos(), input.marked(buf.getPos()), sizeHint), Resume)
+          (ParseRow(buf.getPos(), buf.getPos(), input.marked(buf.getPos()), sr.sizeHint), Resume)
         } else {
-          (SkipRow(rowStart, buf.getPos(), input, sizeHint), NeedInput)
+          (SkipRow(sr.rowStart, buf.getPos(), input, sr.sizeHint), NeedInput)
         }
     }
   }
 
   private def removeRowDelim(format: DelimitedFormat, context: String): String = {
-    def dropTail(tail: String): Option[String] =
-      if (context.endsWith(tail)) Some(context.dropRight(tail.length))
-      else None
+    def dropTail(tail: String): String /* | Null */ =
+      if (context.endsWith(tail)) context.dropRight(tail.length)
+      else null
 
-    dropTail(format.rowDelim.value).
-      orElse(format.rowDelim.alternate.flatMap(dropTail)).
-      getOrElse(context)
+    val d0 = dropTail(format.rowDelim.value)
+    if (d0 eq null) {
+      format.rowDelim.alternate match {
+        case Some(alt) =>
+          val d1 = dropTail(alt)
+          if (d1 eq null) context
+          else d1
+
+        case None => context
+      }
+    }
+    else d0
   }
 }
