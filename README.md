@@ -16,20 +16,20 @@ Delimited is published for Scala 2.11, 2.12, 2.13. To get started with SBT,
 use the following in your SBT build file:
 
 ```scala
-libraryDependencies += "net.tixxit" %% "delimited-core" % "0.10.0"
+libraryDependencies += "net.tixxit" %% "delimited-core" % "0.10.1"
 ```
 
 If you are using [Delimited's iteratee library](http://tixxit.github.io/delimited/latest/api/#net.tixxit.delimited.iteratee.Delimited$)
 then you will also want to include:
 
 ```scala
-libraryDependencies += "net.tixxit" %% "delimited-iteratee" % "0.10.0"
+libraryDependencies += "net.tixxit" %% "delimited-iteratee" % "0.10.1"
 ```
 
 If you're using gradle add this to your `build.gradle` file (and similarly for `delimited-iteratee`):
 
 ```gradle
-compile 'net.tixxit:delimited-core_2.12:0.10.0'
+compile 'net.tixxit:delimited-core_2.12:0.10.1'
 ```
 
 ## [API Docs (Scaladoc)](http://tixxit.github.io/delimited/latest/api/)
