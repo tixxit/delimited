@@ -100,6 +100,19 @@ case class DelimitedFormat(
     text.replace(quote, escapedQuote)
 
   /**
+   * any character > maxSep cannot be a delimiter or separator
+   */
+  val maxSep: Char = {
+    val zero = 0.toChar
+    def get(str: String) = if (str.isEmpty) zero else (str.charAt(0).toInt).toChar
+    val c0 = get(separator)
+    val c1 = get(primaryRowDelim)
+    val c2 = if (c0 < c1) c1 else c0
+    val c3 = if (secondaryRowDelim eq null) zero else get(secondaryRowDelim)
+    if (c2 < c3) c3 else c2
+  }
+
+  /**
    * If `text` starts with a quote, then this removes the wrapping quotes, then
    * unescapes the resulting text. If text does not start with a quote, then it
    * is returned unchanged.
