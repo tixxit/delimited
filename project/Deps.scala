@@ -4,7 +4,7 @@ object Deps {
   object V {
     val iteratee   = "0.19.0"
     val scalaTest = "3.1.2"
-    val scalaTestPlusCheck  = "3.1.0.1"
+    val scalaTestPlusCheck  = "3.1.2.0"
     val scalaCheck = "1.14.3"
   }
 
