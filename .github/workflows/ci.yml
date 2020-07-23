@@ -19,7 +19,7 @@ jobs:
         uses: "olafurpg/setup-java@v6"
         with:
           java-version: "${{matrix.java}}"
-      - run: "sbt \"++${{matrix.scala}} delimitedCore/mimaReportBinaryIssues delimitedIteratee/mimaReportBinaryIssues\""
+      - run: "sbt \"++${{matrix.scala}} delimitedCore/mimaReportBinaryIssues; delimitedIteratee/mimaReportBinaryIssues\""
     strategy:
       matrix:
         java:
