@@ -58,14 +58,6 @@ final class Input private (
   def substring(from: Long, until: Long): String =
     data.substring(check(from), check(until))
 
-  def indexOf(str: String, from: Long): Long = {
-    val idx = data.indexOf(str, check(from))
-    if (idx < 0) -1L
-    else {
-      idx.toLong + offset
-    }
-  }
-
   /**
    * Returns an `Input` whose `mark` is at the given position.
    */
