@@ -1,6 +1,6 @@
 resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
 
-addSbtPlugin("com.eed3si9n"       % "sbt-unidoc"      % "0.4.1")
+addSbtPlugin("com.eed3si9n"       % "sbt-unidoc"      % "0.4.3")
 addSbtPlugin("com.github.gseitz"  % "sbt-release"     % "1.0.13")
 addSbtPlugin("com.jsuereth"       % "sbt-pgp"         % "1.1.1")
 addSbtPlugin("com.typesafe"       % "sbt-mima-plugin" % "0.7.0")
