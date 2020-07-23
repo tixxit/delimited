@@ -167,8 +167,9 @@ object DelimitedParserImpl {
 
     val primaryRowDelim: String = rowDelim.value
     val secondaryRowDelim: String = rowDelim.alternate.orNull
+
     @inline def isRowDelim(): Int = buf.eitherFlag(primaryRowDelim, secondaryRowDelim)
-    def isEndOfCell(): Int = {
+    @inline def isEndOfCell(): Int = {
       val i = isSeparator()
       if (i == 0) isRowDelim() else i
     }
@@ -188,33 +189,33 @@ object DelimitedParserImpl {
 
     def unquotedCell(bldr: Builder[String, Row]): ParseResult = {
       val start = buf.getPos()
-      @tailrec
-      def loop(): ParseResult = {
+      var res: ParseResult = null
+      buf.advanceGT(maxSep)
+      while (res eq null) {
         val flag = isEndOfCell()
         if (flag > 0 || buf.endOfFile()) {
           val value = input.substring(start, buf.getPos())
           bldr += value
-          Success
+          res = Success
         } else if (flag == 0) {
           buf.advance(1)
-          loop()
         } else {
-          NeedInput
+          res = NeedInput
         }
       }
 
-      loop()
+      res
     }
 
     def quotedCell(bldr: Builder[String, Row]): ParseResult = {
       val start = buf.getPos()
-      @tailrec
-      def loop(): ParseResult = {
+      var res: ParseResult = null
+      while (res eq null) {
         if (buf.endOfInput()) {
           if (buf.endOfFile()) {
-            Fail("Unmatched quoted string at end of file", buf.getPos())
+            res = Fail("Unmatched quoted string at end of file", buf.getPos())
           } else {
-            NeedInput
+            res = NeedInput
           }
         } else {
           val d = if (allowRowDelimInQuotes) 0 else isRowDelim()
@@ -222,25 +223,23 @@ object DelimitedParserImpl {
           val q = isQuote()
 
           if (d < 0 || e < 0 || q < 0) {
-            NeedInput
+            res = NeedInput
           } else if (d > 0) {
-            Fail("Unmatched quoted string at row delimiter", buf.getPos())
+            res = Fail("Unmatched quoted string at row delimiter", buf.getPos())
           } else if (e > 0) {
             buf.advance(e)
-            loop()
           } else if (q > 0) {
             val unescaped = unescape(input.substring(start, buf.getPos()))
             buf.advance(q)
             bldr += unescaped
-            Success
+            res = Success
           } else {
             buf.advance(1)
-            loop()
           }
         }
       }
 
-      loop()
+      res
     }
 
     @inline

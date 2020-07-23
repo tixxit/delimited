@@ -17,6 +17,15 @@ final class InputBuffer(input: Input) {
 
   def getChar(): Char = chunk.charAt(pos)
   def advance(i: Int): Unit = pos += i
+
+  // advance while characters are > the given character
+  def advanceGT(c: Char): Long  = {
+    while (pos < clen && (chunk.charAt(pos) > c)) {
+      pos += 1
+    }
+    pos.toLong + input.offset
+  }
+
   def retreat(i: Int): Unit = pos -= i
   def endOfInput(): Boolean = pos >= clen
   def endOfFile(): Boolean = endOfInput() && input.isLast
