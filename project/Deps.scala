@@ -12,4 +12,5 @@ object Deps {
   val scalaTest  = "org.scalatest"  %% "scalatest"     % V.scalaTest  % "test"
   val scalaCheck = "org.scalacheck" %% "scalacheck"    % V.scalaCheck % "test"
   val scalaTestScalaCheck = "org.scalatestplus" %% "scalacheck-1-14"    % V.scalaTestPlusCheck % "test"
+  val simpleFlatMapperCsv = "org.simpleflatmapper" % "sfm-csv" % "8.2.3"
 }
