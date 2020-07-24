@@ -27,12 +27,6 @@ final class Input private (
   val isLast: Boolean,
   val mark: Long
 ) {
-  private def check(i: Long): Int = if ((i < offset) || (i > (offset + data.length))) {
-    throw new IndexOutOfBoundsException(i.toString)
-  } else {
-    (i - offset).toInt
-  }
-
   /**
    * Returns the character data between `mark` and `limit`. This is equivalent
    * to calling `input.substring(input.mark, input.limit)`.
@@ -43,7 +37,8 @@ final class Input private (
    * Returns the character at the given position. This method will do some
    * aggressive bounds checking.
    */
-  def charAt(i: Long): Char = data.charAt(check(i))
+  def charAt(i: Long): Char =
+    data.charAt((i - offset).toInt)
 
   /**
    * Returns the index of the first position that cannot be read. If `isLast`
@@ -56,7 +51,7 @@ final class Input private (
    * It is expected that `mark <= from <= until <= limit`.
    */
   def substring(from: Long, until: Long): String =
-    data.substring(check(from), check(until))
+    data.substring((from - offset).toInt, (until - offset).toInt)
 
   /**
    * Returns an `Input` whose `mark` is at the given position.

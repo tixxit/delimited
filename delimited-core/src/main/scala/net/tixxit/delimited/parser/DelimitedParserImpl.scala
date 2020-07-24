@@ -161,14 +161,21 @@ object DelimitedParserImpl {
     val input: Input = state.input
     val buf: InputBuffer = new InputBuffer(state)
 
-    def isQuote(): Int = buf.isFlag(quote)
-    def isQuoteEscape(): Int = buf.isFlag(quoteEscape)
-    @inline def isSeparator(): Int = buf.isFlag(separator)
+    val qlen = quote.length
+    def isQuote(): Int = buf.isFlag(quote, qlen)
+
+    val qelen = quoteEscape.length
+    def isQuoteEscape(): Int = buf.isFlag(quoteEscape, qelen)
+
+    val seplen = separator.length
+    @inline def isSeparator(): Int = buf.isFlag(separator, seplen)
 
     val primaryRowDelim: String = rowDelim.value
     val secondaryRowDelim: String = rowDelim.alternate.orNull
 
-    @inline def isRowDelim(): Int = buf.eitherFlag(primaryRowDelim, secondaryRowDelim)
+    val prdlen = primaryRowDelim.length
+    val srdlen = if (secondaryRowDelim eq null) -1 else secondaryRowDelim.length
+    @inline def isRowDelim(): Int = buf.eitherFlag(primaryRowDelim, prdlen, secondaryRowDelim, srdlen)
     @inline def isEndOfCell(): Int = {
       val i = isSeparator()
       if (i == 0) isRowDelim() else i
@@ -270,6 +277,7 @@ object DelimitedParserImpl {
       }
     }
 
+    @tailrec
     def row(rowStart: Long, cells: Builder[String, Row]): (ParserState, Instr) = {
       val start = buf.getPos()
       @inline def needInput() = (ContinueRow(rowStart, start, cells.result(), input), NeedInput)
