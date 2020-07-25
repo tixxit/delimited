@@ -30,8 +30,10 @@ final class InputBuffer(input: Input) {
   def endOfInput(): Boolean = pos >= clen
   def endOfFile(): Boolean = endOfInput() && input.isLast
 
-  def isFlag(str: String): Int = {
-    val slen = str.length
+  def isFlag(str: String): Int =
+    isFlag(str, str.length)
+
+  def isFlag(str: String, slen: Int): Int = {
 
     // there are a few cases:
     // 1. clen >= slen
@@ -58,29 +60,58 @@ final class InputBuffer(input: Input) {
     }
     */
 
-    var p = pos
-    var i = 0
-    var res = -2
-    while (res == -2) {
-      if (i >= slen) {
-        res = i
-      }
-      else if (p >= clen) {
+    if (slen == 1) {
+      // this is a common case
+      if (pos >= clen) {
         // we exhausted this chunk
-        res = if (input.isLast) 0 else -1
+        if (input.isLast) 0 else -1
       }
-      else if (str.charAt(i) != chunk.charAt(p)) {
-        res = 0
+      else if (str.charAt(0) != chunk.charAt(pos)) {
+        0
       }
-
-      i += 1
-      p += 1
+      else 1
     }
-    res
+    else {
+      if (clen - pos >= slen) {
+        // the maximum i can be is slen,
+        // so if clen - pos >= slen, we can't exhaust
+        if (chunk.startsWith(str, pos)) slen
+        else 0
+      }
+      else {
+        var p = pos
+        var i = 0
+        // we know that clen - pos < slen
+        // so we cannot contain the entire string
+        // but we could have the beggining of str
+        // and then run out of input
+        // we can exhaust the input
+        while (true) {
+          if (p >= clen) {
+            // we exhausted this chunk
+            return if (input.isLast) 0 else -1
+          }
+          else if (str.charAt(i) != chunk.charAt(p)) {
+            return 0
+          }
+          else {
+            i += 1
+            p += 1
+          }
+        }
+        // unreachable
+        Int.MinValue
+      }
+    }
   }
 
   def eitherFlag(f1: String, f2: String): Int = {
     val i = isFlag(f1)
     if (i == 0 && (f2 ne null)) isFlag(f2) else i
+  }
+
+  def eitherFlag(f1: String, f1Len: Int, f2: String, f2Len: Int): Int = {
+    val i = isFlag(f1, f1Len)
+    if (i == 0 && (f2 ne null)) isFlag(f2, f2Len) else i
   }
 }
