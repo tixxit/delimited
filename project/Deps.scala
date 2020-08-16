@@ -3,7 +3,7 @@ import sbt._
 object Deps {
   object V {
     val iteratee   = "0.19.0"
-    val scalaTest = "3.1.3"
+    val scalaTest = "3.2.1"
     val scalaTestPlusCheck  = "3.2.1.0"
     val scalaCheck = "1.14.3"
   }
