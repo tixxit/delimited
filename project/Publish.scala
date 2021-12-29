@@ -10,7 +10,7 @@ object Publish {
     releaseCrossBuild := true,
     releasePublishArtifactsAction := PgpKeys.publishSigned.value,
     publishMavenStyle := true,
-    publishArtifact in Test := false,
+    (Test / publishArtifact) := false,
     pomIncludeRepository := Function.const(false),
     publishTo := {
       val v = version.value
