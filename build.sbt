@@ -1,14 +1,14 @@
-organization in ThisBuild := "net.tixxit"
+(ThisBuild / organization) := "net.tixxit"
 
-licenses in ThisBuild += ("BSD-style" -> url("http://opensource.org/licenses/MIT"))
+(ThisBuild / licenses) += ("BSD-style" -> url("http://opensource.org/licenses/MIT"))
 
-scalaVersion in ThisBuild := "2.13.1"
+(ThisBuild / scalaVersion) := "2.13.1"
 
-crossScalaVersions in ThisBuild := Seq("2.11.12", "2.12.11", "2.13.1")
+(ThisBuild / crossScalaVersions) := Seq("2.11.12", "2.12.11", "2.13.1")
 
-scalacOptions in ThisBuild ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds")
+(ThisBuild / scalacOptions) ++= Seq("-deprecation", "-feature", "-unchecked", "-language:higherKinds")
 
-maxErrors in ThisBuild := 5
+(ThisBuild / maxErrors) := 5
 
 addCommandAlias("publishDocs", ";unidoc;ghpagesPushSite")
 
@@ -21,7 +21,7 @@ lazy val root = project.
   settings(Publish.skip: _*).
   settings(
     name := "delimited",
-    addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), siteSubdirName in SiteScaladoc),
+    addMappingsToSiteDir((ScalaUnidoc / packageDoc / mappings), (SiteScaladoc / siteSubdirName)),
     autoAPIMappings := true,
     git.remoteRepo := "git@github.com:tixxit/delimited.git"
   )
